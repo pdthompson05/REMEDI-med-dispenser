@@ -1,0 +1,15 @@
+ALTER TABLE med ADD FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE;
+
+ALTER TABLE schedule ADD FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE;
+
+ALTER TABLE schedule ADD FOREIGN KEY (med_id) REFERENCES med (med_id) ON DELETE CASCADE;
+
+ALTER TABLE history ADD FOREIGN KEY (schedule_id) REFERENCES schedule (schedule_id) ON DELETE CASCADE;
+
+ALTER TABLE history ADD FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE;
+
+ALTER TABLE history ADD FOREIGN KEY (med_id) REFERENCES med (med_id) ON DELETE CASCADE;
+
+ALTER TABLE notification ADD FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE;
+
+ALTER TABLE notification ADD FOREIGN KEY (schedule_id) REFERENCES schedule (schedule_id) ON DELETE CASCADE;

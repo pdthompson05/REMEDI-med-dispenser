@@ -1,0 +1,7 @@
+USE db_remidi;
+
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS med;
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS history;
+DROP TABLE IF EXISTS notification;
