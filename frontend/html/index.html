@@ -5,33 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REMEDI Home</title>
     <style>
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #64b5f6;
+            --button-color: #0d47a1;
+            --button-hover-color: #002171;
+            --background-color: #e3f2fd;
+            --card-background: white;
+            --text-color: #333;
+            --error-color: red;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e3f2fd;
-            color: #333;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
+
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 25px 60px;
-            background-color: #1565c0;
+            background-color: var(--primary-color);
             color: white;
             font-size: 22px;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .logo a {
             color: white;
             text-decoration: none;
-            font-size: 24px;
+            font-size: 60px;
             font-weight: bold;
         }
-        .logo a:hover {
-            text-decoration: none;
-        }
+
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -44,26 +55,30 @@
             align-items: center;
             justify-content: space-between;
             padding: 100px 60px;
-            background: linear-gradient(135deg, #64b5f6, #1565c0);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: white;
             border-radius: 0 0 30px 30px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
+
         .hero-text {
             max-width: 50%;
         }
+
         .hero h1 {
             font-size: 50px;
             margin-bottom: 15px;
         }
+
         .hero p {
             font-size: 22px;
             margin-bottom: 30px;
         }
+
         .cta-button {
             display: inline-block;
             padding: 18px 40px;
-            background-color: #0d47a1;
+            background-color: var(--button-color);
             color: white;
             text-decoration: none;
             font-size: 22px;
@@ -72,14 +87,67 @@
             transition: 0.3s;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         .cta-button:hover {
-            background-color: #002171;
+            background-color: var(--button-hover-color);
             transform: scale(1.05);
         }
-        .hero-image img {
-            width: 500px;
-            border-radius: 15px;
+
+        .register-container {
+            background: var(--card-background);
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 320px;
+            text-align: center;
+            margin-left: auto;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #1f72b5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .register-container h1 {
+            color:#002171;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 60px 20px;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .register-container {
+                margin: 20px auto 0;
+                position: static;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -96,8 +164,36 @@
         <div class="hero-text">
             <h1>Manage Your Schedule</h1>
             <p>Set reminders, track your medication, and stay on top of your routine with REMEDI.</p>
-            <a href="register.html" class="cta-button">Get Started</a>
+        </div>
+        <div class="register-container">
+            <h1>Register an account</h1>
+            <h2>Create Account</h2>
+            <input type="firstname" id="new-first-name" placeholder="First Name">
+            <input type="lastname" id="new-last-name" placeholder="Last Name">
+            <input type="email" id="new-email" placeholder="Email">
+            <input type="password" id="new-password" placeholder="Password">
+            <button onclick="createAccount()">Create Account</button>
+            <p id="message" style="color: var(--error-color);"></p>
         </div>
     </div>
+    <script>
+        function createAccount() {
+            let username = document.getElementById('new-username').value.trim();
+            let password = document.getElementById('new-password').value.trim();
+            let message = document.getElementById('message');
+
+            if (!username || !password) {
+                message.textContent = "Please fill in all fields.";
+                return;
+            }
+
+            if (password.length < 6) {
+                message.textContent = "Password must be at least 6 characters.";
+                return;
+            }
+
+            alert("Account created successfully!");
+        }
+    </script>
 </body>
 </html>
