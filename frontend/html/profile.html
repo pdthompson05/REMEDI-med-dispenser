@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REMEDI Profile</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+            color: #333;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 60px;
+            background-color: #1565c0;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: 0.3s;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 100px 60px;
+            background: linear-gradient(135deg, #64b5f6, #1565c0);
+            color: white;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .hero-text {
+            max-width: 50%;
+        }
+        .hero h1 {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #333;
+            width: 50%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .form-container input, .form-container button, .form-container select {
+            display: block;
+            width: 96.2%;
+            padding: 10px;  
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .form-container select {
+            width: 100%;
+            color: gray;
+        }
+        input[type="date"] {
+            color: gray;
+        }
+        input[type="number"] {
+            color: gray;
+        }
+        input[type="time"] {
+            color: gray;
+        }
+        .form-container p {
+            display: block;
+            color: black;
+            font-size: 18px;
+            margin: 15px 0px 0px 0px;
+        }
+        .form-container button {
+            background-color: #0d47a1;
+            width: 100%;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .form-container button:hover {
+            background-color: #002171;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">REMEDI</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Calendar</a>
+            <a href="#">Profile</a>
+            <a href="#">Reminders</a>
+            <a href="#">Insights</a>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Profile Information</h1>
+            <p>Manage your medication schedule and personal information.</p>
+        </div>
+        <div class="form-container">
+            <h2>Personal Information</h2>
+            <p>Your Full Name:</p>
+            <input type="text" placeholder="Name">
+            <p>Date of Birth:</p>
+            <input type="date" placeholder="DateOfBirth">
+            <p>Contact Information:</p>
+            <input type="text" placeholder="xxx@gmail.com">
+            <button>Save Information</button>
+        </div>
+
+        <div class="form-container">
+            <h2>Add Medication To Calendar</h2>
+            <p>Name of Medication:</p>
+            <input type="text" placeholder="Medication Name">
+            
+            <p>Amount of Pills To Take:</p>
+            <input type="number" placeholder="Amount">
+            
+            <p>Frequency:</p>
+            <select>
+                <option value="Once">Once</option>
+                <option value="Twice">Twice</option>
+                <option value="Thrice">Thrice</option>
+            </select>
+
+            <p>Hours Between Doses:</p>
+            <input type="number" placeholder="Amount">
+            
+            <p>Starting Time:</p>
+            <input type="time" placeholder="Starting Time">
+            
+            <p>Calendar Day:</p>
+            <input type="date" placeholder="Date">
+            
+            <p>Set a Reminder (Optional):</p>
+            <input type="time" placeholder="Reminder Time (Optional)">
+            
+            <button>Add Medication</button>
+            
+        </div>
+    </div>
+</body>
+</html>
