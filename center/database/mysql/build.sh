@@ -1,19 +1,20 @@
-# Run this command to create a login path for storing the password:
-# mysql_config_editor set --login-path=section3 -u section3 -p
+# For WSL
+# ssh -f -N -L 3306:138.197.45.197:3306 student3@it313communityprojects.website
 
-export CMD='mysql --login-path=section3 --local-infile -s -h 127.0.0.1 -P 3306 --ssl-mode=REQUIRED section3'
+# End execution if anything fails
+set -e
 
-$CMD < drop.sql
-echo Tables Dropped.
+export CMD='mysql -u section3 -p -h 127.0.0.1 -P 3306'
 
-$CMD < create.sql
-echo Tables Created.
+for file in drop.sql create.sql comment.sql ref.sql; do
+    if [ -f "$file" ]; then
+        echo "Executing $file..."
+        $MYSQL_CMD < "$file"
+        echo "$file executed successfully."
+    else
+        echo "Error: $file not found."
+        exit 1
+    fi
+done
 
-$CMD < comment.sql
-echo Comments Added.
-
-$CMD < ref.sql
-echo References Added.
-
-# $CMD < views.sql
-# echo Views Created.
+echo "Database build completed."
