@@ -1,16 +1,18 @@
 CREATE TABLE user (
-  user_id int PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
+  user_role enum(patient,caregiver) NOT NULL,
+  username varchar(255) UNIQUE NOT NULL,
+  password_hash varchar(255) NOT NULL,
   first_name varchar(255),
   last_name varchar(255),
+  email varchar(255),
   date_of_birth date,
-  phone_number varchar(15),
-  role enum(patient,caregiver) NOT NULL,
   created_at timestamp,
   updated_at timestamp
 );
 
 CREATE TABLE med (
-  med_id int PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   name varchar(255),
   dosage_mg int,
@@ -21,7 +23,7 @@ CREATE TABLE med (
 );
 
 CREATE TABLE schedule (
-  schedule_id int PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   med_id int,
   time time,
@@ -35,7 +37,7 @@ CREATE TABLE schedule (
 );
 
 CREATE TABLE history (
-  history_id int PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
   schedule_id int,
   user_id int,
   med_id int,
@@ -44,7 +46,7 @@ CREATE TABLE history (
 );
 
 CREATE TABLE notification (
-  notification_id int PRIMARY KEY AUTO_INCREMENT,
+  id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   schedule_id int,
   reminder_time datetime,

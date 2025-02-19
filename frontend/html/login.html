@@ -58,10 +58,24 @@
                 document.getElementById('message').textContent = "Please enter username and password.";
                 return;
             }
+
+            let formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
             
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password); // Insecure
-            document.getElementById('message').textContent = "Login successful!";
+            // post form data to login script, check against stored hash
+            fetch('../../center/webapp/login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').textContent = data.message;
+                if (data.status === "success") {
+                    window.location.href = 'home.php'; // redirect doesn't exist yet
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
