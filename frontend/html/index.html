@@ -168,29 +168,54 @@
         <div class="register-container">
             <h1>Register an account</h1>
             <h2>Create Account</h2>
-            <input type="firstname" id="new-first-name" placeholder="First Name">
+            <input type="firstname" id="first-name" placeholder="First Name">
             <input type="lastname" id="new-last-name" placeholder="Last Name">
-            <input type="email" id="new-email" placeholder="Email">
+            <input type="email" id="email" placeholder="Email">
             <input type="password" id="new-password" placeholder="Password">
             <button onclick="createAccount()">Create Account</button>
             <p id="message" style="color: var(--error-color);"></p>
         </div>
     </div>
     <script>
+        // UNFINISHED
         function createAccount() {
-            let username = document.getElementById('new-username').value.trim();
-            let password = document.getElementById('new-password').value.trim();
-            let message = document.getElementById('message');
-
-            if (!username || !password) {
-                message.textContent = "Please fill in all fields.";
-                return;
-            }
+            let first_name = document.getElementById('first_name').value.trim();
+            let last_name = document.getElementById('last_name').value.trim();
+            let email = document.getElementById('email').value.trim();
+            let password = document.getElementById('password').value.trim();
 
             if (password.length < 6) {
                 message.textContent = "Password must be at least 6 characters.";
                 return;
             }
+
+            if (!email || !password || !first_name || !last_name) {
+                document.getElementById('message').textContent = "Please enter username and password.";
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('first_name', first_name)
+            formData.append('last_name', last_name)
+            formData.append('email', email);
+            formData.append('password', password);
+
+            fetch('../../center/database/register.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    console.log("Raw Response:", jsonData); // DEBUG
+                    document.getElementById('message').textContent = jsonData.message;
+                    if (jsonData.status === "success") {
+                        window.location.href = 'login.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('message').textContent = "Login fail";
+                });
 
             alert("Account created successfully!");
         }
