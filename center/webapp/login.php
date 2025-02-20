@@ -1,32 +1,13 @@
 <?php
-// start user session, preserve login state
 session_start();
-// database connection
-include '../database/db.php';
+header("Content-Type: application/json");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+ini_set("log_errors", 1);
+ini_set("error_log", "/var/www/it313communityprojects.website/section-three/error.log");
 
-    if (empty($username) || empty($password)) {
-        echo json_encode(["status" => "error", "message" => "Please enter username and password."]);
-        exit;
-    }
-
-    // pdo sql
-    $stmt = $pdo->prepare("SELECT id, password_hash FROM users WHERE username = :username");
-    $stmt->execute(['username' => $username]);
-    $user = $stmt->fetch();
-
-    // password_verify function runs hash function with salt on password
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $username;
-
-        echo json_encode(["status" => "success", "message" => "Login successful!"]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Invalid username or password."]);
-    }
-    exit;
-}
+error_log("TEST: PHP is running and writing logs.");
+echo json_encode(["status" => "debug", "message" => "PHP is running!"]);
+exit;
 ?>
