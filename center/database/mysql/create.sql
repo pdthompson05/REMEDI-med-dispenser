@@ -1,4 +1,4 @@
-USE db_remidi;
+USE db_remedi;
 
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS med;
