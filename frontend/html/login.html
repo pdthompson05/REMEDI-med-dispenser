@@ -63,16 +63,21 @@
             formData.append('username', username);
             formData.append('password', password);
             
-            // post form data to login script, check against stored hash
             fetch('../../center/webapp/login.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('message').textContent = data.message;
-                if (data.status === "success") {
-                    window.location.href = 'home.php'; // redirect doesn't exist yet
+                console.log("Raw Response:", data);
+                try {
+                    let jsonData = JSON.parse(data);
+                    document.getElementById('message').textContent = jsonData.message;
+                    if (jsonData.status === "success") {
+                        window.location.href = 'profile.html';
+                    }
+                } catch (error) {
+                    console.error("JSON Error:", error);
                 }
             })
             .catch(error => console.error('Error:', error));
