@@ -63,7 +63,7 @@
             formData.append('username', username);
             formData.append('password', password);
 
-            fetch('../../center/database/login.php', {
+            fetch('/var/www/it313communityprojects/section-three/center/database/login.php', {
                 method: 'POST',
                 body: formData
             })
