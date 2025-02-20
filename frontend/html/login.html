@@ -62,25 +62,23 @@
             let formData = new FormData();
             formData.append('username', username);
             formData.append('password', password);
-            
-            fetch('../../center/webapp/login.php', {
+
+            fetch('../../center/database/login.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Raw Response:", data);
-                try {
-                    let jsonData = JSON.parse(data);
+                .then(response => response.json())
+                .then(jsonData => {
+                    console.log("Raw Response:", jsonData);
                     document.getElementById('message').textContent = jsonData.message;
                     if (jsonData.status === "success") {
                         window.location.href = 'profile.html';
                     }
-                } catch (error) {
-                    console.error("JSON Error:", error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('message').textContent = "Login fail";
+                });
         }
     </script>
 </body>

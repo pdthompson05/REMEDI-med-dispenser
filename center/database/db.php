@@ -1,15 +1,12 @@
 <?php
-// MySQLi
 $DB_HOST = "localhost";
-$DB_USER = "testuser";
-$DB_PASS = "testpassword";
-$DB_NAME = "testdb";
+$DB_USER = "section3";
+$DB_PASS = "SmartMeds-SP2025";
+$DB_NAME = "db_remedi";
 
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
-// Check connection
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully!";
 ?>
