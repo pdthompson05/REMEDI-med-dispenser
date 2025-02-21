@@ -1,6 +1,6 @@
 function createAccount() {
-    let first_name = document.getElementById('first_name').value.trim();
-    let last_name = document.getElementById('last_name').value.trim();
+    let first_name = document.getElementById('first-name').value.trim();
+    let last_name = document.getElementById('last-name').value.trim();
     let email = document.getElementById('email').value.trim();
     let password = document.getElementById('password').value.trim();
     let dob = document.getElementById('dob').value.trim();
