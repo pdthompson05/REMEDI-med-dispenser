@@ -1,0 +1,44 @@
+:root {
+    --primary-color: #1565c0;
+    --secondary-color: #64b5f6;
+    --button-color: #0d47a1;
+    --button-hover-color: #002171;
+    --background-color: #e3f2fd;
+    --card-background: white;
+    --text-color: #333;
+    --error-color: red;
+}
+  
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+}
+  
+/* navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 60px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+  
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    transition: 0.3s;
+}
+  
+.logo a {
+    font-size: 60px;
+    font-weight: bold;
+}
+  
