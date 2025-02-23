@@ -1,0 +1,82 @@
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 100px 60px;
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+  
+.hero-text {
+    max-width: 50%;
+}
+  
+.hero h1 {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+  
+.hero p {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+  
+.register-container {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 320px;
+    text-align: center;
+    margin-left: auto;
+}
+  
+.register-container h1 {
+    color: #002171;
+}
+  
+input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+  
+button {
+    width: 100%;
+    padding: 10px;
+    background: #1f72b5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+button:hover {
+    background: #218838;
+}
+  
+@media (max-width: 768px) {
+    .hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .hero-text {
+      max-width: 100%;
+    }
+    
+    .register-container {
+      margin: 20px auto 0;
+      position: static;
+      transform: none;
+    }
+}
+  
