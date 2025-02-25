@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar - REMEDI</title>
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="navbar">
@@ -12,9 +13,16 @@
             <a href="home.html">REMEDI</a>
         </div>
         <div class="nav-links">
+            <div class ="notification-container">
+                <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <p>notifications</p>
+                </div>
+            </div>
             <a href="calendar.html">Calendar</a>
             <a href="#">Insights</a>
             <a href="profile.html">Profile</a>
         </div>
+        <script src="../js/global.js"></script>
 </body>
 </html>
