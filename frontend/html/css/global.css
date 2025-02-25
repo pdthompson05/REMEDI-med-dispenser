@@ -41,4 +41,33 @@ body {
     font-size: 60px;
     font-weight: bold;
 }
+
+.notification-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.notification-icon {
+    font-size: 26px;
+    color: #ffffff;
+}
+
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background-color: white;
+    width: 200px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.notification-container:hover .notification-icon {
+    color: #007bff;
+}
+
   
