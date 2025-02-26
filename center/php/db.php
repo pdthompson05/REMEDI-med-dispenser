@@ -9,7 +9,7 @@ function loadEnv($path) {
     }
 }
 
-loadEnv(__DIR__ . '/.env');
+loadEnv(__DIR__ . '/../.env');
 
 $DB_HOST = getenv('DB_HOST');
 $DB_USER = getenv('DB_USER');
