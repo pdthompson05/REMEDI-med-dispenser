@@ -1,1 +1,6 @@
-center/database/.env
+.DS_Store
+.idea/
+center/.env
+center/backup
+github
+github.pub
