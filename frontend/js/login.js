@@ -11,7 +11,7 @@ function login() {
     formData.append('email', email);
     formData.append('password', password);
 
-    fetch('../../center/database/login.php', {
+    fetch('../../center/php/login.php', {
         method: 'POST',
         body: formData
     })
