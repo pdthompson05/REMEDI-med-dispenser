@@ -30,7 +30,7 @@ function createAccount() {
     formData.append('dob', dob);
     formData.append('account_type', account_type);
 
-    fetch('../../center/php/register.php', {
+    fetch('/var/www/it313communityprojects/section-three/center/php/register.php', {
         method: 'POST',
         body: formData
     })
@@ -44,8 +44,6 @@ function createAccount() {
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('message').textContent = "Login fail";
+            document.getElementById('message').textContent = "Registration fail";
         });
-
-    alert("Account created successfully!");
 }

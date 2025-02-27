@@ -30,10 +30,11 @@ if ($user = $result->fetch_assoc()) {
         echo json_encode(["status" => "success"]);
     } else {
         echo json_encode(["status" => "error", "message" => "Invalid email or password."]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Invalid email or password."]);       
     }
+} else {
+    echo json_encode(["status" => "error", "message" => "Invalid email or password."]);       
 }
+
 
 $stmt->close();
 $conn->close();

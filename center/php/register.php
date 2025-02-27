@@ -38,10 +38,10 @@ if ($stmt->num_rows > 0) {
     echo json_encode(["status" => "error", "message" => "Email already registered"]);
     exit;
 }
-
 $stmt->close();
 
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+$verification_token = bin2hex(random_bytes(50));
 
 $sql_insert = "INSERT INTO users (first_name, last_name, email, password_hash, date_of_birth, account_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
 $stmt_insert = $conn->prepare($sql_insert);
