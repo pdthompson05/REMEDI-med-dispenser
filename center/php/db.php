@@ -9,7 +9,6 @@ if (file_exists($env_path)) {
     $lines = file($env_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     // Loop through each line in the .env file
-
     foreach ($lines as $line) {
         if (strpos($line, '=') !== false) {
             list($key, $value) = explode('=', $line, 2);
@@ -18,9 +17,7 @@ if (file_exists($env_path)) {
     }
 }
 
-
 // Create a new MySQL database connection using values from .env
-// mysqli is PHP's MySQL Improved extension for database operations
 $conn = new mysqli(
     $_ENV['DB_HOST'],
     $_ENV['DB_USER'],
@@ -28,10 +25,7 @@ $conn = new mysqli(
     $_ENV['DB_NAME']
 );
 
-
-
 // Check if the connection was successful
-// connect_error will contain error message if connection failed
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
