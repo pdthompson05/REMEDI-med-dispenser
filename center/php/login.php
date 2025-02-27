@@ -14,20 +14,25 @@ if (empty($email) || empty($password)) {
 
 $sql = "SELECT user_id, email, password_hash FROM user WHERE email = ?";
 $stmt = $conn->prepare($sql);
+if(!$stmt){
+    echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
+    exit;
+}
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($user = $result->fetch_assoc()) {
     if (password_verify($password, $user['password_hash'])) {
+        session_regenerate_id(true); // Prevent session fixation
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['email'] = $user['email'];
         echo json_encode(["status" => "success"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Wrong password"]);
+        echo json_encode(["status" => "error", "message" => "Invalid email or password."]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Invalid email or password."]);       
     }
-} else {
-    echo json_encode(["status" => "error", "message" => "Wrong email"]);
 }
 
 $stmt->close();
