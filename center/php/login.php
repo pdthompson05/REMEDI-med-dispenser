@@ -29,6 +29,9 @@ if ($user = $result->fetch_assoc()) {
         $_SESSION['email'] = $user['email'];
         echo json_encode(["status" => "success"]);
     } 
+    else{
+        echo json_encode(["status" => "error", "message" => "Invalid password or Email"]);
+    }
 }
 
 $stmt->close();
