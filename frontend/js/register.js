@@ -30,7 +30,7 @@ function createAccount() {
     formData.append('dob', dob);
     formData.append('account_type', account_type);
 
-    fetch('../../center/database/register.php', {
+    fetch('../../center/php/register.php', {
         method: 'POST',
         body: formData
     })
