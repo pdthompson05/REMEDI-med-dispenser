@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+            color: #333;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 60px;
+            background-color: #1565c0;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: 0.3s;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
         .hero {
             display: flex;
             flex-direction: column;
@@ -23,10 +50,6 @@
             font-size: 50px;
             margin-bottom: 15px;
         }
-        .hero h2 {
-            font-size: 30px;
-            margin-bottom: 15px;
-        }
         .hero p {
             font-size: 22px;
             margin-bottom: 30px;
@@ -41,31 +64,20 @@
             margin-top: 20px;
             margin-bottom: 20px;
         }
+        .form-container p {
+            font-size: 18px;
+            margin: 15px 0px 0px 0px;
+        }
         .form-container input, .form-container button, .form-container select {
             display: block;
             width: 96.2%;
-            padding: 10px;  
+            padding: 10px;
             margin-top: 10px;
             font-size: 18px;
         }
         .form-container select {
             width: 100%;
             color: gray;
-        }
-        input[type="date"] {
-            color: gray;
-        }
-        input[type="number"] {
-            color: gray;
-        }
-        input[type="time"] {
-            color: gray;
-        }
-        .form-container p {
-            display: block;
-            color: black;
-            font-size: 18px;
-            margin: 15px 0px 0px 0px;
         }
         .form-container button {
             background-color: #0d47a1;
@@ -74,9 +86,59 @@
             border: none;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 15px;
         }
         .form-container button:hover {
             background-color: #002171;
+        }
+        figure {
+            text-align: center;
+        }
+        figure img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            outline: 3px solid #0d47a1;
+        }
+        .profile-info p {
+            font-size: 18px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-info span, .profile-info input {
+            display: inline-block;
+            font-size: 18px;
+        }
+        .profile-info input {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 18px;
+        }
+        .edit-btn {
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .edit-btn:hover, .pfp-btn:hover {
+            background-color: #002171;
+        }
+        .pfp-btn {
+            margin: 0 auto;
+            width: 40%;
+            margin-bottom: 15px;
+        }
+        .profile-picture button {
+            width: 40%;
         }
     </style>
 </head>
@@ -103,16 +165,26 @@
             <p>Manage your medication schedule and personal information.</p>
         </div>
         <div class="form-container">
-            <h2>Personal Information</h2>
-            <p>Your Full Name:</p>
-            <input type="text" placeholder="Name">
-            <p>Date of Birth:</p>
-            <input type="date" placeholder="DateOfBirth">
-            <p>Contact Information:</p>
-            <input type="text" placeholder="xxx@gmail.com">
-            <button>Save Information</button>
-        </div>
+            <h2>Personal Info</h2>
 
+            <div class="profile-picture">
+                <figure>
+                    <img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
+                </figure>
+                <input type="file" id="profile-image-upload" accept="image/*" onchange="previewProfileImage()" style="display: none;">
+                <button class="pfp-btn" onclick="document.getElementById('profile-image-upload').click()">Change Profile Picture</button>
+            </div>
+
+            <div class="profile-info">
+                <p><strong>Full Name:</strong> <span id="name-text">First Last</span> <input type="text" id="name-input" placeholder="Full Name"></p>
+                <p><strong>Date of Birth:</strong> <span id="dob-text">2000-01-01</span> <input type="date" id="dob-input" placeholder="Date"></p>
+                <p><strong>Contact:</strong> <span id="contact-text">name@gmail.com</span> <input type="text" id="contact-input" placeholder="Email"></p>
+                <p><strong>Caretaker Name (optional):</strong> <span id="caretaker-name-text">First Last</span> <input type="text" id="caretaker-name-input" placeholder="Full Name (optional)"></p>
+                <p><strong>Caretaker Contact (optional):</strong> <span id="caretaker-contact-text">name@gmail.com</span> <input type="text" id="caretaker-contact-input" placeholder="Email (optional)"></p>
+            </div>
+            <button class="edit-btn" onclick="toggleEdit()">Edit</button>
+        </div>    
+        
         <div class="form-container">
             <h2>Add Medication To Calendar</h2>
             <p>Name of Medication:</p>
@@ -141,9 +213,49 @@
             <input type="time" placeholder="Reminder Time (Optional)">
             
             <button>Add Medication</button>
-            
         </div>
     </div>
+
+    <script>
+        function toggleEdit() {
+            const inputs = document.querySelectorAll(".profile-info input");
+            const spans = document.querySelectorAll(".profile-info span");
+            const button = document.querySelector(".edit-btn");
+
+            if (button.innerText === "Edit") {
+                inputs.forEach(input => {
+                    input.style.display = "inline-block";
+                });
+                spans.forEach(span => span.style.display = "none");
+                button.innerText = "Save";
+            } else {
+                document.getElementById("name-text").innerText = document.getElementById("name-input").value;
+                document.getElementById("dob-text").innerText = document.getElementById("dob-input").value;
+                document.getElementById("contact-text").innerText = document.getElementById("contact-input").value;
+                document.getElementById("caretaker-name-text").innerText = document.getElementById("caretaker-name-input").value;
+                document.getElementById("caretaker-contact-text").innerText = document.getElementById("caretaker-contact-input").value;
+
+                inputs.forEach(input => input.style.display = "none");
+                spans.forEach(span => span.style.display = "inline-block");
+                button.innerText = "Edit";
+            }
+        }
+    </script>
+    <script>
+        function previewProfileImage() {
+            const file = document.getElementById('profile-image-upload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update profile image preview
+                    document.getElementById('profile-image').src = e.target.result;
+                    // Update profile image in profile-info section
+                    document.getElementById('profile-image-info').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
     <script src="../js/global.js"></script>
 </body>
 </html>
