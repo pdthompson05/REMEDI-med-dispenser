@@ -35,7 +35,7 @@ $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
 $sql_insert_user = "INSERT INTO user (email, password_hash, created_at, updated_at) VALUES (?, ?, NOW(), NOW())";
 $stmt_user = $conn->prepare($sql_insert_user);
-stmt_user->bind_param("ss", $email, $hashed_password);
+$stmt_user->bind_param("ss", $email, $hashed_password);
 
 if ($stmt_user->execute()) {
     $user_id = $stmt_user->insert_id;
