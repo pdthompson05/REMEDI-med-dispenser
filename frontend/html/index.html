@@ -23,33 +23,14 @@
         </div>
         <div class="register-container">
             <h1>Register an account</h1>
-            <h2>Create Account</h2>
-            <input type="firstname" id="new-first-name" placeholder="First Name">
-            <input type="lastname" id="new-last-name" placeholder="Last Name">
-            <input type="email" id="new-email" placeholder="Email">
-            <input type="password" id="new-password" placeholder="Password">
+            <input type="text" id="first-name" placeholder="First Name">
+            <input type="text" id="last-name" placeholder="Last Name">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
             <button onclick="createAccount()">Create Account</button>
             <p id="message" style="color: var(--error-color);"></p>
         </div>
     </div>
-    <script>
-        function createAccount() {
-            let username = document.getElementById('new-username').value.trim();
-            let password = document.getElementById('new-password').value.trim();
-            let message = document.getElementById('message');
-
-            if (!username || !password) {
-                message.textContent = "Please fill in all fields.";
-                return;
-            }
-
-            if (password.length < 6) {
-                message.textContent = "Password must be at least 6 characters.";
-                return;
-            }
-
-            alert("Account created successfully!");
-        }
-    </script>
+    <script src="../js/register.js"></script>
 </body>
 </html>
