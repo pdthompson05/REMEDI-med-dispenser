@@ -142,7 +142,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="loadProfile()">
     <div class="navbar">
         <div class="logo">
             <a href="home.html">REMEDI</a>
@@ -176,15 +176,17 @@
             </div>
 
             <div class="profile-info">
-                <p><strong>Full Name:</strong> <span id="name-text">First Last</span> <input type="text" id="name-input" placeholder="Full Name"></p>
+                <p><strong>First Name:</strong> <span id="first-name-text">First</span> <input type="text" id="first-name-input" placeholder="First Name"></p>
+                <p><strong>Last Name:</strong> <span id="last-name-text">Last</span> <input type="text" id="last-name-input" placeholder="Last Name"></p>
                 <p><strong>Date of Birth:</strong> <span id="dob-text">2000-01-01</span> <input type="date" id="dob-input" placeholder="Date"></p>
                 <p><strong>Contact:</strong> <span id="contact-text">name@gmail.com</span> <input type="text" id="contact-input" placeholder="Email"></p>
                 <p><strong>Caretaker Name (optional):</strong> <span id="caretaker-name-text">First Last</span> <input type="text" id="caretaker-name-input" placeholder="Full Name (optional)"></p>
                 <p><strong>Caretaker Contact (optional):</strong> <span id="caretaker-contact-text">name@gmail.com</span> <input type="text" id="caretaker-contact-input" placeholder="Email (optional)"></p>
             </div>
             <button class="edit-btn" onclick="toggleEdit()">Edit</button>
-        </div>    
-        
+            <button class="save-btn" onclick="updateProfile()" style="display:none;">Save</button>
+        </div>
+
         <div class="form-container">
             <h2>Add Medication To Calendar</h2>
             <p>Name of Medication:</p>
@@ -215,47 +217,8 @@
             <button>Add Medication</button>
         </div>
     </div>
-
-    <script>
-        function toggleEdit() {
-            const inputs = document.querySelectorAll(".profile-info input");
-            const spans = document.querySelectorAll(".profile-info span");
-            const button = document.querySelector(".edit-btn");
-
-            if (button.innerText === "Edit") {
-                inputs.forEach(input => {
-                    input.style.display = "inline-block";
-                });
-                spans.forEach(span => span.style.display = "none");
-                button.innerText = "Save";
-            } else {
-                document.getElementById("name-text").innerText = document.getElementById("name-input").value;
-                document.getElementById("dob-text").innerText = document.getElementById("dob-input").value;
-                document.getElementById("contact-text").innerText = document.getElementById("contact-input").value;
-                document.getElementById("caretaker-name-text").innerText = document.getElementById("caretaker-name-input").value;
-                document.getElementById("caretaker-contact-text").innerText = document.getElementById("caretaker-contact-input").value;
-
-                inputs.forEach(input => input.style.display = "none");
-                spans.forEach(span => span.style.display = "inline-block");
-                button.innerText = "Edit";
-            }
-        }
-    </script>
-    <script>
-        function previewProfileImage() {
-            const file = document.getElementById('profile-image-upload').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Update profile image preview
-                    document.getElementById('profile-image').src = e.target.result;
-                    // Update profile image in profile-info section
-                    document.getElementById('profile-image-info').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    </script>
+    
     <script src="../js/global.js"></script>
+    <script src="../js/profile.js"></script>
 </body>
 </html>
