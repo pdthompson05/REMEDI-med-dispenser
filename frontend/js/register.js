@@ -14,19 +14,13 @@ function createAccount() {
         return;
     }
 
-    //verify dob format
-    if (isNaN(Date.parse(dob))) {
-        document.getElementById('message').textContent = "Date of Birth invalid.";
-        return;
-    }
-
     let formData = new FormData();
     formData.append('first_name', first_name);
     formData.append('last_name', last_name);
     formData.append('email', email);
     formData.append('password', password);
 
-    fetch('/var/www/it313communityprojects/section-three/center/php/register.php', {
+    fetch('https://section-three.it313communityprojects.website/center/php/register.php', {
         method: 'POST',
         body: formData
     })
