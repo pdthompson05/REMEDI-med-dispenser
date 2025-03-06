@@ -14,6 +14,7 @@ $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
 $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : '';
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
+$date_of_birth = (!empty($_POST['date_of_birth'])) ? trim($_POST['date_of_birth']) : NULL;
 
 if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
     echo json_encode(["status" => "error", "message" => "Fields required"]);
@@ -52,9 +53,9 @@ if ($stmt_user->execute()) {
     $stmt_user->close();
 
     # USER PROFILE TABLE
-    $sql_insert_profile = "INSERT INTO user_profile (user_id, first_name, last_name) VALUES (?, ?, ?)";
+    $sql_insert_profile = "INSERT INTO user_profile (user_id, first_name, last_name, date_of_birth) VALUES (?, ?, ?, ?)";
     $stmt_profile = $conn->prepare($sql_insert_profile);
-    $stmt_profile->bind_param("iss", $user_id, $first_name, $last_name);
+    $stmt_profile->bind_param("isss", $user_id, $first_name, $last_name, $date_of_birth);
 
     if ($stmt_profile->execute()) {
         $stmt_profile->close();
