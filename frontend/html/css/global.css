@@ -70,4 +70,8 @@ body {
     color: #007bff;
 }
 
+#message {
+    color: var(--error-color);
+}
+
   
