@@ -28,7 +28,7 @@ function sendVerificationEmail($email, $token) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom($mailUser, 'Your Website');
+        $mail->setFrom($mailUser, 'noreply-remedi');
         $mail->addAddress($email);
 
         $verification_link = "https://section-three.it313communityprojects.website/center/php/verify_token.php?token=" . urlencode($token);
