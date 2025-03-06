@@ -9,3 +9,5 @@ github
 github/
 github.pub
 github.pub/
+PHPMailer/
+**/PHPMailer/
