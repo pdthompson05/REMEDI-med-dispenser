@@ -1,19 +1,20 @@
 <?php
 session_start();
 
-###
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-###
-
 header("Content-Type: application/json");
-require_once "db.php";
+
+require_once "db.php"; // DB connection
+require_once "verify_mail.php"; // Email verification
+
 global $conn;
 
 $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
 $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : '';
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
+$date_of_birth = (!empty($_POST['date_of_birth'])) ? trim($_POST['date_of_birth']) : NULL;
 
 if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
     echo json_encode(["status" => "error", "message" => "Fields required"]);

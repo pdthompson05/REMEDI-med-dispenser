@@ -23,12 +23,14 @@
         </div>
         <div class="register-container">
             <h1>Register an account</h1>
+            <input type="email" id="email" placeholder="Email">
             <input type="text" id="first-name" placeholder="First Name">
             <input type="text" id="last-name" placeholder="Last Name">
-            <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Password">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="Date of Birth">
             <button onclick="createAccount()">Create Account</button>
-            <p id="message" style="color: var(--error-color);"></p>
+            <p id="message"></p>
         </div>
     </div>
     <script src="../js/register.js"></script>
