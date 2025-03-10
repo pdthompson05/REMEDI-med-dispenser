@@ -17,7 +17,7 @@ $stmt->bind_param("sss", $token_hash, $expiry, $email);
 $stmt->execute();
 
 if ($stmt->affected_rows > 0) {
-    require_once "verify_mail.php"; // Ensure the path is correct
+    $mail = require __DIR__ ."/verify_mail.php"; // Ensure the path is correct
 
     $mail->setFrom("noreply.remedi@gmail.com");
     $mail->addAddress($email);
@@ -36,6 +36,8 @@ if ($stmt->affected_rows > 0) {
 } else {
     echo "No user found with that email address.";
 }
+
+echo "Message was sent to your email please check";
 
 $stmt->close();
 $conn->close();
