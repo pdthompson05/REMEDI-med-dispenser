@@ -53,7 +53,7 @@ if ($stmt_user->execute()) {
     $verification_link = "http://section-three.it313communityprojects.website/center/php/verify.php?token=" . $verification_token;
     $subject = "Email Verification";
     $message = "Please click the following link to verify your email: " . $verification_link;
-    $headers = "From: Jasonamaya6@icloud.com"; // Update with your email
+    $headers = "From: noreply.remedi@gmail.com"; // Update with your email
 
     if (mail($email, $subject, $message, $headers)) {
         echo json_encode(["status" => "success", "message" => "Registration successful. Please check your email for verification."]);
