@@ -4,6 +4,8 @@ require 'PHPMailer/src/SMTP.php';
 require 'PHPMailer/src/Exception.php';
 
 require_once __DIR__ . '/env.php'; // loadEnv
+require __DIR__ .'vendor/autoload.php';
+
 
 
 use PHPMailer\PHPMailer\PHPMailer;
