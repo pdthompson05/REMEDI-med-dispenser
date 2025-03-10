@@ -8,48 +8,37 @@ require_once "db.php"; // DB connection
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 
 $token = bin2hex(random_bytes(16));
-
 $token_hash = hash('sha256', $token);
-
 $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
 
-
 $sql = "UPDATE user SET reset_token_hash = ?, reset_token_expires_at = ? WHERE email = ?";
-
 $stmt = $conn->prepare($sql);
-
 $stmt->bind_param("sss", $token_hash, $expiry, $email);
-
 $stmt->execute();
 
-if ($mysqli-> affected_rows_){
-
-    require_once "/verify_mail.php";
+if ($stmt->affected_rows > 0) {
+    require_once "verify_mail.php"; // Ensure the path is correct
 
     $mail->setFrom("noreply.remedi@gmail.com");
     $mail->addAddress($email);
     $mail->Subject = "Password Reset";
     $mail->Body = <<<END
-
     Click <a href="https://section-three.it313communityprojects.website/reset_pass.php?token=$token">here</a>
     to reset your password
-
     END;
 
-    try{
-        $mail-> send();
+    try {
+        $mail->send();
+        echo "Message sent, please check your inbox";
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
-    catch (Exception $e) {
-        echo "message could not be sent mailer error: {$mailer->ErrorInfor}";
-
-    }
-
-
+} else {
+    echo "No user found with that email address.";
 }
 
-echo "Message sent, please check your inbox"
+$stmt->close();
+$conn->close();
 
 
 ?>
-
-
