@@ -24,7 +24,7 @@ $stmt->execute();
 
 if ($mysqli-> affected_rows_){
 
-    require_once "/mailer.php";
+    require_once "/verify_mail.php";
 
     $mail->setFrom("noreply.remedi@gmail.com");
     $mail->addAddress($email);

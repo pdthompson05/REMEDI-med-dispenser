@@ -5,6 +5,7 @@ require 'PHPMailer/src/Exception.php';
 
 require_once __DIR__ . '/env.php'; // loadEnv
 
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -19,6 +20,7 @@ function sendVerificationEmail($email, $token) {
     }
 
     $mail = new PHPMailer(true);
+        
     try {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
