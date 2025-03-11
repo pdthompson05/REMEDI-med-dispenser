@@ -38,9 +38,3 @@ if ($stmt->affected_rows > 0) {
 }
 
 echo "Message was sent to your email please check";
-
-$stmt->close();
-$conn->close();
-
-
-?>

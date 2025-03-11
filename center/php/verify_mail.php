@@ -4,14 +4,14 @@ require 'PHPMailer/src/SMTP.php';
 require 'PHPMailer/src/Exception.php';
 
 require_once __DIR__ . '/env.php'; // loadEnv
-require __DIR__ .'vendor/autoload.php';
+require __DIR__ .'/../../vendor/autoload.php';
 
 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-loadEnv(__DIR__ . '/../.env');
+loadEnv(__DIR__ . '/../.env'); 
 
 function sendVerificationEmail($email, $token) {
     $mailUser = getenv('MAIL_USER');
@@ -44,6 +44,7 @@ function sendVerificationEmail($email, $token) {
         return $mail->send();
     } catch (Exception $e) {
         return false;
+        
     }
 }
 ?>
