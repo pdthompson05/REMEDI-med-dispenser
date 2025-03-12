@@ -41,7 +41,7 @@ function sendVerificationEmail($email, $token) {
         $mail->Body    = "<p>Click the link below to verify your email:</p>
                           <p><a href='$verification_link'>$verification_link</a></p>";
 
-        return $mail;
+        return $mail->send();
     } catch (Exception $e) {
         return false;
         
