@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once "db.php"; // DB connection
+require_once "verify_mail.php"; // Include the mail functions
 
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 
@@ -11,30 +12,20 @@ $token = bin2hex(random_bytes(16));
 $token_hash = hash('sha256', $token);
 $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
 
+// Update the user's reset token in the database
 $sql = "UPDATE user SET reset_token_hash = ?, reset_token_expires_at = ? WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $token_hash, $expiry, $email);
 $stmt->execute();
 
 if ($stmt->affected_rows > 0) {
-    $mail = require __DIR__ ."/verify_mail.php"; // Ensure the path is correct
-
-    $mail->setFrom("noreply.remedi@gmail.com");
-    $mail->addAddress($email);
-    $mail->Subject = "Password Reset";
-    $mail->Body = <<<END
-    Click <a href="https://section-three.it313communityprojects.website/center/php/forgot_pass.php?token=$token">here</a>
-    to reset your password
-    END;
-
-    try {
-        $mail->send();
-        echo "Message sent, please check your inbox";
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    // Call the sendPasswordResetEmail function
+    if (sendPasswordResetEmail($email, $token)) {
+        echo "A password reset email has been sent to your email address. Please check your inbox.";
+    } else {
+        echo "Failed to send the password reset email. Please try again.";
     }
 } else {
     echo "No user found with that email address.";
 }
-
-echo "Message was sent to your email please check";
+?>
