@@ -22,6 +22,7 @@ if ($stmt->affected_rows > 0) {
     // Call the sendPasswordResetEmail function
     if (sendPasswordResetEmail($email, $token)) {
         echo "A password reset email has been sent to your email address. Please check your inbox.";
+        echo '<br><a href="/frontend/html/login.html" class="button">Click here after you have reset your password</a>';
     } else {
         echo "Failed to send the password reset email. Please try again.";
     }

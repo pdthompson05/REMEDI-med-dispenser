@@ -48,6 +48,9 @@ function sendVerificationEmail($email, $token) {
     }
 }
 
+
+# Function for the rest password
+
 function sendPasswordResetEmail($email, $token) {
     $mailUser = getenv('MAIL_USER');
     $mailPass = getenv('MAIL_PASS');
@@ -74,7 +77,7 @@ function sendPasswordResetEmail($email, $token) {
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Request';
         $mail->Body    = "<p>Click the link below to reset your password:</p>
-                          <p><a href='$reset_link'>$reset_link</a></p>";
+                          <p><a href='$reset_link'>Reset Password</a></p>";
 
         return $mail->send(); // Return the result of the send operation
     } catch (Exception $e) {
