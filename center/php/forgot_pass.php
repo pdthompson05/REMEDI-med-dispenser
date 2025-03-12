@@ -24,17 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Reset Password</title>
+            <title>Password Reset Confirmation</title>
         </head>
         <body>
             <div class="reset-container">
-                <h1>Reset Password</h1>
-                <form method="post" action="update_password.php">
-                    <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
-                    <label for="new_password">New Password</label>
-                    <input type="password" name="new_password" id="new_password" required>
-                    <button type="submit">Reset Password</button>
-                </form>
+                <h1>Thank You for Resetting Your Password</h1>
+                <p>Your password has been successfully reset.</p>
             </div>
         </body>
         </html>
