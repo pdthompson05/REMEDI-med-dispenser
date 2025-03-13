@@ -2,9 +2,9 @@
 session_start();
 require_once "db.php"; // DB connection
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password']) && isset($_POST['token'])) {
     // Get token from URL parameter
-    $token = $_GET['token'];
+    $token = $_POST['token'];
     
     if (!isset($token)) {
         die("No token provided.");
