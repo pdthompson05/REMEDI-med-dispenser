@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $sql = "UPDATE user SET password_hash = ?, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $password_hash, $user["id"]);
+    $stmt->bind_param("si", $password_hash, $user["user_id"]);
     
     if ($stmt->execute()) {
         echo "Password updated successfully. You can now login.";
