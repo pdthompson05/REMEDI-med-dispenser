@@ -2,7 +2,7 @@
 session_start();
 require_once "db.php"; // DB connection
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
     $token = $_GET['token'];
     $token_hash = hash('sha256', $token);
 
