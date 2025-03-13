@@ -20,13 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
             <body>
                 <div class="reset-container">
                     <h1>Reset Password</h1>
-                    <form method="post" action="process_new_pass.php">
-
-                        <input type="hidden" name="token" value="<?php htmlspecialchars($token); ?>">
-                        <label for="new_password">New Password</label>
-                        <input type="password" name="new_password" id="new_password" required>
-                        <button type="submit">Password</button>
+                    <form method="POST" action="process_new_pass.php">
+                        <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
+                        <input type="password" name="new_password" required>
+                        <button type="submit">Reset Password</button>
                     </form>
+                    <p>Enter your new password below. It must be at least 8 characters long.</p>
+                    <p>After resetting, you can use your new password to log in.</p>
+                    <p><a href="login.php">Back to Login</a></p>
+                    <p>Didn't request a password reset? <a href="register.php">Register</a> or <a href="login.php">Login</a>.</p>
                 </div>
             </body>
             </html>
