@@ -1,17 +1,6 @@
 <?php
-
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Debug incoming data
-var_dump($_POST);
-
-
 session_start();
 require_once "db.php"; // DB connection
-
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate all required fields are present
@@ -51,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Hash and update password
     $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
     
-    $sql = "UPDATE user SET password_hash = ?, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE id = ?";
+    $sql = "UPDATE user SET password_hash = ?, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("si", $password_hash, $user["user_id"]);
     
@@ -63,5 +52,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     die("Invalid request method.");
 }
-
 ?>
