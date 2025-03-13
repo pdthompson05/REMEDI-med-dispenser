@@ -1,6 +1,3 @@
-# This file will handle the password 
-# reset process by verifying the token and allowing 
-# the user to set a new password
 
 <?php
 session_start();

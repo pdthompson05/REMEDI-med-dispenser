@@ -2,8 +2,8 @@
 session_start();
 require_once "db.php"; // DB connection
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
-    $token = $_POST['token'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
+    $token = $_GET['token'];
     $token_hash = hash('sha256', $token);
 
     // Check if the token is valid
@@ -13,30 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        // Token is valid, process the new password
-        if (isset($_POST['new_password'])) {
-            $new_password = $_POST['new_password'];
 
-            // Validate the new password
-        
-
-            // Update the password in the database
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $update_sql = "UPDATE user SET password = ?, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE reset_token_hash = ?";
-            $update_stmt = $conn->prepare($update_sql);
-            $update_stmt->bind_param("ss", $hashed_password, $token_hash);
-            $update_stmt->execute();
-
-
-        } 
-    } else {
-        echo "Invalid or expired token.";
-    }
+    
 } else {
     echo "No token provided.";
 }
 
+
+
+$password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+$sql = "UPDATE user SET password_hash = ?, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE id = ?";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->bind_param("ss", $password_hash, $user["id"]);
+
+$stmt->execute();
+
+echo "Password updated. You can now login";
 
 
 
