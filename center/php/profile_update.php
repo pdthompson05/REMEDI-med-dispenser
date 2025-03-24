@@ -1,6 +1,8 @@
 <?php
 session_start();
 ob_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 header("Content-Type: application/json");
 require_once "db.php";
 global $conn;

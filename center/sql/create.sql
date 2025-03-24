@@ -33,10 +33,14 @@ CREATE TABLE  (
 CREATE TABLE med (
   med_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  dosage_mg INT,
-  type ENUM('pill', 'capsule', 'liquid', 'injectable', 'other') NOT NULL,
-  instructions TEXT,
+  med_name VARCHAR(255) NOT NULL,
+  amount_pills INT,
+  -- type ENUM('pill', 'capsule', 'liquid', 'injectable', 'other') NOT NULL,
+  frequency ENUM('once', 'twice', 'thrice'),
+  hrs_btwn INT,
+  start_time TIMESTAMP,
+  cldr_day DATE,
+  reminder TIMESTAMP NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE

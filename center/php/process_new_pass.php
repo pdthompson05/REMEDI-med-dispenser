@@ -1,6 +1,10 @@
 <?php
 session_start();
-require_once "db.php"; // DB connection
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header("Content-Type: application/json");
+require_once "db.php";
+global $conn;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate all required fields are present

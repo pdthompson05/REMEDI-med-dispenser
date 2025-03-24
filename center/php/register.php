@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
-require_once "db.php"; // DB connection
-require_once "verify_mail.php"; // Email verification
+require_once "db.php";
+require_once "verify_mail.php";
 
 global $conn;
 
@@ -49,11 +49,10 @@ $stmt_user->bind_param("sss", $email, $password_hash, $verification_token);
 error_log("Inserting user: email=$email, password_hash=$password_hash, verification_token=$verification_token");
 
 if ($stmt_user->execute()) {
-    // Send verification email
     $verification_link = "http://section-three.it313communityprojects.website/center/php/verify.php?token=" . $verification_token;
     $subject = "Email Verification";
     $message = "Please click the following link to verify your email: " . $verification_link;
-    $headers = "From: noreply.remedi@gmail.com"; // Update with your email
+    $headers = "From: noreply.remedi@gmail.com";
 
     if (mail($email, $subject, $message, $headers)) {
         echo json_encode(["status" => "success", "message" => "Registration successful. Please check your email for verification."]);
