@@ -1,7 +1,9 @@
-
 <?php
 session_start();
-require_once "db.php"; // DB connection
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once "db.php";
+global $conn;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
     $token = $_GET['token'];

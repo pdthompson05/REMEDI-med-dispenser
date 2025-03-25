@@ -2,9 +2,9 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-require_once "db.php"; // DB connection
-require_once "verify_mail.php"; // Include the mail functions
+require_once "db.php";
+require_once "verify_mail.php";
+global $conn;
 
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 

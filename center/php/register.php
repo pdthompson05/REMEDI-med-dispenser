@@ -38,33 +38,40 @@ if ($stmt->num_rows > 0) {
 }
 $stmt->close();
 
-$password_hash = password_hash($password, PASSWORD_BCRYPT);
+$hashed_password = password_hash($password, PASSWORD_BCRYPT);
 $verification_token = bin2hex(random_bytes(16));
+$verification_token_hash = hash('sha256', $verification_token);
 
 
+# USER TABLE
 $sql_insert_user = "INSERT INTO user (email, password_hash, created_at, updated_at, verification_token, is_verified) VALUES (?, ?, NOW(), NOW(), ?, 0)";
 $stmt_user = $conn->prepare($sql_insert_user);
-$stmt_user->bind_param("sss", $email, $password_hash, $verification_token);
-
-error_log("Inserting user: email=$email, password_hash=$password_hash, verification_token=$verification_token");
+$stmt_user->bind_param("sss", $email, $hashed_password, $verification_token_hash);
 
 if ($stmt_user->execute()) {
-    // Send verification email
-    $verification_link = "http://section-three.it313communityprojects.website/center/php/verify.php?token=" . $verification_token;
-    $subject = "Email Verification";
-    $message = "Please click the following link to verify your email: " . $verification_link;
-    $headers = "From: noreply.remedi@gmail.com"; // Update with your email
+    $user_id = $stmt_user->insert_id;
+    $stmt_user->close();
 
-    if (mail($email, $subject, $message, $headers)) {
-        echo json_encode(["status" => "success", "message" => "Registration successful. Please check your email for verification."]);
+    # USER PROFILE TABLE
+    $sql_insert_profile = "INSERT INTO user_profile (user_id, first_name, last_name, date_of_birth) VALUES (?, ?, ?, ?)";
+    $stmt_profile = $conn->prepare($sql_insert_profile);
+    $stmt_profile->bind_param("isss", $user_id, $first_name, $last_name, $date_of_birth);
+
+    if ($stmt_profile->execute()) {
+        $stmt_profile->close();
+
+        // Send email verification
+        if (sendVerificationEmail($email, $verification_token)) {
+            echo json_encode(["status" => "success", "message" => "Registration successful."]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Registration successful, email not sent."]);
+        }
     } else {
-        echo json_encode(["status" => "error", "message" => "Registration successful, but failed to send verification email."]);
+        echo json_encode(["status" => "error", "message" => "User profile creation failed"]);
     }
 } else {
-    error_log("SQL Error: " . $stmt_user->error);
-    echo json_encode(["status" => "error", "message" => "Failed to register user. Please try again later."]);
+    echo json_encode(["status" => "error", "message" => "Registration error"]);
 }
 
-$stmt_user->close();
 $conn->close();
 ?>
