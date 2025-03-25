@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar - REMEDI</title>
+    <title>REMEDI Calendar</title>
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/calendar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -13,16 +15,61 @@
             <a href="home.html">REMEDI</a>
         </div>
         <div class="nav-links">
-            <div class ="notification-container">
+            <div class="notification-container">
                 <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
                 <div class="notification-dropdown" id="notificationDropdown">
-                    <p>notifications</p>
+                    <p>Notifications</p>
                 </div>
             </div>
             <a href="calendar.html">Calendar</a>
             <a href="#">Insights</a>
             <a href="profile.html">Profile</a>
         </div>
-        <script src="../js/global.js"></script>
+    </div>
+
+    <div class="calendar-container">
+        <div class="calendar-header" id="week-days">
+        </div>
+        <div class="calendar-body" id="calendar-body">
+        </div>
+    </div>
+
+    <script src="js/calendar.js"></script>
+    <script>
+        const weekDaysEl = document.getElementById("week-days");
+        const calendarBody = document.getElementById("calendar-body");
+
+        const hours = Array.from({ length: 12 }, (_, i) => `${8 + i}:00`);
+        const weekStart = getMonday(new Date());
+        const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+        weekDaysEl.innerHTML = `<div></div>`;
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(weekStart);
+            date.setDate(date.getDate() + i);
+            const label = `${dayNames[i]}<br>${date.getMonth() + 1}/${date.getDate()}`;
+            weekDaysEl.innerHTML += `<div>${label}</div>`;
+        }
+
+        hours.forEach(hour => {
+            calendarBody.innerHTML += `<div class="time-slot time-label">${hour}</div>`;
+            for (let i = 0; i < 7; i++) {
+            calendarBody.innerHTML += `<div class="time-slot day-column" data-day="${i}" data-hour="${hour}"></div>`;
+            }
+        });
+
+        function getMonday(date) {
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        function addReminder(dayIndex, hour, text) {
+            const cells = document.querySelectorAll(`[data-day="${dayIndex}"][data-hour="${hour}"]`);
+            cells.forEach(cell => {
+            cell.innerHTML = `<div class="reminder-block">${text}</div>`;
+        });
+    }
+    </script>
 </body>
 </html>
