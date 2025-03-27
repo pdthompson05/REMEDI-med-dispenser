@@ -42,6 +42,8 @@
                 </div>
                 <h2 id="profile-name">First Last</h2>
                 <p id="profile-email">name@gmail.com</p>
+                <p id="caretaker-profile-name">Caretaker Name: N/A</p>
+                <p id="caretaker-profile-email">Caretaker Email: N/A</p>
             </div>
     
             <div class="profile-info">
@@ -69,6 +71,7 @@
                     <label>Caretaker Contact (Optional)</label>
                     <input type="text" id="caretaker-contact-input" placeholder="Email">
                 </div>
+                
             </div>
     
             <div class="btn-group">
@@ -126,8 +129,8 @@
         </div>
     </div>
     
-    <script src="../js/global.js"></script>
-    <script src="../js/profile.js"></script>
+    <!--<script src="../js/global.js"></script>
+    <script src="../js/profile.js"></script>-->
     <script>
         function toggleMedForm() {
             let form = document.getElementById("med-form");
@@ -187,12 +190,20 @@
             let firstName = document.getElementById("first-name-input").value;
             let lastName = document.getElementById("last-name-input").value;
             let email = document.getElementById("contact-input").value;
+            let caretakerName = document.getElementById("caretaker-name-input").value;
+            let caretakerEmail = document.getElementById("caretaker-contact-input").value;
 
             if (firstName && lastName) {
                 document.getElementById("profile-name").innerText = `${firstName} ${lastName}`;
             }
             if (email) {
                 document.getElementById("profile-email").innerText = email;
+            }
+            if(caretakerName) {
+                document.getElementById("caretaker-profile-name").innerText = 'Caretaker Name: ' + caretakerName;
+            }
+            if(caretakerEmail) {
+                document.getElementById("caretaker-profile-email").innerText = 'Caretaker Email: ' + caretakerEmail;
             }
 
             inputs.forEach(input => {
