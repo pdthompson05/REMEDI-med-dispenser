@@ -15,16 +15,21 @@ function login() {
         method: 'POST',
         body: formData
     })
-        .then(response => response.json())
+        .then(response => {
+            response.text().then(text => {
+                console.log("Raw server response:", text);
+            });
+            return response.json();
+        })
         .then(jsonData => {
-            console.log("Raw Response:", jsonData); // DEBUG
+            console.log("Raw Response:", jsonData);
             document.getElementById('message').textContent = jsonData.message;
             if (jsonData.status === "success") {
                 window.location.href = 'profile.html';
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('message').textContent = "Login fail";
+            console.error('Detailed Error:', error);
+            document.getElementById('message').textContent = "Login fail - Server error";
         });
 }
