@@ -25,7 +25,7 @@ function login() {
             console.log("Raw Response:", jsonData);
             document.getElementById('message').textContent = jsonData.message;
             if (jsonData.status === "success") {
-                window.location.href = 'profile.html';
+                window.location.href = 'index.html';
             }
         })
         .catch(error => {
