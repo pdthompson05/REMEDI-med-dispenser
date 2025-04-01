@@ -6,43 +6,6 @@ function loadProfile() {
         method: "GET",
         credentials: "include"
     })
-<<<<<<< HEAD
-    .then(response => {
-        console.log("Raw response:", response); // Log the raw response
-        return response.json();
-    })
-    .then(jsonData => {
-        console.log("Parsed JSON data:", jsonData); // Log the parsed JSON data
-        if (jsonData.status === "success") {
-            console.log("Profile loaded successfully:", jsonData.data); // Log success
-            document.getElementById("first-name-text").innerText = jsonData.data.first_name || "Not provided";
-            document.getElementById("last-name-text").innerText = jsonData.data.last_name || "Not provided";
-            document.getElementById("dob-text").innerText = jsonData.data.date_of_birth || "Not provided";
-            document.getElementById("contact-text").innerText = jsonData.data.email || "Not provided";
-            document.getElementById("caretaker-name-text").innerText = jsonData.data.caretaker_name || "N/A";
-            document.getElementById("caretaker-contact-text").innerText = jsonData.data.caretaker_email || "N/A";
-
-            document.getElementById("first-name-input").value = jsonData.data.first_name || "";
-            document.getElementById("last-name-input").value = jsonData.data.last_name || "";
-            document.getElementById("dob-input").value = jsonData.data.date_of_birth || "";
-            document.getElementById("contact-input").value = jsonData.data.email || "";
-            document.getElementById("caretaker-name-input").value = jsonData.data.caretaker_name || "";
-            document.getElementById("caretaker-contact-input").value = jsonData.data.caretaker_email || "";
-
-            // Update profile picture
-            const profileImage = document.getElementById("profile-image");
-            profileImage.src = jsonData.data.profile_picture || "https://via.placeholder.com/200";
-        } else {
-            console.error("Error in response:", jsonData.message); // Log the error message
-            window.location.href = "login.html"; // Redirect to login.html
-        }
-    })
-    .catch(error => {
-        console.error("Fetch error:", error); // Log fetch errors
-        console.log("Redirecting to login.html due to fetch error");
-        window.location.href = "login.html"; // Redirect to login.html
-    });
-=======
         .then(async response => {
             const raw = await response.text();
             try {
@@ -112,7 +75,6 @@ function loadProfile() {
         .catch(err => {
             console.error("Error loading medications:", err);
         });
->>>>>>> 849d134 (file structure overhaul, login fixes, medication adding, reminder draft)
 }
 
 function toggleEdit() {
