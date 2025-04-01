@@ -1,10 +1,8 @@
 <?php
-// Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Session config MUST come first
 ini_set("session.cookie_httponly", 1);
 ini_set("session.cookie_secure", 1);
 ini_set("session.use_only_cookies", 1);
@@ -23,42 +21,30 @@ try {
     }
 
     $stmt = $conn->prepare("
-        SELECT user_id, email, password_hash, is_verified 
-        FROM user 
+        SELECT user_id, email, password_hash
+        FROM user
         WHERE email = ?
     ");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
 
-    if (!$user) {
-        throw new Exception("Invalid email");
+    if (!$user || !password_verify($password, $user['password_hash'])) {
+        throw new Exception("Invalid email or password");
     }
 
-    if (!password_verify($password, $user['password_hash'])) {
-        throw new Exception("Invalid password");
-    }
-
-    if ($user['is_verified'] != 1) {
-        throw new Exception("Please verify your email first");
-    }
-
-    // Successful login
-    $_SESSION = [
-        'user_id' => $user['user_id'],
-        'email' => $user['email'],
-        'ip' => $_SERVER['REMOTE_ADDR'],
-        'last_activity' => time()
-    ];
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['email'] = $user['email'];
+    $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+    $_SESSION['last_activity'] = time();
 
     echo json_encode([
         'status' => 'success',
         'message' => 'Login successful',
-        'redirect' => '/frontend/html/home.html'
+        'redirect' => '/../../frontend/html/profile.html'
     ]);
 
 } catch (Exception $e) {
-    // Send error details to the frontend for debugging
     echo json_encode([
         'status' => 'error',
         'message' => $e->getMessage(),

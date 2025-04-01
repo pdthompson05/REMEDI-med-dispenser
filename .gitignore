@@ -18,6 +18,3 @@ vendor/
 composer.json
 composer.lock
 composer.phar
-**/register.php
-**/db.php
-**/login.php
