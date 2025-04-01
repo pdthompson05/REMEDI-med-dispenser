@@ -2,13 +2,8 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-<<<<<<< HEAD
-header("Content-Type: application/json"); //yes 
-require_once "db.php";
-=======
 header("Content-Type: application/json");
 require_once __DIR__ . '/../../config/db.php';
->>>>>>> 849d134 (file structure overhaul, login fixes, medication adding, reminder draft)
 global $conn;
 
 if (!isset($_SESSION['user_id'])) {
