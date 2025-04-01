@@ -54,7 +54,7 @@ try {
     echo json_encode([
         'status' => 'success',
         'message' => 'Login successful',
-        'redirect' => '/frontend/html/index.html'
+        'redirect' => '/frontend/html/home.html'
     ]);
 
 } catch (Exception $e) {
