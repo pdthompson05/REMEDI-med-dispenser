@@ -17,14 +17,15 @@ function login() {
     })
         .then(response => response.json())
         .then(jsonData => {
-            console.log("Raw Response:", jsonData); // DEBUG
+            console.log("Raw Response:", jsonData);
             document.getElementById('message').textContent = jsonData.message;
             if (jsonData.status === "success") {
-                window.location.href = 'profile.html';
+                // Use the redirect field from the response
+                window.location.href = jsonData.redirect;
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('message').textContent = "Login fail";
+            console.error('Detailed Error:', error);
+            document.getElementById('message').textContent = "Login fail - Server error";
         });
 }

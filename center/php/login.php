@@ -1,49 +1,71 @@
 <?php
-session_start();
-ob_start();
-error_reporting(E_ALL);
+// Enable error reporting for debugging
 ini_set('display_errors', 1);
-header("Content-Type: application/json");
-require_once "db.php";
-global $conn;
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+// Session config MUST come first
 ini_set("session.cookie_httponly", 1);
 ini_set("session.cookie_secure", 1);
 ini_set("session.use_only_cookies", 1);
+ini_set("session.cookie_samesite", "Lax");
+session_start();
 
-$email = isset($_POST['email']) ? trim($_POST['email']) : '';
-$password = isset($_POST['password']) ? trim($_POST['password']) : '';
+header("Content-Type: application/json");
+require_once __DIR__.'/db.php';
 
-if (empty($email) || empty($password)) {
-    echo json_encode(["status" => "error", "message" => "email and password required"]);
-    exit;
-}
+try {
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $password = $_POST['password'] ?? '';
 
-$sql = "SELECT user_id, email, password_hash FROM user WHERE email = ?";
-$stmt = $conn->prepare($sql);
-if(!$stmt){
-    echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
-    exit;
-}
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($user = $result->fetch_assoc()) {
-    if (password_verify($password, $user['password_hash'])) {
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['email'] = $user['email'];
-        echo json_encode(["status" => "success"]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Invalid email or password."]);
+    if (!$email || empty($password)) {
+        throw new Exception("Email and password required");
     }
-} else {
-    echo json_encode(["status" => "error", "message" => "Invalid email or password."]);       
-}
 
-$result->close();
-$stmt->close();
-$conn->close();
-exit;
+    $stmt = $conn->prepare("
+        SELECT user_id, email, password_hash, is_verified 
+        FROM user 
+        WHERE email = ?
+    ");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+
+    if (!$user) {
+        throw new Exception("Invalid email");
+    }
+
+    if (!password_verify($password, $user['password_hash'])) {
+        throw new Exception("Invalid password");
+    }
+
+    if ($user['is_verified'] != 1) {
+        throw new Exception("Please verify your email first");
+    }
+
+    // Successful login
+    $_SESSION = [
+        'user_id' => $user['user_id'],
+        'email' => $user['email'],
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'last_activity' => time()
+    ];
+
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Login successful',
+        'redirect' => '/frontend/html/home.html'
+    ]);
+
+} catch (Exception $e) {
+    // Send error details to the frontend for debugging
+    echo json_encode([
+        'status' => 'error',
+        'message' => $e->getMessage(),
+        'debug' => [
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]
+    ]);
+}
 ?>
