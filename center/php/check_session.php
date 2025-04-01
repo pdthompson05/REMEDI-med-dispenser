@@ -11,7 +11,7 @@ echo json_encode([
     'authenticated' => true,
     'user' => [
         'id' => $_SESSION['user_id'],
-        'email' => $_SESSION['email']
+        'email' => $_SESSION['email'] //hello
     ]
 ]);
 ?>
