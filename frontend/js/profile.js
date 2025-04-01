@@ -5,8 +5,12 @@ function loadProfile() {
         method: "GET",
         credentials: "include"
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log("Raw response:", response); // Log the raw response
+        return response.json();
+    })
     .then(jsonData => {
+        console.log("Parsed JSON data:", jsonData); // Log the parsed JSON data
         if (jsonData.status === "success") {
             document.getElementById("first-name-text").innerText = jsonData.data.first_name;
             document.getElementById("last-name-text").innerText = jsonData.data.last_name;
@@ -22,11 +26,12 @@ function loadProfile() {
             document.getElementById("caretaker-name-input").value = jsonData.data.caretaker_name || "";
             document.getElementById("caretaker-contact-input").value = jsonData.data.caretaker_email || "";
         } else {
+            console.error("Error in response:", jsonData.message);
             window.location.href = "login.html";
         }
     })
     .catch(error => {
-        console.error("Error:", error);
+        console.error("Fetch error:", error); // Log fetch errors
         window.location.href = "login.html";
     });
 }
