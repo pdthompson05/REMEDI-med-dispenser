@@ -39,39 +39,28 @@ CREATE TABLE med (
   med_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
   med_name VARCHAR(255) NOT NULL,
-  amount_pills INT,
-  frequency ENUM('once', 'twice', 'thrice') NOT NULL,  -- Added NOT NULL
-  hrs_btwn INT,
-  start_time TIMESTAMP,
-  cldr_day DATE NOT NULL,  -- Added NOT NULL
-  reminder TIMESTAMP,
+  strength VARCHAR(100) NOT NULL,           -- From your 'med-strength' input
+  rx_number VARCHAR(100) NOT NULL,          -- From your 'rx-number' input
+  quantity INT NOT NULL,                    -- From your 'quantity' input
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE schedule (
-  schedule_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE reminder (
+  reminder_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
   med_id INT NOT NULL,
-  scheduled_time DATETIME NOT NULL,
+  dosage VARCHAR(100) DEFAULT NULL,
+  reminder_type ENUM('specific', 'interval') NOT NULL,
+  interval_hours INT DEFAULT NULL,                  -- Only used if type = interval
+  reminder_time TIME DEFAULT NULL,                  -- Used if type = specific
+  reminder_date DATE NOT NULL,                      -- For each day between start/end
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
   FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
 );
 
-CREATE TABLE history (
-  history_id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  med_id INT NOT NULL,
-  taken_at DATETIME NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
-);
-
-CREATE TABLE notification (
-  notification_id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  message TEXT NOT NULL,
-  sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
-);
