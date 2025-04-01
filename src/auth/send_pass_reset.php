@@ -2,7 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once "db.php";
+require_once __DIR__.'/../config/db.php';
 require_once "verify_mail.php";
 global $conn;
 
