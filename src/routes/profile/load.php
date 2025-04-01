@@ -23,10 +23,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($row = $result->fetch_assoc()) {
-    // Add a default profile picture if none exists
-    $row['profile_picture'] = $row['profile_picture'] 
-        ? "https://section-three.it313communityprojects.website/center/php/" . $row['profile_picture'] 
-        : "https://via.placeholder.com/200";
+    if (empty($row['profile_picture'])) {
+        $row['profile_picture'] = "https://via.placeholder.com/200";
+    } else {
+        $row['profile_picture'] = "https://section-three.it313communityprojects.website/center/php/" . $row['profile_picture'];
+    }
 
     echo json_encode(["status" => "success", "data" => $row]);
 } else {
