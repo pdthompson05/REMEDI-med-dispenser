@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
-require_once "db.php"; // DB connection
+require_once __DIR__.'/../config/db.php';
 require_once "verify_mail.php"; // Email verification
 
 global $conn;
