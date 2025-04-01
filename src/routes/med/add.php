@@ -3,26 +3,36 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Content-Type: application/json");
-require_once "db.php";
+require_once __DIR__ . '/../../config/db.php';
 global $conn;
 
-$med_name = isset($_POST['med_name']) ? trim($_POST['med_name']) : '';
-$amount_pills = isset($_POST['amount_pills']) ? trim($_POST['amount_pills']) : '';
-$frequency = isset($_POST['frequency']) ? trim($_POST['frequency']) : '';
-$hrs_btwn = isset($_POST['hrs_btwn']) ? trim($_POST['hrs_btwn']) : '';
-$start_time = isset($_POST['start_time']) ? trim($_POST['start_time']) : '';
-$cldr_day = isset($_POST['cldr_day']) ? trim($_POST['cldr_day']) : '';
-$reminder = isset($_POST['reminder']) ? trim($_POST['reminder']) : '';
-
-if (empty($med_name) || empty($amount_pills) || empty($frequency) || empty($hrs_btwn) || empty($start_time) || empty($cldr_day)) {
-    echo json_encode(["status" => "error", "message" => "Fields required"]);
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["status" => "error", "message" => "User not logged in"]);
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
+$med_name = isset($_POST['med_name']) ? trim($_POST['med_name']) : '';
+$strength = isset($_POST['strength']) ? trim($_POST['strength']) : '';
+$rx_number = isset($_POST['rx_number']) ? trim($_POST['rx_number']) : '';
+$quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0;
 
-$sql_insert_med = "INSERT INTO med (user_id, med_name, amount_pills, frequency, hrs_btwn, start_time, cldr_day, reminder, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
-$stmt_user = $conn->prepare($sql_insert_med);
-$stmt_user->bind_param("isisisss", $user_id, $med_name, $amount_pills, $frequency, $hrs_btwn, $start_time, $cldr_day, $reminder);
+if (empty($med_name) || empty($strength) || empty($rx_number) || $quantity <= 0) {
+    echo json_encode(["status" => "error", "message" => "All fields are required and quantity must be greater than 0"]);
+    exit;
+}
 
+$sql = "INSERT INTO med (user_id, med_name, strength, rx_number, quantity, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("isssi", $user_id, $med_name, $strength, $rx_number, $quantity);
+
+if ($stmt->execute()) {
+    echo json_encode(["status" => "success", "message" => "Medication added successfully"]);
+} else {
+    echo json_encode(["status" => "error", "message" => "SQL Error: " . $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>

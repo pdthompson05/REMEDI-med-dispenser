@@ -8,9 +8,9 @@ ini_set("session.cookie_secure", 1);
 ini_set("session.use_only_cookies", 1);
 ini_set("session.cookie_samesite", "Lax");
 session_start();
-
+ob_start();
 header("Content-Type: application/json");
-require_once __DIR__.'/db.php';
+require_once __DIR__.'/../config/db.php';
 
 try {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -38,13 +38,16 @@ try {
     $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
     $_SESSION['last_activity'] = time();
 
+    ob_clean();
+
     echo json_encode([
         'status' => 'success',
         'message' => 'Login successful',
-        'redirect' => '/../../frontend/html/profile.html'
+        'redirect' => 'https://section-three.it313communityprojects.website/frontend/html/profile.html'
     ]);
 
 } catch (Exception $e) {
+    ob_clean();
     echo json_encode([
         'status' => 'error',
         'message' => $e->getMessage(),

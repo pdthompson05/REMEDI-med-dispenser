@@ -120,15 +120,15 @@
             
                 <label for="end-date">End Date:</label>
                 <input type="date" id="end-date">
-            
-                <button>Set Reminder</button>
+
+                <button id="set-reminder-btn" onclick="addReminder()">Set Reminder</button>
             </div>            
         </div>
     </div>
     
     <script src="../js/global.js"></script>
     <script src="../js/profile.js"></script>
-    <script>
+    <!--<script>
         function toggleMedForm() {
             let form = document.getElementById("med-form");
             form.style.display = form.style.display === "none" ? "block" : "none";
@@ -312,6 +312,6 @@
 
         timeContainer.appendChild(timeWrapper);
     }
-    </script>
+    </script>-->
 </body>
 </html>
