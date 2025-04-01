@@ -1,4 +1,9 @@
 <?php
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Session config MUST come first
 ini_set("session.cookie_httponly", 1);
 ini_set("session.cookie_secure", 1);
@@ -53,9 +58,14 @@ try {
     ]);
 
 } catch (Exception $e) {
+    // Send error details to the frontend for debugging
     echo json_encode([
         'status' => 'error',
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'debug' => [
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]
     ]);
 }
 ?>
