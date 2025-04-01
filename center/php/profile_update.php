@@ -3,7 +3,7 @@ session_start();
 ob_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-header("Content-Type: application/json");
+header("Content-Type: application/json"); //yes 
 require_once "db.php";
 global $conn;
 
