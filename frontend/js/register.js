@@ -20,7 +20,7 @@ function createAccount() {
     formData.append('email', email);
     formData.append('password', password);
 
-    fetch('../../center/php/register.php', {
+    fetch('https://section-three.it313communityprojects.website/src/auth/register.php', {
         method: 'POST',
         body: formData
     })
