@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<style>
+    .content {
+        display: flex;
+        justify-content: center;
+        background-color: white;
+        padding: 5px;
+        margin: 10px;
+        height: 100vh;
+    }
+
+    .text {
+        width: 50%;
+        padding: 100px;
+    }
+    
+    .on-time {
+        color: rgb(119, 221, 119);
+    }
+
+    .late {
+        color: rgb(255, 205, 86);
+    }
+
+    .missed {
+        color: rgb(243, 71, 77);
+    }
+
+    .record {
+        width: 60%;
+        height: 50%;
+        padding: 20px;
+        margin: 10px;
+        overflow-y: scroll;
+        display: block;
+    }
+
+    td {
+        border-top: 1px solid black;
+    }
+
+    table, td {
+        border-collapse: collapse;
+    }
+
+    th, td{
+        text-align: left;
+        padding: 10px;
+        width: 1000px;
+    }
+
+    th:first-child, td:first-child {
+        width: auto;
+    }
+
+    .donut-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .myChart {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .legend {
+        display: flex;  
+        flex-direction: column;
+        align-items: left;
+        width: 30%;
+    }
+</style>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="home.html">REMEDI</a>
+        </div>
+        <div class="nav-links">
+            <div class="notification-container">
+                <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <p>notifications</p>
+                </div>
+            </div>
+            <a href="calendar.html">Calendar</a>
+            <a href="#">Insights</a>
+            <a href="profile.html">Profile</a>
+        </div>
+    </div>
+    <div class="content">
+        <table class="record">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Day</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="on-time"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>On-Time</td>
+                </tr>
+                <tr>
+                    <td class="late"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Late</td>
+                </tr>
+                <tr>
+                    <td class="missed"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Missed</td>
+                </tr>
+                <tr>
+                    <td class="on-time"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>On-Time</td>
+                </tr>
+                <tr>
+                    <td class="late"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Late</td>
+                </tr>
+                <tr>
+                    <td class="missed"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Missed</td>
+                </tr>
+                <tr>
+                    <td class="on-time"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>On-Time</td>
+                </tr>
+                <tr>
+                    <td class="late"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Late</td>
+                </tr>
+                <tr>
+                    <td class="missed"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Missed</td>
+                </tr>
+                <tr>
+                    <td class="on-time"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>On-Time</td>
+                </tr>
+                <tr>
+                    <td class="late"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Late</td>
+                </tr>
+                <tr>
+                    <td class="missed"><i class="fa fa-circle"></i></td>
+                    <td>Monday</td>
+                    <td>10/11/2021</td>
+                    <td>8:00 AM</td>
+                    <td>Missed</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="donut-chart">
+            <div class="chart-container">
+                <canvas id="myChart" class="myChart" style="width:100%;max-width:700px"></canvas>
+            </div>
+            <div class="legend">
+                <div class="ontime-bullet">
+                    <span class="on-time"><i class="fa fa-circle"></i></span>
+                    <span id="on-time-days"></span>
+                </div>
+                <div class="late-bullet">
+                    <span class="late"><i class="fa fa-circle"></i></span>
+                    <span id="late-days"></span>
+                </div>
+                <div class="missed-bullet">
+                    <span class="missed"><i class="fa fa-circle"></i></span>
+                    <span id="missed-days"></span>
+                </div>
+            </div>
+        </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1/dist/chartjs-plugin-annotation.min.js
+"></script>
+<script>
+    const chartData = {
+        labels: ['On-Time', 'Late', 'Missed'],
+        data: [30, 5, 10],
+    };
+
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const dates = ['10/11/2021', '10/12/2021', '10/13/2021', '10/14/2021', '10/15/2021', '10/16/2021', '10/17/2021'];
+    const times = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM'];
+
+    const ul = document.querySelector(".legend ul");
+    const tb = document.querySelector(".record tbody");
+
+    new Chart("myChart", {
+        type: "doughnut",
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                data: chartData.data,
+                backgroundColor: [
+                    'rgb(119,221,119)',
+                    'rgb(255, 205, 86)',
+                    'rgb(243,71,77)'
+                ]
+            }]
+        },
+        options: {
+            borderWidth: 2,
+            borderRadius: 3,
+            hoverBorderWidth: 3,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                annotation: {
+                    annotations: {
+                        dLabel: {
+                            type: 'doughnutLabel',
+                            content: ({ chart }) => ['Total',
+                                chart.getDatasetMeta(0).total,
+                                'last 12 months'
+                            ],
+                            font: [{ size: 30 }, { size: 40 }, { size: 20 }],
+                            color: ['black', 'black', 'grey']
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const populateTable = () => {
+
+    }
+
+    populateTable();
+
+    /* const populateLegend = () => {
+         chartData.labels.forEach((l, d) => {
+             let li = document.createElement("li");
+             li.innerHTML = `${l}: <span class="number">${chartData.data[d]}</span>`;
+             ul.appendChild(li);
+         })
+     };*/
+    const populateLegend = () => {
+        const onTimeDays = document.getElementById("on-time-days");
+        const lateDays = document.getElementById("late-days");
+        const missedDays = document.getElementById("missed-days");
+
+        onTimeDays.innerText = chartData.data[0] + " " + chartData.labels[0];
+        lateDays.innerHTML = chartData.data[1] + " " + chartData.labels[1];
+        missedDays.innerHTML = chartData.data[2] + " " + chartData.labels[2];
+    }
+
+    populateLegend();
+</script>
+
+</html>
