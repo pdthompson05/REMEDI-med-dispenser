@@ -122,3 +122,24 @@ function saveProfile() {
             console.error("Profile update error:", err);
         });
     }
+
+function addTimeInput() {
+  const timeContainer = document.getElementById("time-input-container");
+
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("time-input-wrapper");
+
+  const timeInput = document.createElement("input");
+  timeInput.type = "time";
+  timeInput.classList.add("specific-time");
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.innerText = "✖";
+  removeBtn.classList.add("delete-time-btn");
+  removeBtn.onclick = () => wrapper.remove();
+
+  wrapper.appendChild(timeInput);
+  wrapper.appendChild(removeBtn);
+  timeContainer.appendChild(wrapper);
+}
