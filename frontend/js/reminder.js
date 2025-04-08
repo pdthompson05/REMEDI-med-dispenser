@@ -32,13 +32,21 @@ function addReminder() {
 
         times.forEach(time => formData.append("times[]", time));
     } else if (type === "interval") {
-        const interval = document.getElementById("interval-dropdown").value;
+        const intervalDropdown = document.getElementById("interval-dropdown");
+        if (!intervalDropdown) {
+            alert("Interval dropdown not found.");
+            return;
+        }
+    
+        const interval = intervalDropdown.value;
         if (!interval) {
             alert("Please select an interval.");
             return;
         }
+    
         formData.append("interval_hours", interval);
     }
+    
 
     fetch("https://section-three.it313communityprojects.website/src/routes/reminder/add.php", {
         method: "POST",
