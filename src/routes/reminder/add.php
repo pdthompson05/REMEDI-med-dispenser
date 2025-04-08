@@ -35,15 +35,12 @@ if ($med_check->num_rows === 0) {
 }
 $med_check->close();
 
-// Insert into reminder table
 $interval_hours = $_POST['interval_hours'] ?? null;
-$reminder_time = null;
-$reminder_date = null;
 
-$sql = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, interval_hours, start_date, end_date, reminder_time, reminder_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, interval_hours, start_date, end_date, reminder_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iississss", $user_id, $med_id, $dosage, $reminder_type, $interval_hours, $start_date, $end_date, $reminder_time, $reminder_date);
+$stmt->bind_param("iississs", $user_id, $med_id, $dosage, $reminder_type, $interval_hours, $start_date, $end_date, $start_date);
 
 if (!$stmt->execute()) {
   echo json_encode(["status" => "error", "message" => "Failed to save reminder"]);
@@ -53,9 +50,16 @@ if (!$stmt->execute()) {
 $reminder_id = $stmt->insert_id;
 $stmt->close();
 
-// Insert events into calendar_events
 if ($reminder_type === "specific" && isset($_POST['times'])) {
   $times = $_POST['times'];
+
+  foreach ($times as $time) {
+    $insert_time = $conn->prepare("INSERT INTO reminder_times (reminder_id, reminder_time) VALUES (?, ?)");
+    $insert_time->bind_param("is", $reminder_id, $time);
+    $insert_time->execute();
+    $insert_time->close();
+  }
+
   $start = new DateTime($start_date);
   $end = new DateTime($end_date);
 
@@ -74,8 +78,8 @@ if ($reminder_type === "specific" && isset($_POST['times'])) {
   $end = new DateTime($end_date . " 23:59:59");
 
   while ($start <= $end) {
-    $insert_event = $conn->prepare("INSERT INTO calendar_events (user_id, med_id, event_datetime) VALUES (?, ?, ?)");
     $dt = $start->format('Y-m-d H:i:s');
+    $insert_event = $conn->prepare("INSERT INTO calendar_events (user_id, med_id, event_datetime) VALUES (?, ?, ?)");
     $insert_event->bind_param("iis", $user_id, $med_id, $dt);
     $insert_event->execute();
     $insert_event->close();
@@ -87,5 +91,5 @@ if ($reminder_type === "specific" && isset($_POST['times'])) {
 }
 
 echo json_encode(["status" => "success", "message" => "Reminder and events created"]);
-
 $conn->close();
+?>

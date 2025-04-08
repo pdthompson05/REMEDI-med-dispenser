@@ -8,26 +8,28 @@ require_once __DIR__ . '/../../config/db.php';
 global $conn;
 
 if (!isset($_SESSION['user_id'])) {
-  echo json_encode(["status" => "error", "message" => "Not logged in"]);
-  exit;
+    echo json_encode(["status" => "error", "message" => "Not logged in"]);
+    exit;
 }
 
 $user_id = $_SESSION['user_id'];
 
 $sql = "
-  SELECT 
-    r.reminder_id,
-    r.med_id,
-    m.med_name,
-    r.reminder_type,
-    r.interval_hours,
-    r.reminder_time,
-    r.reminder_date,
-    r.start_date,
-    r.end_date
-  FROM reminder r
-  JOIN med m ON r.med_id = m.med_id
-  WHERE r.user_id = ?
+    SELECT 
+        r.reminder_id,
+        r.med_id,
+        m.med_name,
+        r.dosage,
+        r.reminder_type,
+        r.interval_hours,
+        r.start_date,
+        r.end_date,
+        rt.reminder_time
+    FROM reminder r
+    JOIN med m ON r.med_id = m.med_id
+    LEFT JOIN reminder_times rt ON r.reminder_id = rt.reminder_id
+    WHERE r.user_id = ?
+    ORDER BY r.start_date ASC, rt.reminder_time ASC
 ";
 
 $stmt = $conn->prepare($sql);
@@ -35,45 +37,29 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$events = [];
-
+$reminders = [];
 while ($row = $result->fetch_assoc()) {
-  $type = $row['reminder_type'];
-  $med = $row['med_name'];
-
-  if ($type === 'specific-time') {
-    $start = new DateTime($row['start_date']);
-    $end = new DateTime($row['end_date']);
-    $end->modify('+1 day');
-
-    while ($start < $end) {
-      $datetimeStr = $start->format('Y-m-d') . ' ' . $row['reminder_time'];
-      $events[] = [
-        "event_datetime" => $datetimeStr,
-        "med_name" => $med
-      ];
-      $start->modify('+1 day');
-    }
-  }
-
-  else if ($type === 'interval') {
-    $interval = (int)$row['interval_hours'];
-    if ($interval > 0) {
-      $start = new DateTime($row['start_date'] . ' 00:00:00');
-      $end = new DateTime($row['end_date'] . ' 23:59:59');
-
-      while ($start <= $end) {
-        $events[] = [
-          "event_datetime" => $start->format('Y-m-d H:i:s'),
-          "med_name" => $med
+    $rid = $row['reminder_id'];
+    if (!isset($reminders[$rid])) {
+        $reminders[$rid] = [
+            "reminder_id" => $row["reminder_id"],
+            "med_id" => $row["med_id"],
+            "med_name" => $row["med_name"],
+            "dosage" => $row["dosage"],
+            "reminder_type" => $row["reminder_type"],
+            "interval_hours" => $row["interval_hours"],
+            "start_date" => $row["start_date"],
+            "end_date" => $row["end_date"],
+            "times" => []
         ];
-        $start->modify("+{$interval} hours");
-      }
     }
-  }
+
+    if ($row["reminder_time"]) {
+        $reminders[$rid]["times"][] = $row["reminder_time"];
+    }
 }
 
-echo json_encode(["status" => "success", "data" => $events]);
+echo json_encode(["status" => "success", "data" => array_values($reminders)]);
 $stmt->close();
 $conn->close();
 ?>

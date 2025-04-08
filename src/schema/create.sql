@@ -61,6 +61,13 @@ CREATE TABLE reminder (
   FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
 );
 
+CREATE TABLE reminder_times (
+  time_id INT PRIMARY KEY AUTO_INCREMENT,
+  reminder_id INT NOT NULL,
+  reminder_time TIME NOT NULL,
+  FOREIGN KEY (reminder_id) REFERENCES reminder(reminder_id) ON DELETE CASCADE
+);
+
 CREATE TABLE calendar_events (
   event_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
