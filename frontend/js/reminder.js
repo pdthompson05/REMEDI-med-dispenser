@@ -2,6 +2,7 @@ function addReminder() {
     const medId = document.getElementById("medication-select").value;
     const dosage = document.getElementById("dosage").value.trim();
     const type = document.getElementById("reminder-type").value;
+    const normalizedType = type === "specific-time" ? "specific" : type;
     const startDate = document.getElementById("start-date").value;
     const endDate = document.getElementById("end-date").value;
 
@@ -18,7 +19,7 @@ function addReminder() {
     const formData = new FormData();
     formData.append("med_id", medId);
     formData.append("dosage", dosage);
-    formData.append("reminder_type", type);
+    formData.append("reminder_type", normalizedType);
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
 
