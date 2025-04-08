@@ -132,6 +132,7 @@ function addTimeInput() {
   const timeInput = document.createElement("input");
   timeInput.type = "time";
   timeInput.classList.add("specific");
+  timeInput.name = "times[]";
 
   const removeBtn = document.createElement("button");
   removeBtn.type = "button";
