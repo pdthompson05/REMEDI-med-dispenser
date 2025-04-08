@@ -41,7 +41,7 @@ if ($stmt->num_rows === 0) {
 $stmt->close();
 
 // Insert reminder(s)
-if ($type === "specific" && is_array($time_inputs)) {
+if ($type === "specific-time" && is_array($time_inputs)) {
     $query = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, reminder_time, reminder_date, start_date, end_date)
               VALUES (?, ?, ?, 'specific', ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
