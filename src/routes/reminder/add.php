@@ -54,7 +54,7 @@ $reminder_id = $stmt->insert_id;
 $stmt->close();
 
 // Insert events into calendar_events
-if ($reminder_type === "specific-time" && isset($_POST['times'])) {
+if ($reminder_type === "specific" && isset($_POST['times'])) {
   $times = $_POST['times'];
   $start = new DateTime($start_date);
   $end = new DateTime($end_date);

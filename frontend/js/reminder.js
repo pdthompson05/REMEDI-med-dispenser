@@ -23,7 +23,7 @@ function addReminder() {
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
 
-    if (type === "specific-time") {
+    if (type === "specific") {
         const timeInputs = document.querySelectorAll(".specific-time");
         const times = [];
 
