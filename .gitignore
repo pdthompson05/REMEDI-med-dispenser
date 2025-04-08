@@ -18,3 +18,9 @@ vendor/
 composer.json
 composer.lock
 composer.phar
+**/register.php
+**/login.php
+**/verify_mail.php
+**/verify_token.php
+center/
+**/center/
