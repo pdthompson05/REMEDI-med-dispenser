@@ -21,20 +21,48 @@ function renderCalendarEvents(events) {
 
   events.forEach(event => {
     const eventDate = new Date(event.event_datetime);
-    const hourLabel = `${eventDate.getHours()}:00`;
-    const dayIndex = (eventDate.getDay() + 6) % 7; // Convert Sunday=0 to index 6
+    const dayIndex = (eventDate.getDay() + 6) % 7;
+    const hour = `${eventDate.getHours()}:00`;
 
-    const targetCells = document.querySelectorAll(
-      `.time-slot[data-day="${dayIndex}"][data-hour="${hourLabel}"]`
-    );
+    const cells = document.querySelectorAll(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
+    cells.forEach(cell => {
+      const reminder = document.createElement("div");
+      reminder.className = "reminder-block";
+      reminder.textContent = event.med_name;
 
-    targetCells.forEach(cell => {
-      const block = document.createElement("div");
-      block.className = "reminder-block";
-      block.textContent = event.med_name;
-      cell.appendChild(block);
+      const deleteBtn = document.createElement("button");
+      deleteBtn.innerText = "✖";
+      deleteBtn.className = "delete-event-btn";
+      deleteBtn.onclick = () => {
+        if (confirm("Delete this reminder event?")) {
+          deleteCalendarEvent(event.event_id);
+        }
+      };
+
+      reminder.appendChild(deleteBtn);
+      cell.appendChild(reminder);
     });
   });
+}
+
+function deleteCalendarEvent(eventId) {
+  const formData = new URLSearchParams();
+  formData.append("event_id", eventId);
+
+  fetch("https://section-three.it313communityprojects.website/src/routes/calendar/events.php", {
+    method: "DELETE",
+    credentials: "include",
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        loadCalendarEvents();
+      } else {
+        console.error("Failed to delete event:", data.message);
+      }
+    })
+    .catch(err => console.error("Delete request failed:", err));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
