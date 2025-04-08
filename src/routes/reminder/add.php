@@ -7,68 +7,85 @@ ini_set("display_errors", 1);
 require_once __DIR__ . '/../../config/db.php';
 global $conn;
 
-// Check login
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["status" => "error", "message" => "User not logged in"]);
-    exit;
+  echo json_encode(["status" => "error", "message" => "Not logged in"]);
+  exit;
 }
 
 $user_id = $_SESSION['user_id'];
+$med_id = $_POST['med_id'] ?? null;
+$dosage = $_POST['dosage'] ?? null;
+$reminder_type = $_POST['reminder_type'] ?? null;
+$start_date = $_POST['start_date'] ?? null;
+$end_date = $_POST['end_date'] ?? null;
 
-// Sanitize inputs
-$med_id = isset($_POST['med_id']) ? (int) $_POST['med_id'] : 0;
-$dosage = isset($_POST['dosage']) ? trim($_POST['dosage']) : null;
-$type = $_POST['reminder_type'] ?? '';
-$start_date = $_POST['start_date'] ?? '';
-$end_date = $_POST['end_date'] ?? '';
-$interval_hours = isset($_POST['interval_hours']) ? (int) $_POST['interval_hours'] : null;
-$time_inputs = isset($_POST['times']) ? $_POST['times'] : [];
-
-if ($med_id <= 0 || empty($type) || empty($start_date) || empty($end_date)) {
-    echo json_encode(["status" => "error", "message" => "Missing required fields"]);
-    exit;
+if (!$med_id || !$reminder_type || !$start_date || !$end_date) {
+  echo json_encode(["status" => "error", "message" => "Missing required fields"]);
+  exit;
 }
 
-// Validate medication ownership
-$stmt = $conn->prepare("SELECT med_id FROM med WHERE med_id = ? AND user_id = ?");
-$stmt->bind_param("ii", $med_id, $user_id);
-$stmt->execute();
-$stmt->store_result();
-if ($stmt->num_rows === 0) {
-    echo json_encode(["status" => "error", "message" => "Medication not found for user"]);
-    exit;
+// Validate med_id
+$med_check = $conn->prepare("SELECT med_id FROM med WHERE user_id = ? AND med_id = ?");
+$med_check->bind_param("ii", $user_id, $med_id);
+$med_check->execute();
+$med_check->store_result();
+if ($med_check->num_rows === 0) {
+  echo json_encode(["status" => "error", "message" => "Invalid med ID"]);
+  exit;
 }
+$med_check->close();
+
+// Insert into reminder table
+$interval_hours = $_POST['interval_hours'] ?? null;
+$reminder_time = null;
+$reminder_date = null;
+
+$sql = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, interval_hours, start_date, end_date, reminder_time, reminder_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iississss", $user_id, $med_id, $dosage, $reminder_type, $interval_hours, $start_date, $end_date, $reminder_time, $reminder_date);
+
+if (!$stmt->execute()) {
+  echo json_encode(["status" => "error", "message" => "Failed to save reminder"]);
+  exit;
+}
+
+$reminder_id = $stmt->insert_id;
 $stmt->close();
 
-// Insert reminder(s)
-if ($type === "specific-time" && is_array($time_inputs)) {
-    $query = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, reminder_time, reminder_date, start_date, end_date)
-              VALUES (?, ?, ?, 'specific', ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
+// Insert events into calendar_events
+if ($reminder_type === "specific-time" && isset($_POST['times'])) {
+  $times = $_POST['times'];
+  $start = new DateTime($start_date);
+  $end = new DateTime($end_date);
 
-    foreach ($time_inputs as $time) {
-        // You can optionally generate reminder_date = start_date for now
-        $stmt->bind_param("iisssss", $user_id, $med_id, $dosage, $time, $start_date, $start_date, $end_date);
-        $stmt->execute();
+  while ($start <= $end) {
+    foreach ($times as $time) {
+      $datetime = $start->format('Y-m-d') . ' ' . $time . ':00';
+      $insert_event = $conn->prepare("INSERT INTO calendar_events (user_id, med_id, event_datetime) VALUES (?, ?, ?)");
+      $insert_event->bind_param("iis", $user_id, $med_id, $datetime);
+      $insert_event->execute();
+      $insert_event->close();
     }
+    $start->modify('+1 day');
+  }
+} elseif ($reminder_type === "interval" && is_numeric($interval_hours)) {
+  $start = new DateTime($start_date . " 00:00:00");
+  $end = new DateTime($end_date . " 23:59:59");
 
-    $stmt->close();
-    echo json_encode(["status" => "success", "message" => "Specific time reminders created"]);
-    exit;
-
-} elseif ($type === "interval" && $interval_hours > 0) {
-    $query = "INSERT INTO reminder (user_id, med_id, dosage, reminder_type, interval_hours, reminder_date, start_date, end_date)
-              VALUES (?, ?, ?, 'interval', ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-
-    $stmt->bind_param("iisssss", $user_id, $med_id, $dosage, $interval_hours, $start_date, $start_date, $end_date);
-    $stmt->execute();
-    $stmt->close();
-
-    echo json_encode(["status" => "success", "message" => "Interval reminder created"]);
-    exit;
+  while ($start <= $end) {
+    $insert_event = $conn->prepare("INSERT INTO calendar_events (user_id, med_id, event_datetime) VALUES (?, ?, ?)");
+    $dt = $start->format('Y-m-d H:i:s');
+    $insert_event->bind_param("iis", $user_id, $med_id, $dt);
+    $insert_event->execute();
+    $insert_event->close();
+    $start->modify("+{$interval_hours} hours");
+  }
 } else {
-    echo json_encode(["status" => "error", "message" => "Invalid reminder type or data"]);
-    exit;
+  echo json_encode(["status" => "error", "message" => "Invalid reminder type or data"]);
+  exit;
 }
-?>
+
+echo json_encode(["status" => "success", "message" => "Reminder and events created"]);
+
+$conn->close();
