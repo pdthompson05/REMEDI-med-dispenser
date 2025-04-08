@@ -1,65 +1,97 @@
 document.addEventListener("DOMContentLoaded", loadProfile);
 
 function loadProfile() {
-    fetch('https://section-three.it313communityprojects.website/center/php/profile_load.php', {
+    // Load profile
+    fetch('https://section-three.it313communityprojects.website/src/routes/profile/load.php', {
         method: "GET",
         credentials: "include"
     })
-    .then(response => response.json())
-    .then(jsonData => {
-        if (jsonData.status === "success") {
-            document.getElementById("first-name-text").innerText = jsonData.data.first_name;
-            document.getElementById("last-name-text").innerText = jsonData.data.last_name;
-            document.getElementById("dob-text").innerText = jsonData.data.date_of_birth;
-            document.getElementById("contact-text").innerText = jsonData.data.email;
-            document.getElementById("caretaker-name-text").innerText = jsonData.data.caretaker_name || "N/A";
-            document.getElementById("caretaker-contact-text").innerText = jsonData.data.caretaker_email || "N/A";
+        .then(async response => {
+            const raw = await response.text();
+            try {
+                const jsonData = JSON.parse(raw);
+                if (jsonData.status === "success") {
+                    const data = jsonData.data;
+                    document.getElementById("first-name-input").value = data.first_name;
+                    document.getElementById("last-name-input").value = data.last_name;
+                    document.getElementById("dob-input").value = data.date_of_birth;
+                    document.getElementById("contact-input").value = data.email;
+                    document.getElementById("caretaker-name-input").value = data.caretaker_name || "";
+                    document.getElementById("caretaker-contact-input").value = data.caretaker_email || "";
 
-            document.getElementById("first-name-input").value = jsonData.data.first_name;
-            document.getElementById("last-name-input").value = jsonData.data.last_name;
-            document.getElementById("dob-input").value = jsonData.data.date_of_birth;
-            document.getElementById("contact-input").value = jsonData.data.email;
-            document.getElementById("caretaker-name-input").value = jsonData.data.caretaker_name || "";
-            document.getElementById("caretaker-contact-input").value = jsonData.data.caretaker_email || "";
-        } else {
+                    document.getElementById("profile-name").innerText = `${data.first_name} ${data.last_name}`;
+                    document.getElementById("profile-email").innerText = data.email;
+                } else {
+                    window.location.href = "login.html";
+                }
+            } catch (err) {
+                console.error("Invalid JSON from load.php:", raw);
+                window.location.href = "login.html";
+            }
+        })
+        .catch(error => {
+            console.error("Profile fetch error:", error);
             window.location.href = "login.html";
-        }
+        });
+
+    // Load medications
+    fetch("https://section-three.it313communityprojects.website/src/routes/med/get.php", {
+        method: "GET",
+        credentials: "include"
     })
-    .catch(error => {
-        console.error("Error:", error);
-        window.location.href = "login.html";
-    });
+        .then(async res => {
+            const raw = await res.text();
+            try {
+                const json = JSON.parse(raw);
+                if (json.status === "success") {
+                    const list = document.getElementById("medication-list");
+                    list.innerHTML = "";
+
+                    const dropdown = document.getElementById("medication-select");
+                    dropdown.innerHTML = '<option value="" disabled selected>Select Medication</option>';
+
+                    json.data.forEach(med => {
+                        // Medication list
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                            <strong>${med.med_name}</strong> - ${med.strength} | RX: ${med.rx_number} | Qty: ${med.quantity}
+                            <button class="delete-med" onclick="deleteMedication(${med.med_id}, this)">X</button>
+                        `;
+                        list.appendChild(li);
+
+                        // Reminder dropdown
+                        const option = document.createElement("option");
+                        option.value = med.med_id;
+                        option.textContent = med.med_name;
+                        dropdown.appendChild(option);
+                    });
+                } else {
+                    console.warn("Could not load medications:", json.message);
+                }
+            } catch (err) {
+                console.error("JSON parse error from get.php:", raw);
+            }
+        })
+        .catch(err => {
+            console.error("Error loading medications:", err);
+        });
 }
 
 function toggleEdit() {
     const inputs = document.querySelectorAll(".profile-info input");
-    const spans = document.querySelectorAll(".profile-info span");
-    const editButton = document.querySelector(".edit-btn");
+    const editBtn = document.querySelector(".edit-btn");
+    const saveBtn = document.querySelector(".save-btn");
 
-    if (editButton.innerText === "Edit") {
-        inputs.forEach(input => input.style.display = "inline-block");
-        spans.forEach(span => span.style.display = "none");
-        editButton.innerText = "Save";
-    } else {
-        updateProfile();
-    }
+    inputs.forEach(input => {
+        input.style.display = "block";
+        input.removeAttribute("disabled");
+    });
+
+    editBtn.style.display = "none";
+    saveBtn.style.display = "inline-block";
 }
 
-function previewProfileImage() {
-    const file = document.getElementById('profile-image-upload').files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // Update profile image preview
-            document.getElementById('profile-image').src = e.target.result;
-            // Update profile image in profile-info section
-            document.getElementById('profile-image-info').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function updateProfile() {
+function saveProfile() {
     const formData = new FormData();
     formData.append("first_name", document.getElementById("first-name-input").value);
     formData.append("last_name", document.getElementById("last-name-input").value);
@@ -68,22 +100,47 @@ function updateProfile() {
     formData.append("caretaker_name", document.getElementById("caretaker-name-input").value);
     formData.append("caretaker_email", document.getElementById("caretaker-contact-input").value);
 
-    fetch('https://section-three.it313communityprojects.website/center/php/profile_update.php', {
+    fetch('https://section-three.it313communityprojects.website/src/routes/profile/update.php', {
         method: "POST",
         body: formData,
         credentials: "include"
     })
-    .then(response => response.json())
-    .then(jsonData => {
-        alert(jsonData.message);
-        if (jsonData.status === "success") {
-            loadProfile();
-            document.querySelectorAll(".profile-info input").forEach(input => input.style.display = "none");
-            document.querySelectorAll(".profile-info span").forEach(span => span.style.display = "inline-block");
-            document.querySelector(".edit-btn").innerText = "Edit";
-        }
-    })
-    .catch(error => {
-        console.error("Error updating profile:", error);
-    });
+        .then(res => res.json())
+        .then(json => {
+            alert(json.message);
+            if (json.status === "success") {
+                loadProfile();
+                document.querySelectorAll(".profile-info input").forEach(i => {
+                    i.setAttribute("disabled", "true");
+                    i.style.display = "none";
+                });
+                document.querySelector(".save-btn").style.display = "none";
+                document.querySelector(".edit-btn").style.display = "inline-block";
+            }
+        })
+        .catch(err => {
+            console.error("Profile update error:", err);
+        });
+    }
+
+function addTimeInput() {
+  const timeContainer = document.getElementById("time-input-container");
+
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("time-input-wrapper");
+
+  const timeInput = document.createElement("input");
+  timeInput.type = "time";
+  timeInput.classList.add("specific");
+  timeInput.name = "times[]";
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.innerText = "✖";
+  removeBtn.classList.add("delete-time-btn");
+  removeBtn.onclick = () => wrapper.remove();
+
+  wrapper.appendChild(timeInput);
+  wrapper.appendChild(removeBtn);
+  timeContainer.appendChild(wrapper);
 }

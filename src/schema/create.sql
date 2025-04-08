@@ -13,6 +13,8 @@ CREATE TABLE user (
   user_id INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) UNIQUE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
+  verification_token VARCHAR(64),
+  is_verified TINYINT(1) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -22,48 +24,58 @@ CREATE TABLE user_profile (
   user_id INT UNIQUE NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
-  caretaker_name VARCHAR(255) NULL,
-  caretaker_email VARCHAR(255) NULL,
-  date_of_birth DATE NULL,
-  profile_picture VARCHAR(255) NULL,
-  user_role ENUM('patient', 'caregiver') NULL,
+  caretaker_name VARCHAR(255),
+  caretaker_email VARCHAR(255),
+  date_of_birth DATE,
+  profile_picture VARCHAR(255),
+  user_role ENUM('patient', 'caregiver'),
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE med (
   med_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  dosage_mg INT,
-  type ENUM('pill', 'capsule', 'liquid', 'injectable', 'other') NOT NULL,
-  instructions TEXT,
+  med_name VARCHAR(255) NOT NULL,
+  strength VARCHAR(100) NOT NULL,
+  rx_number VARCHAR(100) NOT NULL,
+  quantity INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE schedule (
-  schedule_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE reminder (
+  reminder_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
   med_id INT NOT NULL,
-  scheduled_time DATETIME NOT NULL,
+  dosage VARCHAR(100) DEFAULT NULL,
+  reminder_type ENUM('specific', 'interval') NOT NULL,
+  interval_hours INT DEFAULT NULL,
+  reminder_time TIME DEFAULT NULL,
+  reminder_date DATE NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
   FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
 );
 
-CREATE TABLE history (
-  history_id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  med_id INT NOT NULL,
-  taken_at DATETIME NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
+CREATE TABLE reminder_times (
+  time_id INT PRIMARY KEY AUTO_INCREMENT,
+  reminder_id INT NOT NULL,
+  reminder_time TIME NOT NULL,
+  FOREIGN KEY (reminder_id) REFERENCES reminder(reminder_id) ON DELETE CASCADE
 );
 
-CREATE TABLE notification (
-  notification_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE calendar_events (
+  event_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
-  message TEXT NOT NULL,
-  sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
+  med_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  event_datetime DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
 );

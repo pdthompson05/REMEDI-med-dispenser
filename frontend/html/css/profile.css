@@ -1,0 +1,274 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px;
+    background: linear-gradient(135deg, #42a5f5, #1976d2);
+    color: white;
+}
+
+.hero-text {
+    text-align: left; /* Align text to the left */
+    margin: 0 auto; /* Center the block itself, but keep text left-aligned */
+}
+
+
+/* MAIN CONTAINER: Flex fix for better spacing */
+.main-container {
+    display: flex;
+    align-items: flex-start; /* Aligns items at the top */
+    justify-content: center;
+    gap: 30px;
+    padding: 40px;
+}
+
+/* PROFILE CARD */
+.profile-card {
+    background: white;
+    padding: 30px;
+    width: 420px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex-grow: 1; /* Allows flexible spacing */
+}
+
+/* Profile Picture */
+.profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.profile-picture img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #1976d2;
+}
+
+.upload-btn {
+    background: #1976d2;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.upload-btn:hover {
+    background: #0d47a1;
+}
+
+/* Profile Info */
+.profile-info {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.info-group {
+    margin-bottom: 15px;
+}
+
+.profile-info label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.profile-info input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    background: #1976d2;
+    color: white;
+    padding: 12px;
+    width: 48%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+
+/* RIGHT SECTION: More balanced spacing */
+.right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 45%;
+    flex-grow: 1;
+}
+
+/* FORM CONTAINERS */
+.form-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-container input, .form-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#medication-list {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+#medication-list::before {
+    content: "";
+    display: block;
+    font-size: 16px;
+    color: #666;
+    padding: 15px 0;
+}
+
+.add-med-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    width: 30px; /* Small square */
+    height: 30px; /* Small square */
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    margin-left: 10px; /* Adds spacing between text and button */
+}
+
+.add-med-btn:hover {
+    background: #0d47a1;
+}
+
+.add-med-btn:hover {
+    background: #0d47a1;
+}
+
+.delete-med {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.delete-med:hover {
+    background: darkred;
+}
+
+#med-form {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.add-time-btn {
+    background: none;
+    color: #333;
+    border: 1px solid #ccc;
+    width: 20px; /* Smaller size */
+    height: 20px; /* Smaller size */
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    margin-left: 5px;
+}
+
+.add-time-btn:hover {
+    background: #f0f0f0;
+}
+
+.delete-time-btn {
+    background: none;
+    color: #777;
+    border: 1px solid #ccc;
+    width: 20px; /* Smaller size */
+    height: 20px; /* Smaller size */
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    margin-left: 5px;
+}
+
+.delete-time-btn:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+
+/* Ensure new time inputs are spaced properly */
+.time-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+
+
+@media (max-width: 900px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .profile-card, .right-section {
+        width: 100%;
+    }
+}

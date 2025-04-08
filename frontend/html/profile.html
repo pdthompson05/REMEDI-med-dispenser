@@ -6,141 +6,8 @@
     <title>REMEDI Profile</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e3f2fd;
-            color: #333;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 60px;
-            background-color: #1565c0;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 20px;
-            transition: 0.3s;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 100px 60px;
-            background: linear-gradient(135deg, #64b5f6, #1565c0);
-            color: white;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-        .hero-text {
-            max-width: 50%;
-        }
-        .hero h1 {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-        .hero p {
-            font-size: 22px;
-            margin-bottom: 30px;
-        }
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            color: #333;
-            width: 50%;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .form-container p {
-            font-size: 18px;
-            margin: 15px 0px 0px 0px;
-        }
-        .form-container input, .form-container button, .form-container select {
-            display: block;
-            width: 96.2%;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-        .form-container select {
-            width: 100%;
-            color: gray;
-        }
-        .form-container button {
-            background-color: #0d47a1;
-            width: 100%;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 15px;
-        }
-        .form-container button:hover {
-            background-color: #002171;
-        }
-        figure {
-            text-align: center;
-        }
-        figure img {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            outline: 3px solid #0d47a1;
-        }
-        .profile-info p {
-            font-size: 18px;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .profile-info span, .profile-info input {
-            display: inline-block;
-            font-size: 18px;
-        }
-        .profile-info input {
-            display: none;
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            font-size: 18px;
-        }
-        .edit-btn {
-            background-color: #0d47a1;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            margin-top: 15px;
-        }
-        .edit-btn:hover, .pfp-btn:hover {
-            background-color: #002171;
-        }
-        .pfp-btn {
-            margin: 0 auto;
-            width: 40%;
-            margin-bottom: 15px;
-        }
-        .profile-picture button {
-            width: 40%;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/profile.css">
 </head>
 <body onload="loadProfile()">
     <div class="navbar">
@@ -148,77 +15,305 @@
             <a href="home.html">REMEDI</a>
         </div>
         <div class="nav-links">
-            <div class ="notification-container">
+            <div class="notification-container">
                 <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
                 <div class="notification-dropdown" id="notificationDropdown">
-                    <p>notifications</p>
+                    <p>Notifications</p>
                 </div>
             </div>
             <a href="calendar.html">Calendar</a>
             <a href="#">Insights</a>
-            <a href="profile.html">Profile</a>
+            <a href="profile.html" class="active">Profile</a>
         </div>
     </div>
     <div class="hero">
         <div class="hero-text">
-            <h1>Profile Information</h1>
-            <p>Manage your medication schedule and personal information.</p>
+            <h1>Your Profile</h1>
+            <p>Manage your information and medication schedule.</p>
         </div>
-        <div class="form-container">
-            <h2>Personal Info</h2>
+    </div>
 
-            <div class="profile-picture">
-                <figure>
+    <div class="main-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-picture">
                     <img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
-                </figure>
-                <input type="file" id="profile-image-upload" accept="image/*" onchange="previewProfileImage()" style="display: none;">
-                <button class="pfp-btn" onclick="document.getElementById('profile-image-upload').click()">Change Profile Picture</button>
+                    <button class="upload-btn" onclick="document.getElementById('profile-image-upload').click()">Change Picture</button>
+                </div>
+                <h2 id="profile-name">First Last</h2>
+                <p id="profile-email">name@gmail.com</p>
             </div>
-
+    
             <div class="profile-info">
-                <p><strong>First Name:</strong> <span id="first-name-text">First</span> <input type="text" id="first-name-input" placeholder="First Name"></p>
-                <p><strong>Last Name:</strong> <span id="last-name-text">Last</span> <input type="text" id="last-name-input" placeholder="Last Name"></p>
-                <p><strong>Date of Birth:</strong> <span id="dob-text">2000-01-01</span> <input type="date" id="dob-input" placeholder="Date"></p>
-                <p><strong>Contact:</strong> <span id="contact-text">name@gmail.com</span> <input type="text" id="contact-input" placeholder="Email"></p>
-                <p><strong>Caretaker Name (optional):</strong> <span id="caretaker-name-text">First Last</span> <input type="text" id="caretaker-name-input" placeholder="Full Name (optional)"></p>
-                <p><strong>Caretaker Contact (optional):</strong> <span id="caretaker-contact-text">name@gmail.com</span> <input type="text" id="caretaker-contact-input" placeholder="Email (optional)"></p>
+                <div class="info-group">
+                    <label>First Name</label>
+                    <input type="text" id="first-name-input" placeholder="First Name">
+                </div>
+                <div class="info-group">
+                    <label>Last Name</label>
+                    <input type="text" id="last-name-input" placeholder="Last Name">
+                </div>
+                <div class="info-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="dob-input">
+                </div>
+                <div class="info-group">
+                    <label>Contact Email</label>
+                    <input type="text" id="contact-input" placeholder="Email">
+                </div>
+                <div class="info-group">
+                    <label>Caretaker Name (Optional)</label>
+                    <input type="text" id="caretaker-name-input" placeholder="Full Name">
+                </div>
+                <div class="info-group">
+                    <label>Caretaker Contact (Optional)</label>
+                    <input type="text" id="caretaker-contact-input" placeholder="Email">
+                </div>
             </div>
-            <button class="edit-btn" onclick="toggleEdit()">Edit</button>
-            <button class="save-btn" onclick="updateProfile()" style="display:none;">Save</button>
+    
+            <div class="btn-group">
+                <button class="edit-btn" onclick="toggleEdit()">Edit</button>
+                <button class="save-btn" onclick="saveProfile()" style="display: none;">Save</button>
+            </div>
+            
         </div>
+    
+        <div class="right-section">
+            <div class="form-container">
+                <h2>Current Medications <button class="add-med-btn" onclick="toggleMedForm()">+</button></h2>
+                <div id="med-form" style="display: none;">
+                    <input type="text" id="med-name" placeholder="Medication Name">
+                    <input type="text" id="med-strength" placeholder="Strength">
+                    <input type="text" id="rx-number" placeholder="RX Number">
+                    <input type="number" id="quantity" placeholder="Quantity per bottle">
+                    <button onclick="addMedication()">Add Medication</button>
+                </div>
+                <ul id="medication-list"></ul>
+            </div>
+            
+    
+            <div class="form-container">
+                <h2>Set Reminder</h2>
+                
+                <label for="medication-select">Select Medication:</label>
+                <select id="medication-select">
+                    <option value="" disabled selected>Select Medication</option>
+                </select>
+            
+                <label for="dosage">Dosage:</label>
+                <input type="text" id="dosage" placeholder="Dosage">
+            
+                <label for="reminder-type">Reminder Type:</label>
+                <select id="reminder-type" onchange="toggleReminderInputs()">
+                    <option value="specific">Set Specific Times</option>
+                    <option value="interval">Set Every X Hours</option>
+                </select>
+            
+                <div id="time-input-container">
+                    <label for="specific">Time:</label>
+                    <input type="time" class="specific">
+                    <button type="button" class="add-time-btn" onclick="addTimeInput()">+</button>
+                </div>
+            
+                <label for="start-date">Start Date:</label>
+                <input type="date" id="start-date">
+            
+                <label for="end-date">End Date:</label>
+                <input type="date" id="end-date">
 
-        <div class="form-container">
-            <h2>Add Medication To Calendar</h2>
-            <p>Name of Medication:</p>
-            <input type="text" placeholder="Medication Name">
-            
-            <p>Amount of Pills To Take:</p>
-            <input type="number" placeholder="Amount">
-            
-            <p>Frequency:</p>
-            <select>
-                <option value="Once">Once</option>
-                <option value="Twice">Twice</option>
-                <option value="Thrice">Thrice</option>
-            </select>
-
-            <p>Hours Between Doses:</p>
-            <input type="number" placeholder="Amount">
-            
-            <p>Starting Time:</p>
-            <input type="time" placeholder="Starting Time">
-            
-            <p>Calendar Day:</p>
-            <input type="date" placeholder="Date">
-            
-            <p>Set a Reminder (Optional):</p>
-            <input type="time" placeholder="Reminder Time (Optional)">
-            
-            <button>Add Medication</button>
+                <button id="set-reminder-btn" onclick="addReminder()">Set Reminder</button>
+            </div>            
         </div>
     </div>
     
     <script src="../js/global.js"></script>
     <script src="../js/profile.js"></script>
+    <script src="../js/med.js"></script>
+    <script src="../js/reminder.js"></script>
+    <!--<script>
+        function toggleMedForm() {
+            let form = document.getElementById("med-form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+    
+        function addMedication() {
+            let medName = document.getElementById("med-name").value;
+            let medStrength = document.getElementById("med-strength").value;
+            let rxNumber = document.getElementById("rx-number").value;
+            let quantity = document.getElementById("quantity").value;
+    
+            if (medName === "" || medStrength === "" || rxNumber === "" || quantity === "") {
+                alert("Please fill in all medication details.");
+                return;
+            }
+    
+            let medList = document.getElementById("medication-list");
+    
+            let li = document.createElement("li");
+            li.innerHTML = `
+                <strong>${medName}</strong> - ${medStrength} | RX: ${rxNumber} | Qty: ${quantity}
+                <button class="delete-med" onclick="removeMedication(this)">X</button>
+            `;
+    
+            medList.appendChild(li);
+
+            document.getElementById("med-name").value = "";
+            document.getElementById("med-strength").value = "";
+            document.getElementById("rx-number").value = "";
+            document.getElementById("quantity").value = "";
+        }
+    
+        function removeMedication(button) {
+            button.parentElement.remove();
+        }
+
+        function toggleEdit() {
+        let inputs = document.querySelectorAll(".profile-info input");
+        let editBtn = document.querySelector(".edit-btn");
+        let saveBtn = document.querySelector(".save-btn");
+
+        inputs.forEach(input => {
+            input.style.display = "block";
+            input.removeAttribute("disabled");
+        });
+
+        editBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+        }
+
+        function saveProfile() {
+            let inputs = document.querySelectorAll(".profile-info input");
+            let editBtn = document.querySelector(".edit-btn");
+            let saveBtn = document.querySelector(".save-btn");
+
+            let firstName = document.getElementById("first-name-input").value;
+            let lastName = document.getElementById("last-name-input").value;
+            let email = document.getElementById("contact-input").value;
+
+            if (firstName && lastName) {
+                document.getElementById("profile-name").innerText = `${firstName} ${lastName}`;
+            }
+            if (email) {
+                document.getElementById("profile-email").innerText = email;
+            }
+
+            inputs.forEach(input => {
+                input.style.display = "none";
+                input.setAttribute("disabled", "true");
+            });
+
+            saveBtn.style.display = "none"; //hide save button
+            editBtn.style.display = "inline-block"; //show edit button
+        }
+
+        //hiding input fields when page loads
+        window.onload = function() {
+            let inputs = document.querySelectorAll(".profile-info input");
+            inputs.forEach(input => {
+                input.style.display = "none";
+                input.setAttribute("disabled", "true");
+            });
+        };
+
+        function toggleReminderInputs() {
+        let reminderType = document.getElementById("reminder-type").value;
+        let timeContainer = document.getElementById("time-input-container");
+
+        if (reminderType === "specific") {
+            timeContainer.style.display = "block";
+        } else {
+            timeContainer.style.display = "none";
+        }
+    }
+
+    function addTimeInput() {
+        let timeContainer = document.getElementById("time-input-container");
+
+        let timeWrapper = document.createElement("div");
+        timeWrapper.classList.add("time-input-wrapper");
+
+        //new time input
+        let newTimeInput = document.createElement("input");
+        newTimeInput.type = "time";
+        newTimeInput.classList.add("specific");
+
+        //delete time input
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "✖";
+        deleteBtn.classList.add("delete-time-btn");
+        deleteBtn.onclick = function () {
+            timeContainer.removeChild(timeWrapper);
+        };
+
+        timeWrapper.appendChild(newTimeInput);
+        timeWrapper.appendChild(deleteBtn);
+
+        timeContainer.appendChild(timeWrapper);
+    }
+
+    function toggleReminderInputs() {
+        let reminderType = document.getElementById("reminder-type").value;
+        let timeContainer = document.getElementById("time-input-container");
+
+        timeContainer.innerHTML = "";
+
+        if (reminderType === "specific") {
+            let newTimeInput = document.createElement("input");
+            newTimeInput.type = "time";
+            newTimeInput.classList.add("specific");
+
+            let addTimeBtn = document.createElement("button");
+            addTimeBtn.innerText = "+";
+            addTimeBtn.classList.add("add-time-btn");
+            addTimeBtn.onclick = addTimeInput;
+
+            timeContainer.appendChild(newTimeInput);
+            timeContainer.appendChild(addTimeBtn);
+            timeContainer.style.display = "block";
+        } else if (reminderType === "interval") {
+            let intervalLabel = document.createElement("label");
+            intervalLabel.innerText = "Repeat Every:";
+            intervalLabel.setAttribute("for", "interval-dropdown");
+
+            let intervalDropdown = document.createElement("select");
+            intervalDropdown.id = "interval-dropdown";
+
+            let hours = [1, 2, 3, 4, 5, 6, 8, 12];
+            hours.forEach(hour => {
+                let option = document.createElement("option");
+                option.value = hour;
+                option.innerText = `${hour} hours`;
+                intervalDropdown.appendChild(option);
+            });
+
+            timeContainer.appendChild(intervalLabel);
+            timeContainer.appendChild(intervalDropdown);
+            timeContainer.style.display = "block";
+        }
+    }
+
+    function addTimeInput() {
+        let timeContainer = document.getElementById("time-input-container");
+
+        let timeWrapper = document.createElement("div");
+        timeWrapper.classList.add("time-input-wrapper");
+
+        let newTimeInput = document.createElement("input");
+        newTimeInput.type = "time";
+        newTimeInput.classList.add("specific");
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "✖";
+        deleteBtn.classList.add("delete-time-btn");
+        deleteBtn.onclick = function () {
+            timeContainer.removeChild(timeWrapper);
+        };
+
+        timeWrapper.appendChild(newTimeInput);
+        timeWrapper.appendChild(deleteBtn);
+
+        timeContainer.appendChild(timeWrapper);
+    }
+    </script>-->
 </body>
 </html>
