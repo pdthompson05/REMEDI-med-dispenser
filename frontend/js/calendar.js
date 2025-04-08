@@ -23,7 +23,6 @@ function renderCalendarEvents(events) {
     const eventDate = new Date(event.event_datetime);
     const dayIndex = (eventDate.getDay() + 6) % 7;
     const hour = `${eventDate.getHours()}:00`;
-
     const cells = document.querySelectorAll(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
     cells.forEach(cell => {
       const reminder = document.createElement("div");
@@ -32,9 +31,9 @@ function renderCalendarEvents(events) {
 
       const deleteBtn = document.createElement("button");
       deleteBtn.innerText = "✖";
-      deleteBtn.className = "delete-event-btn";
+      deleteBtn.classList.add("delete-event-btn");
       deleteBtn.onclick = () => {
-        if (confirm("Delete this reminder event?")) {
+        if (confirm(`Delete reminder for ${event.med_name}?`)) {
           deleteCalendarEvent(event.event_id);
         }
       };
