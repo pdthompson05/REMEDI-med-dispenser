@@ -53,6 +53,11 @@ function addReminder() {
         formData.append("interval_hours", interval);
     }
     
+    console.log("Times being sent:");
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+    }
+
 
     fetch("https://section-three.it313communityprojects.website/src/routes/reminder/add.php", {
         method: "POST",
