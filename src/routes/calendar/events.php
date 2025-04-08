@@ -80,19 +80,55 @@ switch ($method) {
     $event_id = $del_vars['event_id'] ?? null;
 
     if (!$event_id) {
-      echo json_encode(["status" => "error", "message" => "Missing event_id"]);
-      exit;
+        echo json_encode(["status" => "error", "message" => "Missing event_id"]);
+        exit;
     }
 
-    $sql = "DELETE FROM calendar_events WHERE event_id = ? AND user_id = ?";
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare("SELECT med_id FROM calendar_events WHERE event_id = ? AND user_id = ?");
+    $stmt->bind_param("ii", $event_id, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        echo json_encode(["status" => "error", "message" => "Event not found"]);
+        exit;
+    }
+
+    $row = $result->fetch_assoc();
+    $med_id = $row['med_id'];
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT reminder_id FROM reminder WHERE med_id = ? AND user_id = ?");
+    $stmt->bind_param("ii", $med_id, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $reminder_row = $result->fetch_assoc();
+        $reminder_id = $reminder_row['reminder_id'];
+        $stmt->close();
+
+        $stmt = $conn->prepare("DELETE FROM reminder_times WHERE reminder_id = ?");
+        $stmt->bind_param("i", $reminder_id);
+        $stmt->execute();
+        $stmt->close();
+
+        $stmt = $conn->prepare("DELETE FROM reminder WHERE reminder_id = ?");
+        $stmt->bind_param("i", $reminder_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    $stmt = $conn->prepare("DELETE FROM calendar_events WHERE event_id = ? AND user_id = ?");
     $stmt->bind_param("ii", $event_id, $user_id);
 
     if ($stmt->execute()) {
-      echo json_encode(["status" => "success", "message" => "Event deleted"]);
+        echo json_encode(["status" => "success", "message" => "Event and reminder deleted"]);
     } else {
-      echo json_encode(["status" => "error", "message" => "Failed to delete event"]);
+        echo json_encode(["status" => "error", "message" => "Failed to delete event"]);
     }
+
+    $stmt->close();
     break;
 
   default:
