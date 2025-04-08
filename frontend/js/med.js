@@ -31,13 +31,12 @@ function addMedication() {
                 const json = JSON.parse(raw);
                 if (json.status === "success") {
                     alert("Medication added!");
-                    // Clear inputs
                     document.getElementById("med-name").value = "";
                     document.getElementById("med-strength").value = "";
                     document.getElementById("rx-number").value = "";
                     document.getElementById("quantity").value = "";
                     toggleMedForm();
-                    loadProfile(); // reload to fetch new med_id
+                    loadProfile();
                 } else {
                     alert("Error: " + json.message);
                 }

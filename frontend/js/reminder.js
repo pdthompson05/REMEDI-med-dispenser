@@ -2,7 +2,6 @@ function addReminder() {
     const medId = document.getElementById("medication-select").value;
     const dosage = document.getElementById("dosage").value.trim();
     const type = document.getElementById("reminder-type").value;
-    const normalizedType = type === "specific" ? "specific" : type;
     const startDate = document.getElementById("start-date").value;
     const endDate = document.getElementById("end-date").value;
 
@@ -14,7 +13,7 @@ function addReminder() {
     const formData = new FormData();
     formData.append("med_id", medId);
     formData.append("dosage", dosage);
-    formData.append("reminder_type", normalizedType);
+    formData.append("reminder_type", type);
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
 
@@ -47,11 +46,6 @@ function addReminder() {
     
         formData.append("interval_hours", interval);
     }
-    
-    console.log("Times being sent:");
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-    }
 
     fetch("https://section-three.it313communityprojects.website/src/routes/reminder/add.php", {
         method: "POST",
@@ -62,7 +56,12 @@ function addReminder() {
         .then(json => {
             if (json.status === "success") {
                 alert("Reminder set!");
-                loadProfile(); // optionally reload reminders
+                document.getElementById("medication-select").value = "";
+                document.getElementById("dosage").value = "";
+                document.getElementById("reminder-type").value = "";
+                document.getElementById("start-date").value = "";
+                document.getElementById("end-date").value = "";
+                loadProfile();
             } else {
                 alert("Reminder error: " + json.message);
             }
