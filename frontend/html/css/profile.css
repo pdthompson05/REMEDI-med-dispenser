@@ -149,6 +149,7 @@ button:hover {
 }
 
 #medication-list {
+    content: none;
     list-style-type: none;
     padding: 0;
     text-align: center;
