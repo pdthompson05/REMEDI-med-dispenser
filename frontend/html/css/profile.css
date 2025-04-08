@@ -149,14 +149,13 @@ button:hover {
 }
 
 #medication-list {
-    content: none;
     list-style-type: none;
     padding: 0;
     text-align: center;
 }
 
 #medication-list::before {
-    content: "No medications added yet!";
+    content: "";
     display: block;
     font-size: 16px;
     color: #666;
