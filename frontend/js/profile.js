@@ -131,7 +131,7 @@ function addTimeInput() {
 
   const timeInput = document.createElement("input");
   timeInput.type = "time";
-  timeInput.classList.add("specific-time");
+  timeInput.classList.add("specific");
 
   const removeBtn = document.createElement("button");
   removeBtn.type = "button";
@@ -142,46 +142,4 @@ function addTimeInput() {
   wrapper.appendChild(timeInput);
   wrapper.appendChild(removeBtn);
   timeContainer.appendChild(wrapper);
-}
-
-function toggleReminderInputs() {
-  const reminderType = document.getElementById("reminder-type").value;
-  const timeContainer = document.getElementById("time-input-container");
-
-  timeContainer.innerHTML = "";
-
-  if (reminderType === "specific-time") {
-    const timeInput = document.createElement("input");
-    timeInput.type = "time";
-    timeInput.classList.add("specific-time");
-
-    const addTimeBtn = document.createElement("button");
-    addTimeBtn.innerText = "+";
-    addTimeBtn.type = "button";
-    addTimeBtn.classList.add("add-time-btn");
-    addTimeBtn.onclick = addTimeInput;
-
-    timeContainer.appendChild(timeInput);
-    timeContainer.appendChild(addTimeBtn);
-    timeContainer.style.display = "block";
-  } else if (reminderType === "interval") {
-    const intervalLabel = document.createElement("label");
-    intervalLabel.innerText = "Repeat Every:";
-
-    const intervalDropdown = document.createElement("select");
-    intervalDropdown.id = "interval-dropdown";
-
-    [1, 2, 4, 6, 8, 12].forEach(hour => {
-      const option = document.createElement("option");
-      option.value = hour;
-      option.textContent = `${hour} hours`;
-      intervalDropdown.appendChild(option);
-    });
-
-    timeContainer.appendChild(intervalLabel);
-    timeContainer.appendChild(intervalDropdown);
-    timeContainer.style.display = "block";
-  } else {
-    timeContainer.style.display = "none";
-  }
 }
