@@ -105,13 +105,13 @@
             
                 <label for="reminder-type">Reminder Type:</label>
                 <select id="reminder-type" onchange="toggleReminderInputs()">
-                    <option value="specific-time">Set Specific Times</option>
+                    <option value="specific">Set Specific Times</option>
                     <option value="interval">Set Every X Hours</option>
                 </select>
             
                 <div id="time-input-container">
-                    <label for="specific-time">Time:</label>
-                    <input type="time" class="specific-time">
+                    <label for="specific">Time:</label>
+                    <input type="time" class="specific">
                     <button type="button" class="add-time-btn" onclick="addTimeInput()">+</button>
                 </div>
             
@@ -219,7 +219,7 @@
         let reminderType = document.getElementById("reminder-type").value;
         let timeContainer = document.getElementById("time-input-container");
 
-        if (reminderType === "specific-time") {
+        if (reminderType === "specific") {
             timeContainer.style.display = "block";
         } else {
             timeContainer.style.display = "none";
@@ -235,7 +235,7 @@
         //new time input
         let newTimeInput = document.createElement("input");
         newTimeInput.type = "time";
-        newTimeInput.classList.add("specific-time");
+        newTimeInput.classList.add("specific");
 
         //delete time input
         let deleteBtn = document.createElement("button");
@@ -257,10 +257,10 @@
 
         timeContainer.innerHTML = "";
 
-        if (reminderType === "specific-time") {
+        if (reminderType === "specific") {
             let newTimeInput = document.createElement("input");
             newTimeInput.type = "time";
-            newTimeInput.classList.add("specific-time");
+            newTimeInput.classList.add("specific");
 
             let addTimeBtn = document.createElement("button");
             addTimeBtn.innerText = "+";
@@ -300,7 +300,7 @@
 
         let newTimeInput = document.createElement("input");
         newTimeInput.type = "time";
-        newTimeInput.classList.add("specific-time");
+        newTimeInput.classList.add("specific");
 
         let deleteBtn = document.createElement("button");
         deleteBtn.innerText = "✖";

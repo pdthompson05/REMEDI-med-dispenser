@@ -2,7 +2,7 @@ function addReminder() {
     const medId = document.getElementById("medication-select").value;
     const dosage = document.getElementById("dosage").value.trim();
     const type = document.getElementById("reminder-type").value;
-    const normalizedType = type === "specific-time" ? "specific" : type;
+    const normalizedType = type === "specific" ? "specific" : type;
     const startDate = document.getElementById("start-date").value;
     const endDate = document.getElementById("end-date").value;
 
@@ -24,7 +24,7 @@ function addReminder() {
     formData.append("end_date", endDate);
 
     if (type === "specific") {
-        const timeInputs = document.querySelectorAll(".specific-time");
+        const timeInputs = document.querySelectorAll(".specific");
         const times = [];
 
         timeInputs.forEach(input => {
@@ -80,10 +80,10 @@ function toggleReminderInputs() {
 
   timeContainer.innerHTML = "";
 
-  if (reminderType === "specific-time") {
+  if (reminderType === "specific") {
     const timeInput = document.createElement("input");
     timeInput.type = "time";
-    timeInput.classList.add("specific-time");
+    timeInput.classList.add("specific");
 
     const addTimeBtn = document.createElement("button");
     addTimeBtn.innerText = "+";
