@@ -6,11 +6,6 @@ function addReminder() {
     const startDate = document.getElementById("start-date").value;
     const endDate = document.getElementById("end-date").value;
 
-    console.log("medId:", medId);
-    console.log("type:", type);
-    console.log("startDate:", startDate);
-    console.log("endDate:", endDate);
-
     if (!medId || !type || !startDate || !endDate) {
         alert("Please fill in all required reminder fields.");
         return;
