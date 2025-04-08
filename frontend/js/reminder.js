@@ -53,7 +53,6 @@ function addReminder() {
         console.log(pair[0] + ": " + pair[1]);
     }
 
-
     fetch("https://section-three.it313communityprojects.website/src/routes/reminder/add.php", {
         method: "POST",
         body: formData,
