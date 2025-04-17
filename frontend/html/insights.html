@@ -80,6 +80,24 @@
         align-items: left;
         width: 30%;
     }
+
+    #csv-download {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 14px;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    #csv-download:hover {
+        background-color: #1565c0;
+    }
 </style>
 
 <body>
@@ -218,8 +236,8 @@
             </div>
         </div>
 
-        <button onclick="downloadCSV()" class="download-btn">Download History as CSV</button>
-
+        <button id="csv-download" onclick="downloadCSV()">Download CSV</button>
+          
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="

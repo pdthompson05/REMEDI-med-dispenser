@@ -75,14 +75,26 @@ const populateLegend = () => {
 populateLegend();
 
 function downloadCSV() {
+  const rows = [];
   const headers = ["Day", "Date", "Time", "Status"];
-  const rows = mockHistory.map(entry => [entry.day, entry.date, entry.time, entry.status]);
+  rows.push(headers);
 
-  let csvContent = "data:text/csv;charset=utf-8," 
-    + headers.join(",") + "\n" 
-    + rows.map(r => r.join(",")).join("\n");
+  const tableRows = document.querySelectorAll(".record tbody tr");
+  tableRows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    if (cells.length === 5) {
+      rows.push([
+        cells[1].textContent,
+        cells[2].textContent,
+        cells[3].textContent,
+        cells[4].textContent
+      ]);
+    }
+  });
 
+  const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
   const encodedUri = encodeURI(csvContent);
+
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
   link.setAttribute("download", "medication_history.csv");
@@ -90,3 +102,4 @@ function downloadCSV() {
   link.click();
   document.body.removeChild(link);
 }
+
