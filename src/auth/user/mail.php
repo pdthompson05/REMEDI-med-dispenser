@@ -1,13 +1,13 @@
 <?php
-require __DIR__. '/../../PHPMailer/src/PHPMailer.php';
-require __DIR__. '/../../PHPMailer/src/SMTP.php';
-require __DIR__. '/../../PHPMailer/src/Exception.php';
-require_once __DIR__ . '/../config/env.php'; // loadEnv
+require __DIR__. '/../../../PHPMailer/src/PHPMailer.php';
+require __DIR__. '/../../../PHPMailer/src/SMTP.php';
+require __DIR__. '/../../../PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../../config/env.php'; // loadEnv
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-loadEnv(__DIR__ . '/../../.env'); // loadEnv for .env file
+loadEnv(__DIR__ . '/../../../.env'); // loadEnv for .env file
 
 function sendVerificationEmail($email, $token) {
     $mailUser = getenv('MAIL_USER');
@@ -31,7 +31,7 @@ function sendVerificationEmail($email, $token) {
         $mail->setFrom($mailUser, 'noreply-remedi');
         $mail->addAddress($email);
 
-        $verification_link = "https://section-three.it313communityprojects.website/src/auth/verify_token.php?token=" . urlencode($token);
+        $verification_link = "https://section-three.it313communityprojects.website/src/auth/user/token.php?token=" . urlencode($token);
         $mail->isHTML(true);
         $mail->Subject = 'Verify Your Email';
         $mail->Body    = "<p>Click the link below to verify your email:</p>

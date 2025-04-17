@@ -22,14 +22,14 @@ $sql = "
         r.dosage,
         r.reminder_type,
         r.interval_hours,
-        r.reminder_time,
-        r.reminder_date,
         r.start_date,
-        r.end_date
+        r.end_date,
+        rt.reminder_time
     FROM reminder r
     JOIN med m ON r.med_id = m.med_id
+    LEFT JOIN reminder_times rt ON r.reminder_id = rt.reminder_id
     WHERE r.user_id = ?
-    ORDER BY r.reminder_date ASC, r.reminder_time ASC
+    ORDER BY r.start_date ASC, rt.reminder_time ASC
 ";
 
 $stmt = $conn->prepare($sql);
@@ -39,11 +39,27 @@ $result = $stmt->get_result();
 
 $reminders = [];
 while ($row = $result->fetch_assoc()) {
-    $reminders[] = $row;
+    $rid = $row['reminder_id'];
+    if (!isset($reminders[$rid])) {
+        $reminders[$rid] = [
+            "reminder_id" => $row["reminder_id"],
+            "med_id" => $row["med_id"],
+            "med_name" => $row["med_name"],
+            "dosage" => $row["dosage"],
+            "reminder_type" => $row["reminder_type"],
+            "interval_hours" => $row["interval_hours"],
+            "start_date" => $row["start_date"],
+            "end_date" => $row["end_date"],
+            "times" => []
+        ];
+    }
+
+    if ($row["reminder_time"]) {
+        $reminders[$rid]["times"][] = $row["reminder_time"];
+    }
 }
 
-echo json_encode(["status" => "success", "data" => $reminders]);
-
+echo json_encode(["status" => "success", "data" => array_values($reminders)]);
 $stmt->close();
 $conn->close();
 ?>

@@ -34,7 +34,7 @@
         </div>
       </div>
       <a href="calendar.html">Calendar</a>
-      <a href="#">Insights</a>
+      <a href="insights">Insights</a>
       <a href="profile.html">Profile</a>
     </div>
   </div>
@@ -50,7 +50,7 @@
       <div class="calendar-header" id="week-days"></div>
       <div class="calendar-body" id="calendar-body"></div>
     </div>
-
+    
     <div class="reminder-side hidden" id="reminderSide">
       <h2 id="reminderDateLabel">March 1, 2025</h2>
       <ul id="reminderList">
@@ -59,6 +59,8 @@
     </div>
   </div>
 
+  <script src="../js/global.js"></script>
+  <script src="../js/calendar.js"></script>
   <script>
     const weekDaysEl = document.getElementById("week-days");
     const calendarBody = document.getElementById("calendar-body");
