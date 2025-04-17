@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | REMEDI</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <input type="text" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
+<body class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+        <img src="pill2.png" alt="Pill Icon" class="pill-icon" />
+        <h2>Welcome Back to <span class="brand">REMEDI</span></h2>
+        <p>Manage your health, one reminder at a time.</p>
+    </div>
+    <div class="login-form">
+        <input type="text" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
         <button onclick="login()">Login</button>
-        <p id="message" style="color: red;"></p>
-        <p><a href="../../center/php/reset_pass.php">Forgot Password?</a></p>
-    <script src="../js/login.js"></script>
+        <p id="message"></p>
+        <p class="forgot-password"><a href="../../center/php/reset_pass.php">Forgot Password?</a></p>
+    </div>
+  </div>
+  <script src="../js/login.js"></script>
 </body>
 </html>

@@ -92,6 +92,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 /* Button Group */
@@ -146,6 +147,7 @@ button:hover {
     margin-bottom: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 #medication-list {

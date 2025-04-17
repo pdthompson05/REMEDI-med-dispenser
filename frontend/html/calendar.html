@@ -1,75 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REMEDI Calendar</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/calendar.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>REMEDI Calendar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/calendar.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <a href="home.html">REMEDI</a>
-        </div>
-        <div class="nav-links">
-            <div class="notification-container">
-                <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
-                <div class="notification-dropdown" id="notificationDropdown">
-                    <p>Notifications</p>
-                </div>
-            </div>
-            <a href="calendar.html">Calendar</a>
-            <a href="insights.html">Insights</a>
-            <a href="profile.html">Profile</a>
-        </div>
+  <div class="navbar">
+    <div class="logo">
+      <a href="home.html">
+        <img src="logo.png" alt="REMEDI Logo" class="logo-image">
+      </a>
     </div>
+    <div class="nav-links">
+      <div class="notification-container">
+        <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
+        <div class="notification-dropdown" id="notificationDropdown">
+          <p>Notifications</p>
+        </div>
+      </div>
+      <a href="calendar.html">Calendar</a>
+      <a href="insights">Insights</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </div>
 
+  <div class="view-toggle">
+    <button onclick="switchView('week')">Weekly View</button>
+    <button onclick="switchView('month')">Monthly View</button>
+  </div>
+
+  <div class="calendar-wrapper monthly-view" id="calendarWrapper">
     <div class="calendar-container">
-        <div class="calendar-header" id="week-days">
-        </div>
-        <div class="calendar-body" id="calendar-body">
-        </div>
+      <div class="calendar-month-row hidden" id="monthDisplay"></div>
+      <div class="calendar-header" id="week-days"></div>
+      <div class="calendar-body" id="calendar-body"></div>
     </div>
+    
+    <div class="reminder-side hidden" id="reminderSide">
+      <h2 id="reminderDateLabel">March 1, 2025</h2>
+      <ul id="reminderList">
+        <li>No reminders.</li>
+      </ul>
+    </div>
+  </div>
 
-    <script src="../js/calendar.js"></script>
-    <script>
-        const weekDaysEl = document.getElementById("week-days");
-        const calendarBody = document.getElementById("calendar-body");
+  <script src="../js/global.js"></script>
+  <script src="../js/calendar.js"></script>
+  <script>
+    const weekDaysEl = document.getElementById("week-days");
+    const calendarBody = document.getElementById("calendar-body");
+    const reminderListEl = document.getElementById("reminderList");
+    const reminderDateLabel = document.getElementById("reminderDateLabel");
+    const reminderSide = document.getElementById("reminderSide");
+    const monthDisplay = document.getElementById("monthDisplay");
 
-        const hours = Array.from({ length: 12 }, (_, i) => `${8 + i}:00`);
-        const weekStart = getMonday(new Date());
-        const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    let currentView = 'week';
+    let selectedDate = null;
 
-        weekDaysEl.innerHTML = `<div></div>`;
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(weekStart);
-            date.setDate(date.getDate() + i);
-            const label = `${dayNames[i]}<br>${date.getMonth() + 1}/${date.getDate()}`;
-            weekDaysEl.innerHTML += `<div>${label}</div>`;
-        }
+    const reminders = {};
 
-        hours.forEach(hour => {
-            calendarBody.innerHTML += `<div class="time-slot time-label">${hour}</div>`;
-            for (let i = 0; i < 7; i++) {
-            calendarBody.innerHTML += `<div class="time-slot day-column" data-day="${i}" data-hour="${hour}"></div>`;
-            }
-        });
-
-        function getMonday(date) {
-            const day = date.getDay();
-            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-            return new Date(date.setDate(diff));
-        }
-
-        function addReminder(dayIndex, hour, text) {
-            const cells = document.querySelectorAll(`[data-day="${dayIndex}"][data-hour="${hour}"]`);
-            cells.forEach(cell => {
-            cell.innerHTML = `<div class="reminder-block">${text}</div>`;
-        });
+    function switchView(view) {
+      currentView = view;
+      renderCalendar();
     }
-    </script>
+
+    function renderCalendar() {
+      const wrapper = document.getElementById("calendarWrapper");
+
+      if (currentView === 'week') {
+        reminderSide.classList.add("hidden");
+        wrapper.classList.remove("monthly-view");
+        wrapper.classList.add("weekly-view");
+        monthDisplay.classList.add("hidden");
+        renderWeeklyView();
+      } else {
+        reminderSide.classList.remove("hidden");
+        wrapper.classList.remove("weekly-view");
+        wrapper.classList.add("monthly-view");
+        monthDisplay.classList.remove("hidden");
+        renderMonthlyView();
+      }
+    }
+
+    function renderWeeklyView() {
+      weekDaysEl.innerHTML = `<div></div>`;
+      calendarBody.innerHTML = "";
+
+      const hours = Array.from({ length: 12 }, (_, i) => `${8 + i}:00`);
+      const weekStart = getMonday(new Date());
+      const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(weekStart);
+        date.setDate(date.getDate() + i);
+        const label = `${dayNames[i]}<br>${date.getMonth() + 1}/${date.getDate()}`;
+        weekDaysEl.innerHTML += `<div>${label}</div>`;
+      }
+
+      hours.forEach(hour => {
+        calendarBody.innerHTML += `<div class="time-slot time-label">${hour}</div>`;
+        for (let i = 0; i < 7; i++) {
+          calendarBody.innerHTML += `<div class="time-slot day-column" data-day="${i}" data-hour="${hour}"></div>`;
+        }
+      });
+    }
+
+    function renderMonthlyView() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDay = new Date(year, month, 1).getDay();
+      const offset = (firstDay + 6) % 7;
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+
+      monthDisplay.textContent = `${monthNames[month]} ${year}`;
+
+      weekDaysEl.innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        .map(day => `<div>${day}</div>`).join('');
+      
+      calendarBody.innerHTML = "";
+
+      const totalCells = offset + daysInMonth;
+      const totalGrid = Math.ceil(totalCells / 7) * 7;
+
+      for (let i = 0; i < totalGrid; i++) {
+        if (i < offset || i >= offset + daysInMonth) {
+          calendarBody.innerHTML += `<div class="time-slot day-column"></div>`;
+        } else {
+          const day = i - offset + 1;
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const isSelected = selectedDate === dateStr;
+          const hasReminder = reminders[dateStr] && reminders[dateStr].length > 0;
+          const reminderDot = hasReminder ? `<img src="pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
+          const dayNumber = isSelected
+          ? `<span class="selected-day">${day}</span>${reminderDot}`
+          : `<span class="day-number">${day}</span>${reminderDot}`;
+
+          calendarBody.innerHTML += `
+            <div class="time-slot day-column" onclick="selectDay('${dateStr}')">
+              ${dayNumber}
+            </div>`;
+        }
+      }
+
+      if (!selectedDate) {
+        selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+      }
+
+      updateReminderPanel(selectedDate);
+    }
+
+    function updateReminderPanel(dateStr) {
+      const [year, month, day] = dateStr.split('-').map(Number);
+      const date = new Date(year, month - 1, day);
+
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      reminderDateLabel.textContent = date.toLocaleDateString(undefined, options);
+
+      reminderListEl.innerHTML = "";
+
+      if (reminders[dateStr]) {
+        reminders[dateStr].forEach(reminder => {
+          const li = document.createElement("li");
+          li.textContent = reminder;
+          reminderListEl.appendChild(li);
+        });
+      } else {
+        reminderListEl.innerHTML = "<li>No reminders.</li>";
+      }
+    }
+
+    function selectDay(dateStr) {
+      selectedDate = dateStr;
+      renderCalendar();
+    }
+
+    function getMonday(date) {
+      const day = date.getDay();
+      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+      return new Date(date.setDate(diff));
+    }
+
+    function addReminder(dayIndex, hour, text) {
+      const cells = document.querySelectorAll(`[data-day="${dayIndex}"][data-hour="${hour}"]`);
+      cells.forEach(cell => {
+        cell.innerHTML = `<div class="reminder-block">${text}</div>`;
+      });
+    }
+
+    function toggleNotifications() {
+      const dropdown = document.getElementById("notificationDropdown");
+      dropdown.classList.toggle("show");
+    }
+
+    window.onload = renderCalendar;
+  </script>
 </body>
 </html>
