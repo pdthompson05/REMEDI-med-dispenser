@@ -73,3 +73,20 @@ const populateLegend = () => {
 }
 
 populateLegend();
+
+function downloadCSV() {
+  const headers = ["Day", "Date", "Time", "Status"];
+  const rows = mockHistory.map(entry => [entry.day, entry.date, entry.time, entry.status]);
+
+  let csvContent = "data:text/csv;charset=utf-8," 
+    + headers.join(",") + "\n" 
+    + rows.map(r => r.join(",")).join("\n");
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "medication_history.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
