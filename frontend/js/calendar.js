@@ -1,4 +1,4 @@
-const CALENDAR_API = "https://section-three.it313communityprojects.website/src/routes/calendar/events.php";
+const CALENDAR_API = "https://section-three.it313communityprojects.website/src/routes/calendar/render.php";
 
 function loadCalendarEvents() {
   fetch(CALENDAR_API, {
@@ -48,7 +48,7 @@ function deleteCalendarEvent(eventId) {
   const formData = new URLSearchParams();
   formData.append("event_id", eventId);
 
-  fetch("https://section-three.it313communityprojects.website/src/routes/calendar/events.php", {
+  fetch("https://section-three.it313communityprojects.website/src/routes/calendar/render.php", {
     method: "DELETE",
     credentials: "include",
     body: formData
