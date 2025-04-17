@@ -14,7 +14,7 @@ function login() {
     formData.append('email', email);
     formData.append('password', password);
 
-    fetch('https://section-three.it313communityprojects.website/src/auth/login.php', {
+    fetch('https://section-three.it313communityprojects.website/src/auth/user/login.php', {
         method: 'POST',
         body: formData,
         credentials: 'include'
