@@ -17,10 +17,12 @@
         <div class="nav-links">
             <div class="notification-container">
                 <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
-                <div class="notification-dropdown" id="notificationDropdown">
-                    <p>Notifications</p>
+                <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
+                    <p>Reminders</p>
+                    <div id="notificationList"></div>
                 </div>
             </div>
+              
             <a href="calendar.html">Calendar</a>
             <a href="insights.html">Insights</a>
             <a href="profile.html" class="active">Profile</a>
