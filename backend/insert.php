@@ -12,11 +12,11 @@ if ($conn->connect_error) {
 
 $device_id = $_POST['device_id'];
 $temp = $_POST['temp'];
-$humidity = $_POST['humidity'];
+$magnet = $_POST['humidity'];
 $timestamp = date("Y-m-d H:i:s"); // Server time
 
-$sql = "INSERT INTO sensor_data (device_id, temperature, humidity, timestamp) 
-        VALUES ('$device_id', '$temp', '$humidity', '$timestamp')";
+$sql = "INSERT INTO sensor_data (device_id, temperature, magnet, timestamp) 
+        VALUES ('$device_id', '$temp', '$magnet', '$timestamp')";
 
 if ($conn->query($sql) === TRUE) {
     echo "Success";
