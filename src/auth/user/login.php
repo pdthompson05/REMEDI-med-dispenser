@@ -1,36 +1,37 @@
 <?php
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-ini_set("session.cookie_httponly", 1);
-ini_set("session.cookie_secure", 1);
-ini_set("session.use_only_cookies", 1);
-ini_set("session.cookie_samesite", "Lax");
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Lax');
 session_start();
 ob_start();
-header("Content-Type: application/json");
+header('Content-Type: application/json');
 require_once __DIR__.'/../../config/db.php';
 
 try {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'] ?? '';
 
-    if (!$email || empty($password)) {
-        throw new Exception("Email and password required");
+    if (! $email || empty($password)) {
+        throw new Exception('Email and password required');
     }
 
-    $stmt = $conn->prepare("
+    $stmt = $conn->prepare('
         SELECT user_id, email, password_hash
         FROM user
         WHERE email = ?
-    ");
-    $stmt->bind_param("s", $email);
+    ');
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
 
-    if (!$user || !password_verify($password, $user['password_hash'])) {
-        throw new Exception("Invalid email or password");
+    if (! $user || ! password_verify($password, $user['password_hash'])) {
+        throw new Exception('Invalid email or password');
     }
 
     $_SESSION['user_id'] = $user['user_id'];
@@ -43,7 +44,7 @@ try {
     echo json_encode([
         'status' => 'success',
         'message' => 'Login successful',
-        'redirect' => 'https://section-three.it313communityprojects.website/frontend/html/profile.html'
+        'redirect' => 'https://section-three.it313communityprojects.website/frontend/html/profile.html',
     ]);
 
 } catch (Exception $e) {
@@ -53,8 +54,7 @@ try {
         'message' => $e->getMessage(),
         'debug' => [
             'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ]
+            'line' => $e->getLine(),
+        ],
     ]);
 }
-?>

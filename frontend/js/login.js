@@ -15,16 +15,16 @@ function login() {
     formData.append('password', password);
 
     fetch('https://section-three.it313communityprojects.website/src/auth/user/login.php', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-    })
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        })
         .then(async response => {
-            const raw = await response.text();       // get raw response
-            console.log("Raw Response Text:", raw);  // log for debugging
+            const raw = await response.text(); // get raw response
+            console.log("Raw Response Text:", raw); // log for debugging
 
             try {
-                const jsonData = JSON.parse(raw);    // try to parse JSON
+                const jsonData = JSON.parse(raw); // try to parse JSON
                 console.log("Parsed JSON:", jsonData);
 
                 if (jsonData.message) {

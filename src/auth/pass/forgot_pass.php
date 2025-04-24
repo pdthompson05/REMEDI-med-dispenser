@@ -10,9 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
     $token_hash = hash('sha256', $token);
 
     // Check if the token is valid
-    $sql = "SELECT * FROM user WHERE reset_token_hash = ? AND reset_token_expires_at > NOW()";
+    $sql = 'SELECT * FROM user WHERE reset_token_hash = ? AND reset_token_expires_at > NOW()';
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $token_hash);
+    $stmt->bind_param('s', $token_hash);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -36,9 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['token'])) {
             </html>
         <?php
     } else {
-        echo "Invalid or expired token.";
+        echo 'Invalid or expired token.';
     }
 } else {
-    echo "No token provided.";
+    echo 'No token provided.';
 }
 ?>
