@@ -36,11 +36,19 @@ new Chart("myChart", {
                 annotations: {
                     dLabel: {
                         type: 'doughnutLabel',
-                        content: ({ chart }) => ['Total',
+                        content: ({
+                            chart
+                        }) => ['Total',
                             chart.getDatasetMeta(0).total,
                             'last 12 months'
                         ],
-                        font: [{ size: 30 }, { size: 40 }, { size: 20 }],
+                        font: [{
+                            size: 30
+                        }, {
+                            size: 40
+                        }, {
+                            size: 20
+                        }],
                         color: ['black', 'black', 'grey']
                     }
                 }
@@ -75,31 +83,30 @@ const populateLegend = () => {
 populateLegend();
 
 function downloadCSV() {
-  const rows = [];
-  const headers = ["Day", "Date", "Time", "Status"];
-  rows.push(headers);
+    const rows = [];
+    const headers = ["Day", "Date", "Time", "Status"];
+    rows.push(headers);
 
-  const tableRows = document.querySelectorAll(".record tbody tr");
-  tableRows.forEach(row => {
-    const cells = row.querySelectorAll("td");
-    if (cells.length === 5) {
-      rows.push([
-        cells[1].textContent,
-        cells[2].textContent,
-        cells[3].textContent,
-        cells[4].textContent
-      ]);
-    }
-  });
+    const tableRows = document.querySelectorAll(".record tbody tr");
+    tableRows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length === 5) {
+            rows.push([
+                cells[1].textContent,
+                cells[2].textContent,
+                cells[3].textContent,
+                cells[4].textContent
+            ]);
+        }
+    });
 
-  const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
-  const encodedUri = encodeURI(csvContent);
+    const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
 
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "medication_history.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "medication_history.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
-

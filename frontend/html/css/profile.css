@@ -150,13 +150,13 @@ button:hover {
     box-sizing: border-box;
 }
 
-#medication-list {
+#medication-list, #device-list {
     list-style-type: none;
     padding: 0;
     text-align: center;
 }
 
-#medication-list::before {
+#medication-list::before, #device-list::before {
     content: "";
     display: block;
     font-size: 16px;
@@ -164,7 +164,7 @@ button:hover {
     padding: 15px 0;
 }
 
-.add-med-btn {
+.add-med-btn, .add-dev-btn {
     background: #1976d2;
     color: white;
     border: none;
@@ -181,15 +181,11 @@ button:hover {
     margin-left: 10px; /* Adds spacing between text and button */
 }
 
-.add-med-btn:hover {
+.add-med-btn:hover, .add-dev-btn:hover {
     background: #0d47a1;
 }
 
-.add-med-btn:hover {
-    background: #0d47a1;
-}
-
-.delete-med {
+.delete-med, .delete-device {
     background: red;
     color: white;
     border: none;
@@ -199,11 +195,11 @@ button:hover {
     border-radius: 3px;
 }
 
-.delete-med:hover {
+.delete-med:hover, .delete-device:hover {
     background: darkred;
 }
 
-#med-form {
+#med-form, #device-form {
     margin-top: 10px;
     padding: 10px;
     border-top: 1px solid #ccc;

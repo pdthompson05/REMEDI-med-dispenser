@@ -1,12 +1,13 @@
 <?php
+
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once __DIR__.'/../../config/db.php';
 global $conn;
 
-if (!isset($_GET['token'])) {
-    die("No token provided.");
+if (! isset($_GET['token'])) {
+    exit('No token provided.');
 }
 
 $token = $_GET['token'];
@@ -14,10 +15,10 @@ $token_hash = hash('sha256', $token);
 
 global $conn;
 
-# Check token validity
-$sql = "SELECT user_id FROM user WHERE verification_token = ? AND is_verified = 0";
+// Check token validity
+$sql = 'SELECT user_id FROM user WHERE verification_token = ? AND is_verified = 0';
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $token_hash);
+$stmt->bind_param('s', $token_hash);
 $stmt->execute();
 $stmt->store_result();
 
@@ -26,20 +27,19 @@ if ($stmt->num_rows === 1) {
     $stmt->fetch();
     $stmt->close();
 
-    # VERIFY USER
-    $sql_update = "UPDATE user SET is_verified = 1, verification_token = NULL WHERE user_id = ?";
+    // VERIFY USER
+    $sql_update = 'UPDATE user SET is_verified = 1, verification_token = NULL WHERE user_id = ?';
     $stmt_update = $conn->prepare($sql_update);
-    $stmt_update->bind_param("i", $user_id);
+    $stmt_update->bind_param('i', $user_id);
 
     if ($stmt_update->execute()) {
-        echo "Email verified successfully.";
+        echo 'Email verified successfully.';
     } else {
-        echo "Error verifying email.";
+        echo 'Error verifying email.';
     }
     $stmt_update->close();
 } else {
-    echo "Error verifying email.";
+    echo 'Error verifying email.';
 }
 
 $conn->close();
-?>

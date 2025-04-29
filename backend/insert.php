@@ -7,7 +7,7 @@ $pass = "checkout";
 $conn = new mysqli($host, $user, $pass, $db);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    exit('Connection failed: '.$conn->connect_error);
 }
 
 $device_id = $_POST['device_id'];
@@ -18,11 +18,10 @@ $timestamp = date("Y-m-d H:i:s"); // Server time
 $sql = "INSERT INTO sensor_data (device_id, temperature, magnet, timestamp) 
         VALUES ('$device_id', '$temp', '$magnet', '$timestamp')";
 
-if ($conn->query($sql) === TRUE) {
-    echo "Success";
+if ($conn->query($sql) === true) {
+    echo 'Success';
 } else {
-    echo "Error: " . $conn->error;
+    echo 'Error: '.$conn->error;
 }
 
 $conn->close();
-?>

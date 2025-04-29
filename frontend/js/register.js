@@ -21,9 +21,9 @@ function createAccount() {
     formData.append('password', password);
 
     fetch('https://section-three.it313communityprojects.website/src/auth/user/register.php', {
-        method: 'POST',
-        body: formData
-    })
+            method: 'POST',
+            body: formData
+        })
         .then(response => response.json())
         .then(jsonData => {
             console.log("Raw Response:", jsonData); // DEBUG

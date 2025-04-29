@@ -21,10 +21,10 @@ function addMedication() {
     formData.append("quantity", quantity);
 
     fetch("https://section-three.it313communityprojects.website/src/routes/med/add.php", {
-        method: "POST",
-        body: formData,
-        credentials: "include"
-    })
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        })
         .then(async res => {
             const raw = await res.text();
             try {
@@ -56,10 +56,10 @@ function deleteMedication(medId, buttonElement) {
     formData.append("med_id", medId);
 
     fetch("https://section-three.it313communityprojects.website/src/routes/med/delete.php", {
-        method: "POST",
-        body: formData,
-        credentials: "include"
-    })
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        })
         .then(async res => {
             const raw = await res.text();
             try {

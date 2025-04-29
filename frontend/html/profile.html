@@ -39,8 +39,9 @@
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-picture">
-                    <img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
-                    <button class="upload-btn" onclick="document.getElementById('profile-image-upload').click()">Change Picture</button>
+                    <!--Not supporting profile pictures due to time contraints-->
+                    <!--<img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
+                    <button class="upload-btn" onclick="document.getElementById('profile-image-upload').click()">Change Picture</button>-->
                 </div>
                 <h2 id="profile-name">First Last</h2>
                 <p id="profile-email">name@gmail.com</p>
@@ -82,7 +83,7 @@
     
         <div class="right-section">
             <div class="form-container">
-                <h2>Current Medications <button class="add-med-btn" onclick="toggleMedForm()">+</button></h2>
+                <h2>Current Medications<button class="add-med-btn" onclick="toggleMedForm()">+</button></h2>
                 <div id="med-form" style="display: none;">
                     <input type="text" id="med-name" placeholder="Medication Name">
                     <input type="text" id="med-strength" placeholder="Strength">
@@ -91,6 +92,15 @@
                     <button onclick="addMedication()">Add Medication</button>
                 </div>
                 <ul id="medication-list"></ul>
+            </div>
+
+            <div class="form-container">
+                <h2>Current Devices<button class="add-dev-btn" onclick="toggleDeviceForm()">+</button></h2>
+                <div id="device-form" style="display: none;">
+                    <input type="number" id="device-id" placeholder="Device ID">
+                    <button onclick="pairDevice()">Pair</button>
+                </div>
+                <ul id="device-list"></ul>
             </div>
             
     
@@ -131,193 +141,9 @@
     <script src="../js/global.js"></script>
     <script src="../js/profile.js"></script>
     <script src="../js/med.js"></script>
+    <script src="../js/device_add.js"></script>
+    <script src="../js/pair.js"></script>
     <script src="../js/reminder.js"></script>
     <!--<script src="../js/notitray.js"></script>-->
-
-    <!--<script>
-        function toggleMedForm() {
-            let form = document.getElementById("med-form");
-            form.style.display = form.style.display === "none" ? "block" : "none";
-        }
-    
-        function addMedication() {
-            let medName = document.getElementById("med-name").value;
-            let medStrength = document.getElementById("med-strength").value;
-            let rxNumber = document.getElementById("rx-number").value;
-            let quantity = document.getElementById("quantity").value;
-    
-            if (medName === "" || medStrength === "" || rxNumber === "" || quantity === "") {
-                alert("Please fill in all medication details.");
-                return;
-            }
-    
-            let medList = document.getElementById("medication-list");
-    
-            let li = document.createElement("li");
-            li.innerHTML = `
-                <strong>${medName}</strong> - ${medStrength} | RX: ${rxNumber} | Qty: ${quantity}
-                <button class="delete-med" onclick="removeMedication(this)">X</button>
-            `;
-    
-            medList.appendChild(li);
-
-            document.getElementById("med-name").value = "";
-            document.getElementById("med-strength").value = "";
-            document.getElementById("rx-number").value = "";
-            document.getElementById("quantity").value = "";
-        }
-    
-        function removeMedication(button) {
-            button.parentElement.remove();
-        }
-
-        function toggleEdit() {
-        let inputs = document.querySelectorAll(".profile-info input");
-        let editBtn = document.querySelector(".edit-btn");
-        let saveBtn = document.querySelector(".save-btn");
-
-        inputs.forEach(input => {
-            input.style.display = "block";
-            input.removeAttribute("disabled");
-        });
-
-        editBtn.style.display = "none";
-        saveBtn.style.display = "inline-block";
-        }
-
-        function saveProfile() {
-            let inputs = document.querySelectorAll(".profile-info input");
-            let editBtn = document.querySelector(".edit-btn");
-            let saveBtn = document.querySelector(".save-btn");
-
-            let firstName = document.getElementById("first-name-input").value;
-            let lastName = document.getElementById("last-name-input").value;
-            let email = document.getElementById("contact-input").value;
-
-            if (firstName && lastName) {
-                document.getElementById("profile-name").innerText = `${firstName} ${lastName}`;
-            }
-            if (email) {
-                document.getElementById("profile-email").innerText = email;
-            }
-
-            inputs.forEach(input => {
-                input.style.display = "none";
-                input.setAttribute("disabled", "true");
-            });
-
-            saveBtn.style.display = "none"; //hide save button
-            editBtn.style.display = "inline-block"; //show edit button
-        }
-
-        //hiding input fields when page loads
-        window.onload = function() {
-            let inputs = document.querySelectorAll(".profile-info input");
-            inputs.forEach(input => {
-                input.style.display = "none";
-                input.setAttribute("disabled", "true");
-            });
-        };
-
-        function toggleReminderInputs() {
-        let reminderType = document.getElementById("reminder-type").value;
-        let timeContainer = document.getElementById("time-input-container");
-
-        if (reminderType === "specific") {
-            timeContainer.style.display = "block";
-        } else {
-            timeContainer.style.display = "none";
-        }
-    }
-
-    function addTimeInput() {
-        let timeContainer = document.getElementById("time-input-container");
-
-        let timeWrapper = document.createElement("div");
-        timeWrapper.classList.add("time-input-wrapper");
-
-        //new time input
-        let newTimeInput = document.createElement("input");
-        newTimeInput.type = "time";
-        newTimeInput.classList.add("specific");
-
-        //delete time input
-        let deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "✖";
-        deleteBtn.classList.add("delete-time-btn");
-        deleteBtn.onclick = function () {
-            timeContainer.removeChild(timeWrapper);
-        };
-
-        timeWrapper.appendChild(newTimeInput);
-        timeWrapper.appendChild(deleteBtn);
-
-        timeContainer.appendChild(timeWrapper);
-    }
-
-    function toggleReminderInputs() {
-        let reminderType = document.getElementById("reminder-type").value;
-        let timeContainer = document.getElementById("time-input-container");
-
-        timeContainer.innerHTML = "";
-
-        if (reminderType === "specific") {
-            let newTimeInput = document.createElement("input");
-            newTimeInput.type = "time";
-            newTimeInput.classList.add("specific");
-
-            let addTimeBtn = document.createElement("button");
-            addTimeBtn.innerText = "+";
-            addTimeBtn.classList.add("add-time-btn");
-            addTimeBtn.onclick = addTimeInput;
-
-            timeContainer.appendChild(newTimeInput);
-            timeContainer.appendChild(addTimeBtn);
-            timeContainer.style.display = "block";
-        } else if (reminderType === "interval") {
-            let intervalLabel = document.createElement("label");
-            intervalLabel.innerText = "Repeat Every:";
-            intervalLabel.setAttribute("for", "interval-dropdown");
-
-            let intervalDropdown = document.createElement("select");
-            intervalDropdown.id = "interval-dropdown";
-
-            let hours = [1, 2, 3, 4, 5, 6, 8, 12];
-            hours.forEach(hour => {
-                let option = document.createElement("option");
-                option.value = hour;
-                option.innerText = `${hour} hours`;
-                intervalDropdown.appendChild(option);
-            });
-
-            timeContainer.appendChild(intervalLabel);
-            timeContainer.appendChild(intervalDropdown);
-            timeContainer.style.display = "block";
-        }
-    }
-
-    function addTimeInput() {
-        let timeContainer = document.getElementById("time-input-container");
-
-        let timeWrapper = document.createElement("div");
-        timeWrapper.classList.add("time-input-wrapper");
-
-        let newTimeInput = document.createElement("input");
-        newTimeInput.type = "time";
-        newTimeInput.classList.add("specific");
-
-        let deleteBtn = document.createElement("button");
-        deleteBtn.innerText = "✖";
-        deleteBtn.classList.add("delete-time-btn");
-        deleteBtn.onclick = function () {
-            timeContainer.removeChild(timeWrapper);
-        };
-
-        timeWrapper.appendChild(newTimeInput);
-        timeWrapper.appendChild(deleteBtn);
-
-        timeContainer.appendChild(timeWrapper);
-    }
-    </script>-->
 </body>
 </html>

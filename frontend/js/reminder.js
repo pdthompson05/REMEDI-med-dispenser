@@ -37,21 +37,21 @@ function addReminder() {
             alert("Interval dropdown not found.");
             return;
         }
-    
+
         const interval = intervalDropdown.value;
         if (!interval) {
             alert("Please select an interval.");
             return;
         }
-    
+
         formData.append("interval_hours", interval);
     }
 
     fetch("https://section-three.it313communityprojects.website/src/routes/reminder/add.php", {
-        method: "POST",
-        body: formData,
-        credentials: "include"
-    })
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
@@ -73,43 +73,43 @@ function addReminder() {
 }
 
 function toggleReminderInputs() {
-  const reminderType = document.getElementById("reminder-type").value;
-  const timeContainer = document.getElementById("time-input-container");
+    const reminderType = document.getElementById("reminder-type").value;
+    const timeContainer = document.getElementById("time-input-container");
 
-  timeContainer.innerHTML = "";
+    timeContainer.innerHTML = "";
 
-  if (reminderType === "specific") {
-    const timeInput = document.createElement("input");
-    timeInput.type = "time";
-    timeInput.classList.add("specific");
+    if (reminderType === "specific") {
+        const timeInput = document.createElement("input");
+        timeInput.type = "time";
+        timeInput.classList.add("specific");
 
-    const addTimeBtn = document.createElement("button");
-    addTimeBtn.innerText = "+";
-    addTimeBtn.type = "button";
-    addTimeBtn.classList.add("add-time-btn");
-    addTimeBtn.onclick = addTimeInput;
+        const addTimeBtn = document.createElement("button");
+        addTimeBtn.innerText = "+";
+        addTimeBtn.type = "button";
+        addTimeBtn.classList.add("add-time-btn");
+        addTimeBtn.onclick = addTimeInput;
 
-    timeContainer.appendChild(timeInput);
-    timeContainer.appendChild(addTimeBtn);
-    timeContainer.style.display = "block";
-  } else if (reminderType === "interval") {
-    const intervalLabel = document.createElement("label");
-    intervalLabel.innerText = "Repeat Every:";
+        timeContainer.appendChild(timeInput);
+        timeContainer.appendChild(addTimeBtn);
+        timeContainer.style.display = "block";
+    } else if (reminderType === "interval") {
+        const intervalLabel = document.createElement("label");
+        intervalLabel.innerText = "Repeat Every:";
 
-    const intervalDropdown = document.createElement("select");
-    intervalDropdown.id = "interval-dropdown";
+        const intervalDropdown = document.createElement("select");
+        intervalDropdown.id = "interval-dropdown";
 
-    [1, 2, 4, 6, 8, 12].forEach(hour => {
-      const option = document.createElement("option");
-      option.value = hour;
-      option.textContent = `${hour} hours`;
-      intervalDropdown.appendChild(option);
-    });
+        [1, 2, 4, 6, 8, 12].forEach(hour => {
+            const option = document.createElement("option");
+            option.value = hour;
+            option.textContent = `${hour} hours`;
+            intervalDropdown.appendChild(option);
+        });
 
-    timeContainer.appendChild(intervalLabel);
-    timeContainer.appendChild(intervalDropdown);
-    timeContainer.style.display = "block";
-  } else {
-    timeContainer.style.display = "none";
-  }
+        timeContainer.appendChild(intervalLabel);
+        timeContainer.appendChild(intervalDropdown);
+        timeContainer.style.display = "block";
+    } else {
+        timeContainer.style.display = "none";
+    }
 }
