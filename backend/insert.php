@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
-$db = "your_db";
-$user = "your_user";
-$pass = "your_password";
+$db = "student3-it313communityprojects.website";
+$user = "esp32_01";
+$pass = "checkout";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 
 $device_id = $_POST['device_id'];
 $temp = $_POST['temp'];
-$magnet = $_POST['humidity'];
+$magnet = $_POST['magnet'];
 $timestamp = date("Y-m-d H:i:s"); // Server time
 
 $sql = "INSERT INTO sensor_data (device_id, temperature, magnet, timestamp) 
