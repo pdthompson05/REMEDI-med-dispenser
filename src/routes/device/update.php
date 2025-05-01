@@ -8,7 +8,7 @@ $temp = $_POST['temp'];
 $magnet = $_POST['humidity'];
 $timestamp = date('Y-m-d H:i:s');
 
-$sql = 'UPDATE device SET temperature = ?, humidity = ?, updated_at = ?, connected = 1 WHERE device_id = ?';
+$sql = 'UPDATE device SET temperature = ?, magnet = ?, updated_at = ?, connected = 1 WHERE device_id = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ddsi', $temp, $magnet, $timestamp, $device_id);
 
