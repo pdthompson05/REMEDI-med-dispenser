@@ -1,144 +1,188 @@
 <!DOCTYPE html>
+<!--This is the profile page for the REMEDI app-->
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>REMEDI Profile</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/profile.css">
-</head>
-<body onload="loadProfile()">
+    <link rel="stylesheet" href="css/global.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/profile.css" />
+  </head>
+  <body onload="loadProfile()">
     <div class="navbar">
-        <div class="logo">
-            <a href="home.html">
-                <img src="logo.png" alt="REMEDI Logo" class="logo-image">
-            </a>
+      <div class="logo">
+        <a href="home.html">
+          <img src="logo.png" alt="REMEDI Logo" class="logo-image" />
+        </a>
+      </div>
+      <div class="nav-links">
+        <div class="notification-container">
+          <i
+            class="fa fa-bell notification-icon"
+            onclick="toggleNotifications()"
+          ></i>
+          <div class="notification-dropdown" id="notificationDropdown">
+            <p>Notifications</p>
+          </div>
         </div>
-        <div class="nav-links">
-            <div class="notification-container">
-                <i class="fa fa-bell notification-icon" onclick="toggleNotifications()"></i>
-                <div class="notification-dropdown" id="notificationDropdown">
-                    <p>Notifications</p>
-                </div>
-            </div>
-            <a href="calendar.html">Calendar</a>
-            <a href="insights.html">Insights</a>
-            <a href="profile.html" class="active">Profile</a>
-        </div>
+        <a href="calendar.html">Calendar</a>
+        <a href="insights.html">Insights</a>
+        <a href="profile.html" class="active">Profile</a>
+      </div>
     </div>
     <div class="hero">
-        <div class="hero-text">
-            <h1>Your Profile</h1>
-            <p>Manage your information and medication schedule.</p>
-        </div>
+      <div class="hero-text">
+        <h1>Your Profile</h1>
+        <p>Manage your information and medication schedule.</p>
+      </div>
     </div>
 
     <div class="main-container">
-        <div class="profile-card">
-            <div class="profile-header">
-                <div class="profile-picture">
-                    <!--Not supporting profile pictures due to time contraints-->
-                    <!--<img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-picture">
+            <!--Not supporting profile pictures due to time contraints-->
+            <!--<img src="https://picsum.photos/id/633/200/200" alt="Profile Picture" id="profile-image">
                     <button class="upload-btn" onclick="document.getElementById('profile-image-upload').click()">Change Picture</button>-->
-                </div>
-                <h2 id="profile-name">First Last</h2>
-                <p id="profile-email">name@gmail.com</p>
-            </div>
-    
-            <div class="profile-info">
-                <div class="info-group">
-                    <label>First Name</label>
-                    <input type="text" id="first-name-input" placeholder="First Name">
-                </div>
-                <div class="info-group">
-                    <label>Last Name</label>
-                    <input type="text" id="last-name-input" placeholder="Last Name">
-                </div>
-                <div class="info-group">
-                    <label>Date of Birth</label>
-                    <input type="date" id="dob-input">
-                </div>
-                <div class="info-group">
-                    <label>Contact Email</label>
-                    <input type="text" id="contact-input" placeholder="Email">
-                </div>
-                <div class="info-group">
-                    <label>Caretaker Name (Optional)</label>
-                    <input type="text" id="caretaker-name-input" placeholder="Full Name">
-                </div>
-                <div class="info-group">
-                    <label>Caretaker Contact (Optional)</label>
-                    <input type="text" id="caretaker-contact-input" placeholder="Email">
-                </div>
-            </div>
-    
-            <div class="btn-group">
-                <button class="edit-btn" onclick="toggleEdit()">Edit</button>
-                <button class="save-btn" onclick="saveProfile()" style="display: none;">Save</button>
-            </div>
-            
+          </div>
+          <h2 id="profile-name">First Last</h2>
+          <p id="profile-email">name@gmail.com</p>
         </div>
-    
-        <div class="right-section">
-            <div class="form-container">
-                <h2>Current Medications<button class="add-med-btn" onclick="toggleMedForm()">+</button></h2>
-                <div id="med-form" style="display: none;">
-                    <input type="text" id="med-name" placeholder="Medication Name">
-                    <input type="text" id="med-strength" placeholder="Strength">
-                    <input type="text" id="rx-number" placeholder="RX Number">
-                    <input type="number" id="quantity" placeholder="Quantity per bottle">
-                    <button onclick="addMedication()">Add Medication</button>
-                </div>
-                <ul id="medication-list"></ul>
-            </div>
 
-            <div class="form-container">
-                <h2>Current Devices<button class="add-dev-btn" onclick="toggleDeviceForm()">+</button></h2>
-                <div id="device-form" style="display: none;">
-                    <input type="number" id="device-id" placeholder="Device ID">
-                    <button onclick="pairDevice()">Pair</button>
-                </div>
-                <p id="device-status">Checking device status...</p>
-                <ul id="device-list"></ul>
-            </div>
-            
-    
-            <div class="form-container">
-                <h2>Set Reminder</h2>
-                
-                <label for="medication-select">Select Medication:</label>
-                <select id="medication-select">
-                    <option value="" disabled selected>Select Medication</option>
-                </select>
-            
-                <label for="dosage">Dosage:</label>
-                <input type="text" id="dosage" placeholder="Dosage">
-            
-                <label for="reminder-type">Reminder Type:</label>
-                <select id="reminder-type" onchange="toggleReminderInputs()">
-                    <option value="specific">Set Specific Times</option>
-                    <option value="interval">Set Every X Hours</option>
-                </select>
-            
-                <div id="time-input-container">
-                    <label for="specific">Time:</label>
-                    <input type="time" class="specific">
-                    <button type="button" class="add-time-btn" onclick="addTimeInput()">+</button>
-                </div>
-            
-                <label for="start-date">Start Date:</label>
-                <input type="date" id="start-date">
-            
-                <label for="end-date">End Date:</label>
-                <input type="date" id="end-date">
-
-                <button id="set-reminder-btn" onclick="addReminder()">Set Reminder</button>
-            </div>            
+        <div class="profile-info">
+          <div class="info-group">
+            <label>First Name</label>
+            <input type="text" id="first-name-input" placeholder="First Name" />
+          </div>
+          <div class="info-group">
+            <label>Last Name</label>
+            <input type="text" id="last-name-input" placeholder="Last Name" />
+          </div>
+          <div class="info-group">
+            <label>Date of Birth</label>
+            <input type="date" id="dob-input" />
+          </div>
+          <div class="info-group">
+            <label>Contact Email</label>
+            <input type="text" id="contact-input" placeholder="Email" />
+          </div>
+          <div class="info-group">
+            <label>Caretaker Name (Optional)</label>
+            <input
+              type="text"
+              id="caretaker-name-input"
+              placeholder="Full Name"
+            />
+          </div>
+          <div class="info-group">
+            <label>Caretaker Contact (Optional)</label>
+            <input
+              type="text"
+              id="caretaker-contact-input"
+              placeholder="Email"
+            />
+          </div>
         </div>
+
+        <div class="btn-group">
+          <button class="edit-btn" onclick="toggleEdit()">Edit</button>
+          <button
+            class="save-btn"
+            onclick="saveProfile()"
+            style="display: none"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+
+      <div class="right-section">
+        <div class="form-container">
+          <h2>
+            Current Medications<button
+              class="add-med-btn"
+              onclick="toggleMedForm()"
+            >
+              +
+            </button>
+          </h2>
+          <div id="med-form" style="display: none">
+            <input type="text" id="med-name" placeholder="Medication Name" />
+            <input type="text" id="med-strength" placeholder="Strength" />
+            <input type="text" id="rx-number" placeholder="RX Number" />
+            <input
+              type="number"
+              id="quantity"
+              placeholder="Quantity per bottle"
+            />
+            <button onclick="addMedication()">Add Medication</button>
+          </div>
+          <ul id="medication-list"></ul>
+        </div>
+
+        <div class="form-container">
+          <h2>
+            Current Devices<button
+              class="add-dev-btn"
+              onclick="toggleDeviceForm()"
+            >
+              +
+            </button>
+          </h2>
+          <div id="device-form" style="display: none">
+            <input type="number" id="device-id" placeholder="Device ID" />
+            <button onclick="pairDevice()">Pair</button>
+          </div>
+          <p id="device-status">Checking device status...</p>
+          <ul id="device-list"></ul>
+        </div>
+
+        <div class="form-container">
+          <h2>Set Reminder</h2>
+
+          <label for="medication-select">Select Medication:</label>
+          <select id="medication-select">
+            <option value="" disabled selected>Select Medication</option>
+          </select>
+
+          <label for="dosage">Dosage:</label>
+          <input type="text" id="dosage" placeholder="Dosage" />
+
+          <label for="reminder-type">Reminder Type:</label>
+          <select id="reminder-type" onchange="toggleReminderInputs()">
+            <option value="specific">Set Specific Times</option>
+            <option value="interval">Set Every X Hours</option>
+          </select>
+
+          <div id="time-input-container">
+            <label for="specific">Time:</label>
+            <input type="time" class="specific" />
+            <button type="button" class="add-time-btn" onclick="addTimeInput()">
+              +
+            </button>
+          </div>
+
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date" />
+
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date" />
+
+          <button id="set-reminder-btn" onclick="addReminder()">
+            Set Reminder
+          </button>
+        </div>
+      </div>
     </div>
-    
+
     <script src="../js/global.js"></script>
     <!--<script src="../js/profile.js"></script>-->
     <script src="../js/med.js"></script>
@@ -146,5 +190,5 @@
     <script src="../js/pair.js"></script>
     <script src="../js/reminder.js"></script>
     <!--<script src="../js/notitray.js"></script>-->
-</body>
+  </body>
 </html>
