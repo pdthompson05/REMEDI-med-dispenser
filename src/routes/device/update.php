@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 $device_id = $_POST['device_id'];
 $temp = $_POST['temp'];
-$magnet = $_POST['humidity'];
+$magnet = $_POST['magnet'];
 $timestamp = date('Y-m-d H:i:s');
 
 $sql = 'UPDATE device SET temperature = ?, magnet = ?, updated_at = ?, connected = 1 WHERE device_id = ?';
