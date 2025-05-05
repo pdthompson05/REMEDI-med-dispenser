@@ -64,6 +64,33 @@ function deleteCalendarEvent(eventId) {
         .catch(err => console.error("Delete request failed:", err));
 }
 
+function fetchMonthlyEvents(year, month) {
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+    const endDate = new Date(year, month, 0).toISOString().split('T')[0]; // last day of month
+  
+    fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
+      method: "GET",
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === "success") {
+          const events = json.data;
+          reminders = {}; // Reset
+  
+          events.forEach(ev => {
+            const date = ev.event_datetime.split("T")[0];
+            if (!reminders[date]) reminders[date] = [];
+            reminders[date].push(`${ev.med_name} at ${new Date(ev.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+          });
+  
+          renderCalendar(); // re-render with new reminders
+        }
+      })
+      .catch(err => console.error("Failed to fetch monthly events:", err));
+  }  
+
 document.addEventListener("DOMContentLoaded", () => {
     loadCalendarEvents();
 });
+
