@@ -12,6 +12,7 @@ let selectedDate = null;
 let reminders = {}; // use let not const so we can reassign
 
 function switchView(view) {
+    console.log("Switching view to:", view);
     currentView = view;
     if (view === 'month') {
         const now = new Date();
@@ -22,6 +23,7 @@ function switchView(view) {
 }
 
 function renderCalendar() {
+    console.log("Rendering calendar for view:", currentView);
     const wrapper = document.getElementById("calendarWrapper");
 
     if (currentView === 'week') {
@@ -66,6 +68,7 @@ function renderWeeklyView() {
 }
 
 function renderMonthlyView() {
+    console.log("Rendering monthly view");
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -124,6 +127,7 @@ function selectDay(dateStr) {
 }
 
 function updateReminderPanel(dateStr) {
+    console.log("Updating reminder panel for:", dateStr);
     console.log("[Reminder Panel] Updating for:", dateStr);
     const [year, month, day] = dateStr.split('-').map(Number);
     const date = new Date(year, month - 1, day);
@@ -203,6 +207,7 @@ function renderCalendarEvents(events) {
 }
 
 function fetchMonthlyEvents(year, month) {
+    console.log("Fetching monthly events for", year, month);
     const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
     const endDate = new Date(year, month, 0).toISOString().split('T')[0];
 
@@ -217,6 +222,7 @@ function fetchMonthlyEvents(year, month) {
             console.log("[Monthly Fetch] Response:", json);
 
             if (json.status === "success") {
+                console.log("Monthly events fetched:", json.data);
                 const events = json.data;
                 reminders = {};
                 console.log("[Monthly Fetch] Events received:", events.length);
