@@ -16,7 +16,11 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param('ddi', $temp, $magnet, $device_id);
 
 if ($stmt->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Device updated']);
+    if ($stmt->affected_rows > 0) {
+        echo json_encode(['status' => 'success', 'message' => 'Device updated']);
+    } else {
+        echo json_encode(['status' => 'warning', 'message' => 'No device updated — check device_id']);
+    }
 } else {
     echo json_encode(['status' => 'error', 'message' => $conn->error]);
 }
