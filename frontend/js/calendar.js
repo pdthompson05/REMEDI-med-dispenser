@@ -73,6 +73,8 @@ function renderMonthlyView() {
     const firstDay = new Date(year, month, 1).getDay();
     const offset = (firstDay + 6) % 7;
 
+    console.log("[Monthly View] Rendering month:", month + 1, "Year:", year);
+
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -100,10 +102,12 @@ function renderMonthlyView() {
                 `<span class="selected-day">${day}</span>${reminderDot}` :
                 `<span class="day-number">${day}</span>${reminderDot}`;
 
+            console.log("[Monthly View] Rendering day:", dateStr, "Has reminder?", hasReminder);
+
             calendarBody.innerHTML += `
-        <div class="time-slot day-column" onclick="selectDay('${dateStr}')">
-          ${dayNumber}
-        </div>`;
+                <div class="time-slot day-column" onclick="selectDay('${dateStr}')">
+                    ${dayNumber}
+                </div>`;
         }
     }
 
@@ -120,6 +124,7 @@ function selectDay(dateStr) {
 }
 
 function updateReminderPanel(dateStr) {
+    console.log("[Reminder Panel] Updating for:", dateStr);
     const [year, month, day] = dateStr.split('-').map(Number);
     const date = new Date(year, month - 1, day);
     const options = {
@@ -132,12 +137,14 @@ function updateReminderPanel(dateStr) {
     reminderListEl.innerHTML = "";
 
     if (reminders[dateStr]) {
+        console.log("[Reminder Panel] Reminders found:", reminders[dateStr]);
         reminders[dateStr].forEach(reminder => {
             const li = document.createElement("li");
             li.textContent = reminder;
             reminderListEl.appendChild(li);
         });
     } else {
+        console.log("[Reminder Panel] No reminders for this date.");
         reminderListEl.innerHTML = "<li>No reminders.</li>";
     }
 }
@@ -199,30 +206,37 @@ function fetchMonthlyEvents(year, month) {
     const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
     const endDate = new Date(year, month, 0).toISOString().split('T')[0];
 
+    console.log("[Monthly Fetch] Fetching from", startDate, "to", endDate);
+
     fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
             method: "GET",
             credentials: "include"
         })
         .then(res => res.json())
         .then(json => {
+            console.log("[Monthly Fetch] Response:", json);
+
             if (json.status === "success") {
                 const events = json.data;
                 reminders = {};
+                console.log("[Monthly Fetch] Events received:", events.length);
 
                 events.forEach(ev => {
                     const date = ev.event_datetime.split("T")[0];
-                    if (!reminders[date]) reminders[date] = [];
                     const time = new Date(ev.event_datetime).toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
+                    if (!reminders[date]) reminders[date] = [];
                     reminders[date].push(`${ev.med_name} at ${time}`);
                 });
 
-                renderCalendar(); // re-render with updated reminders
+                renderCalendar(); // Re-render after setting reminders
+            } else {
+                console.warn("[Monthly Fetch] Failed status:", json.status);
             }
         })
-        .catch(err => console.error("Failed to fetch monthly events:", err));
+        .catch(err => console.error("[Monthly Fetch] Error fetching monthly events:", err));
 }
 
 function deleteCalendarEvent(eventId) {
