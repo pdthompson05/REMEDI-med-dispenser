@@ -16,17 +16,17 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        $start_date = $_GET['start_date'] ?? null;
-        $end_date = $_GET['end_date'] ?? null;
+        $start = $_GET['start_date'] ?? null;
+        $end = $_GET['end_date'] ?? null;
 
-        if ($start_date && $end_date) {
+        if ($start && $end) {
             $sql = 'SELECT e.event_id, e.med_id, e.event_datetime, m.med_name 
                     FROM calendar_events e
                     JOIN med m ON e.med_id = m.med_id
                     WHERE e.user_id = ? AND e.event_datetime BETWEEN ? AND ?
                     ORDER BY e.event_datetime ASC';
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('iss', $user_id, $start_date, $end_date);
+            $stmt->bind_param('iss', $user_id, $start, $end);
         } else {
             $sql = 'SELECT e.event_id, e.med_id, e.event_datetime, m.med_name 
                     FROM calendar_events e

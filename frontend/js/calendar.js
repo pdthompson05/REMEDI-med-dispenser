@@ -9,40 +9,39 @@ const monthDisplay = document.getElementById("monthDisplay");
 
 let currentView = 'week';
 let selectedDate = null;
-let reminders = {};
+let reminders = {}; // use let not const so we can reassign
 
 function switchView(view) {
     currentView = view;
     if (view === 'month') {
         const now = new Date();
-        fetchMonthlyEvents(now.getFullYear(), now.getMonth());
+        fetchMonthlyEvents(now.getFullYear(), now.getMonth() + 1);
     } else {
-        renderCalendar();
+        renderCalendar(); // weekly
     }
 }
 
 function renderCalendar() {
     const wrapper = document.getElementById("calendarWrapper");
-  
+
     if (currentView === 'week') {
-      reminderSide.classList.add("hidden");
-      wrapper.classList.remove("monthly-view");
-      wrapper.classList.add("weekly-view");
-      monthDisplay.classList.add("hidden");
-      renderWeeklyView();
+        reminderSide.classList.add("hidden");
+        wrapper.classList.remove("monthly-view");
+        wrapper.classList.add("weekly-view");
+        monthDisplay.classList.add("hidden");
+        renderWeeklyView();
+        loadCalendarEvents();
     } else {
-      reminderSide.classList.remove("hidden");
-      wrapper.classList.remove("weekly-view");
-      wrapper.classList.add("monthly-view");
-      monthDisplay.classList.remove("hidden");
-  
-      const now = new Date();
-      fetchMonthlyEvents(now.getFullYear(), now.getMonth()); // ✅ don't expect return value
+        reminderSide.classList.remove("hidden");
+        wrapper.classList.remove("weekly-view");
+        wrapper.classList.add("monthly-view");
+        monthDisplay.classList.remove("hidden");
+        renderMonthlyView();
     }
-  }  
+}
 
 function renderWeeklyView() {
-    weekDaysEl.innerHTML = "<div></div>";
+    weekDaysEl.innerHTML = `<div></div>`;
     calendarBody.innerHTML = "";
 
     const hours = Array.from({
@@ -73,13 +72,16 @@ function renderMonthlyView() {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDay = new Date(year, month, 1).getDay();
     const offset = (firstDay + 6) % 7;
+
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
 
     monthDisplay.textContent = `${monthNames[month]} ${year}`;
-    weekDaysEl.innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => `<div>${day}</div>`).join('');
+    weekDaysEl.innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        .map(day => `<div>${day}</div>`).join('');
+
     calendarBody.innerHTML = "";
 
     const totalCells = offset + daysInMonth;
@@ -93,12 +95,15 @@ function renderMonthlyView() {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const isSelected = selectedDate === dateStr;
             const hasReminder = reminders[dateStr] && reminders[dateStr].length > 0;
-            const reminderDot = hasReminder ? `<img src="../html/pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
+            const reminderDot = hasReminder ? `<img src="pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
             const dayNumber = isSelected ?
                 `<span class="selected-day">${day}</span>${reminderDot}` :
                 `<span class="day-number">${day}</span>${reminderDot}`;
 
-            calendarBody.innerHTML += `<div class="time-slot day-column" onclick="selectDay('${dateStr}')">${dayNumber}</div>`;
+            calendarBody.innerHTML += `
+        <div class="time-slot day-column" onclick="selectDay('${dateStr}')">
+          ${dayNumber}
+        </div>`;
         }
     }
 
@@ -109,29 +114,9 @@ function renderMonthlyView() {
     updateReminderPanel(selectedDate);
 }
 
-function fetchMonthlyEvents(year, month) {
-    const startDate = `${year}-${String(month + 1).padStart(2, '0')}-01`;
-    const endDate = new Date(year, month + 1, 0).toISOString().split('T')[0];
-
-    fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
-            method: "GET",
-            credentials: "include"
-        })
-        .then(res => res.json())
-        .then(json => {
-            if (json.status === "success") {
-                reminders = {}; // reset global
-
-                json.data.forEach(ev => {
-                    const date = ev.event_datetime.split("T")[0];
-                    if (!reminders[date]) reminders[date] = [];
-                    reminders[date].push(`${ev.med_name} at ${new Date(ev.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
-                });
-
-                renderMonthlyView(); // only render after fetching!
-            }
-        })
-        .catch(err => console.error("Failed to fetch monthly events:", err));
+function selectDay(dateStr) {
+    selectedDate = dateStr;
+    renderCalendar();
 }
 
 function updateReminderPanel(dateStr) {
@@ -143,6 +128,7 @@ function updateReminderPanel(dateStr) {
         day: 'numeric'
     };
     reminderDateLabel.textContent = date.toLocaleDateString(undefined, options);
+
     reminderListEl.innerHTML = "";
 
     if (reminders[dateStr]) {
@@ -154,17 +140,6 @@ function updateReminderPanel(dateStr) {
     } else {
         reminderListEl.innerHTML = "<li>No reminders.</li>";
     }
-}
-
-function selectDay(dateStr) {
-    selectedDate = dateStr;
-    renderCalendar();
-}
-
-function getMonday(date) {
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(date.setDate(diff));
 }
 
 function loadCalendarEvents() {
@@ -211,6 +186,36 @@ function renderCalendarEvents(events) {
     });
 }
 
+function fetchMonthlyEvents(year, month) {
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+    const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+
+    fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(res => res.json())
+        .then(json => {
+            if (json.status === "success") {
+                const events = json.data;
+                reminders = {};
+
+                events.forEach(ev => {
+                    const date = ev.event_datetime.split("T")[0];
+                    if (!reminders[date]) reminders[date] = [];
+                    const time = new Date(ev.event_datetime).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    reminders[date].push(`${ev.med_name} at ${time}`);
+                });
+
+                renderCalendar(); // re-render with updated reminders
+            }
+        })
+        .catch(err => console.error("Failed to fetch monthly events:", err));
+}
+
 function deleteCalendarEvent(eventId) {
     const formData = new URLSearchParams();
     formData.append("event_id", eventId);
@@ -231,6 +236,17 @@ function deleteCalendarEvent(eventId) {
         .catch(err => console.error("Delete request failed:", err));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function getMonday(date) {
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(date.setDate(diff));
+}
+
+function toggleNotifications() {
+    const dropdown = document.getElementById("notificationDropdown");
+    dropdown.classList.toggle("show");
+}
+
+window.onload = () => {
     renderCalendar();
-});
+};
