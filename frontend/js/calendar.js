@@ -23,29 +23,23 @@ function switchView(view) {
 
 function renderCalendar() {
     const wrapper = document.getElementById("calendarWrapper");
-
+  
     if (currentView === 'week') {
-        reminderSide.classList.add("hidden");
-        wrapper.classList.remove("monthly-view");
-        wrapper.classList.add("weekly-view");
-        monthDisplay.classList.add("hidden");
-        renderWeeklyView();
-        loadCalendarEvents();
+      reminderSide.classList.add("hidden");
+      wrapper.classList.remove("monthly-view");
+      wrapper.classList.add("weekly-view");
+      monthDisplay.classList.add("hidden");
+      renderWeeklyView();
     } else {
-        reminderSide.classList.remove("hidden");
-        wrapper.classList.remove("weekly-view");
-        wrapper.classList.add("monthly-view");
-        monthDisplay.classList.remove("hidden");
-
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth() + 1;
-
-        fetchMonthlyEvents(year, month).then(() => {
-            renderMonthlyView();
-        });
+      reminderSide.classList.remove("hidden");
+      wrapper.classList.remove("weekly-view");
+      wrapper.classList.add("monthly-view");
+      monthDisplay.classList.remove("hidden");
+  
+      const now = new Date();
+      fetchMonthlyEvents(now.getFullYear(), now.getMonth()); // ✅ don't expect return value
     }
-}
+  }  
 
 function renderWeeklyView() {
     weekDaysEl.innerHTML = "<div></div>";
