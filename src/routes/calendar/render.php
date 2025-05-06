@@ -16,24 +16,31 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        $start = $_GET['start_date'] ?? null;
-        $end = $_GET['end_date'] ?? null;
+        $startDate = $_GET['start_date'] ?? null;
+        $endDate = $_GET['end_date'] ?? null;
 
-        if ($start && $end) {
-            $sql = 'SELECT e.event_id, e.med_id, e.event_datetime, m.med_name 
-                    FROM calendar_events e
-                    JOIN med m ON e.med_id = m.med_id
-                    WHERE e.user_id = ? AND e.event_datetime BETWEEN ? AND ?
-                    ORDER BY e.event_datetime ASC';
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('iss', $user_id, $start, $end);
+        $params = [];
+        $types = '';
+        $dateFilter = '';
+
+        if ($startDate && $endDate) {
+            $dateFilter = 'AND e.event_datetime BETWEEN ? AND ?';
+            $params[] = $startDate;
+            $params[] = $endDate;
+            $types = 'ss';
+        }
+
+        $sql = "SELECT e.event_id, e.med_id, e.event_datetime, m.med_name
+                FROM calendar_events e
+                JOIN med m ON e.med_id = m.med_id
+                WHERE e.user_id = ? $dateFilter
+                ORDER BY e.event_datetime ASC";
+
+        $stmt = $conn->prepare($sql);
+
+        if ($dateFilter) {
+            $stmt->bind_param('iss', $user_id, ...$params);
         } else {
-            $sql = 'SELECT e.event_id, e.med_id, e.event_datetime, m.med_name 
-                    FROM calendar_events e
-                    JOIN med m ON e.med_id = m.med_id
-                    WHERE e.user_id = ?
-                    ORDER BY e.event_datetime ASC';
-            $stmt = $conn->prepare($sql);
             $stmt->bind_param('i', $user_id);
         }
 
