@@ -46,9 +46,11 @@ function renderWeeklyView() {
     weekDaysEl.innerHTML = `<div></div>`;
     calendarBody.innerHTML = "";
 
-    const hours = Array.from({
-        length: 12
-    }, (_, i) => `${8 + i}:00`);
+    const hours = [];
+    for (let h = 8; h <= 24; h++) {
+        hours.push(`${h === 24 ? '00' : String(h).padStart(2, '0')}:00`);
+    }
+
     const weekStart = getMonday(new Date());
     const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -170,20 +172,14 @@ function loadCalendarEvents() {
 }
 
 function renderCalendarEvents(events) {
-    // Clear existing
     document.querySelectorAll(".reminder-block").forEach(el => el.remove());
-
-    const weekStart = getMonday(new Date());
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekStart.getDate() + 6);
 
     events.forEach(event => {
         const eventDate = new Date(event.event_datetime);
-
-        if (eventDate < weekStart || eventDate > weekEnd) return;
-
+        const hourVal = eventDate.getHours();
+        if (hourVal < 8 && hourVal !== 0) return; // skip if not 8 AM–12 AM
         const dayIndex = (eventDate.getDay() + 6) % 7;
-        const hour = `${String(eventDate.getHours()).padStart(2, '0')}:00`;
+        const hour = `${String(hourVal === 0 ? '00' : hourVal).padStart(2, '0')}:00`;
 
         const cell = document.querySelector(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
         if (cell) {
@@ -192,7 +188,7 @@ function renderCalendarEvents(events) {
             reminder.textContent = event.med_name;
 
             const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "X";
+            deleteBtn.innerText = "✖";
             deleteBtn.classList.add("delete-event-btn");
             deleteBtn.onclick = () => {
                 if (confirm(`Delete reminder for ${event.med_name}?`)) {
