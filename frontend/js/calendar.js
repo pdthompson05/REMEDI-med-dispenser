@@ -159,14 +159,16 @@ function loadCalendarEvents() {
 }
 
 function renderCalendarEvents(events) {
+    // Clear existing reminders
     document.querySelectorAll(".reminder-block").forEach(el => el.remove());
 
     events.forEach(event => {
         const eventDate = new Date(event.event_datetime);
-        const dayIndex = (eventDate.getDay() + 6) % 7;
+        const dayIndex = (eventDate.getDay() + 6) % 7; // Adjust Sunday (0) to index 6
         const hour = `${String(eventDate.getHours()).padStart(2, '0')}:00`;
-        const cells = document.querySelectorAll(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
-        cells.forEach(cell => {
+
+        const cell = document.querySelector(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
+        if (cell) {
             const reminder = document.createElement("div");
             reminder.className = "reminder-block";
             reminder.textContent = event.med_name;
@@ -182,7 +184,7 @@ function renderCalendarEvents(events) {
 
             reminder.appendChild(deleteBtn);
             cell.appendChild(reminder);
-        });
+        }
     });
 }
 
