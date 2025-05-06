@@ -172,14 +172,20 @@ function loadCalendarEvents() {
 }
 
 function renderCalendarEvents(events) {
+    // Clear existing
     document.querySelectorAll(".reminder-block").forEach(el => el.remove());
+
+    const weekStart = getMonday(new Date());
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
 
     events.forEach(event => {
         const eventDate = new Date(event.event_datetime);
-        const hourVal = eventDate.getHours();
-        if (hourVal < 8 && hourVal !== 0) return; // skip if not 8 AM–12 AM
+
+        if (eventDate < weekStart || eventDate > weekEnd) return;
+
         const dayIndex = (eventDate.getDay() + 6) % 7;
-        const hour = `${String(hourVal === 0 ? '00' : hourVal).padStart(2, '0')}:00`;
+        const hour = `${String(eventDate.getHours()).padStart(2, '0')}:00`;
 
         const cell = document.querySelector(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
         if (cell) {
@@ -188,7 +194,7 @@ function renderCalendarEvents(events) {
             reminder.textContent = event.med_name;
 
             const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "✖";
+            deleteBtn.innerText = "X";
             deleteBtn.classList.add("delete-event-btn");
             deleteBtn.onclick = () => {
                 if (confirm(`Delete reminder for ${event.med_name}?`)) {
