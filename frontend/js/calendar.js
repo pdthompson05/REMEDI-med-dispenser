@@ -190,6 +190,7 @@ function renderMonthlyView() {
         .map(day => `<div>${day}</div>`).join('');
 
     calendarBody.innerHTML = "";
+    console.log("Starting to populate days...");
 
     const totalCells = offset + daysInMonth;
     const totalGrid = Math.ceil(totalCells / 7) * 7;
@@ -200,9 +201,12 @@ function renderMonthlyView() {
         } else {
             const day = i - offset + 1;
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            console.log("Rendering day:", dateStr, reminders[dateStr]);
+
             const isSelected = selectedDate === dateStr;
             const hasReminder = reminders[dateStr] && reminders[dateStr].length > 0;
-            const reminderDot = hasReminder ? `<img src="pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
+            const reminderDot = hasReminder ? `<img src="../html/pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
             const dayNumber = isSelected ?
                 `<span class="selected-day">${day}</span>${reminderDot}` :
                 `<span class="day-number">${day}</span>${reminderDot}`;
