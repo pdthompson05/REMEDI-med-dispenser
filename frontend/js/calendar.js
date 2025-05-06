@@ -164,7 +164,7 @@ function renderCalendarEvents(events) {
     events.forEach(event => {
         const eventDate = new Date(event.event_datetime);
         const dayIndex = (eventDate.getDay() + 6) % 7;
-        const hour = `${eventDate.getHours()}:00`;
+        const hour = `${String(eventDate.getHours()).padStart(2, '0')}:00`;
         const cells = document.querySelectorAll(`.time-slot[data-day="${dayIndex}"][data-hour="${hour}"]`);
         cells.forEach(cell => {
             const reminder = document.createElement("div");
