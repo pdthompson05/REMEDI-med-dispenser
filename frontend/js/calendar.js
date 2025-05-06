@@ -207,11 +207,12 @@ function renderCalendarEvents(events) {
 }
 
 function fetchMonthlyEvents(year, month) {
-    console.log("Fetching monthly events for", year, month);
+    console.log(`[Monthly Fetch] Fetching for ${year} ${month}`);
+
     const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
     const endDate = new Date(year, month, 0).toISOString().split('T')[0];
 
-    console.log("[Monthly Fetch] Fetching from", startDate, "to", endDate);
+    console.log(`[Monthly Fetch] Fetching from ${startDate} to ${endDate}`);
 
     fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
             method: "GET",
@@ -219,30 +220,37 @@ function fetchMonthlyEvents(year, month) {
         })
         .then(res => res.json())
         .then(json => {
-            console.log("[Monthly Fetch] Response:", json);
+            console.log("[Monthly Fetch] Response: ", json);
 
             if (json.status === "success") {
-                console.log("Monthly events fetched:", json.data);
                 const events = json.data;
                 reminders = {};
-                console.log("[Monthly Fetch] Events received:", events.length);
+
+                console.log("Monthly events fetched: ", events);
 
                 events.forEach(ev => {
-                    const date = ev.event_datetime.split("T")[0];
-                    const time = new Date(ev.event_datetime).toLocaleTimeString([], {
+                    const dt = new Date(ev.event_datetime);
+                    const dateKey = dt.toISOString().split("T")[0]; // Force ISO format YYYY-MM-DD
+                    const time = dt.toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-                    if (!reminders[date]) reminders[date] = [];
-                    reminders[date].push(`${ev.med_name} at ${time}`);
+
+                    if (!reminders[dateKey]) reminders[dateKey] = [];
+                    reminders[dateKey].push(`${ev.med_name} at ${time}`);
                 });
 
-                renderCalendar(); // Re-render after setting reminders
+                console.log("[Monthly Fetch] Events received:", events.length);
+                console.log("[Monthly Fetch] Reminder keys:", Object.keys(reminders));
+
+                renderCalendar(); // Re-render the monthly view with updated data
             } else {
-                console.warn("[Monthly Fetch] Failed status:", json.status);
+                console.error("[Monthly Fetch] Error from server:", json.message);
             }
         })
-        .catch(err => console.error("[Monthly Fetch] Error fetching monthly events:", err));
+        .catch(err => {
+            console.error("[Monthly Fetch] Failed to fetch monthly events:", err);
+        });
 }
 
 function deleteCalendarEvent(eventId) {
