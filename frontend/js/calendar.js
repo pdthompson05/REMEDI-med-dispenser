@@ -13,7 +13,12 @@ let reminders = {};
 
 function switchView(view) {
     currentView = view;
-    renderCalendar();
+    if (view === 'month') {
+        const now = new Date();
+        fetchMonthlyEvents(now.getFullYear(), now.getMonth());
+    } else {
+        renderCalendar();
+    }
 }
 
 function renderCalendar() {
@@ -94,7 +99,7 @@ function renderMonthlyView() {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const isSelected = selectedDate === dateStr;
             const hasReminder = reminders[dateStr] && reminders[dateStr].length > 0;
-            const reminderDot = hasReminder ? `<img src="pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
+            const reminderDot = hasReminder ? `<img src="../html/pill2.png" alt="REMEDI Pill" class="reminder-dot">` : "";
             const dayNumber = isSelected ?
                 `<span class="selected-day">${day}</span>${reminderDot}` :
                 `<span class="day-number">${day}</span>${reminderDot}`;
@@ -111,22 +116,25 @@ function renderMonthlyView() {
 }
 
 function fetchMonthlyEvents(year, month) {
-    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-    const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+    const startDate = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+    const endDate = new Date(year, month + 1, 0).toISOString().split('T')[0];
 
-    return fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
+    fetch(`${CALENDAR_API}?start_date=${startDate}&end_date=${endDate}`, {
             method: "GET",
             credentials: "include"
         })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
-                reminders = {};
+                reminders = {}; // reset global
+
                 json.data.forEach(ev => {
                     const date = ev.event_datetime.split("T")[0];
                     if (!reminders[date]) reminders[date] = [];
                     reminders[date].push(`${ev.med_name} at ${new Date(ev.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
                 });
+
+                renderMonthlyView(); // only render after fetching!
             }
         })
         .catch(err => console.error("Failed to fetch monthly events:", err));
