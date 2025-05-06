@@ -1,8 +1,6 @@
 <?php
 
 require_once __DIR__.'/../../config/db.php';
-header('Content-Type: application/json');
-
 $device_id = $_POST['device_id'] ?? null;
 $temp = $_POST['temp'] ?? null;
 $magnet = $_POST['magnet'] ?? null;
