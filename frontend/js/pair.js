@@ -30,35 +30,24 @@ function pairDevice() {
 }
 
 function unpairDevice() {
-    const deviceId = document.getElementById("device-id").value.trim();
-
-    if (!deviceId) {
-        alert("No device ID provided.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("device_id", deviceId);
-
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/unpair.php", {
-            method: "POST",
-            credentials: "include",
-            body: formData
-        })
-        .then(res => res.json())
-        .then(json => {
-            if (json.status === "success") {
-                alert("Device unpaired successfully.");
-                document.getElementById("sensor-config").style.display = "none";
-                document.getElementById("device-status").textContent = "No device paired.";
-                document.getElementById("device-id").value = "";
-                location.reload();
-            } else {
-                alert("Unpair failed: " + json.message);
-            }
-        })
-        .catch(err => {
-            console.error("Unpairing error:", err);
-            alert("Failed to unpair device.");
-        });
+    fetch("/src/routes/device/unpair.php", {
+        method: "POST",
+        credentials: "include"
+    })
+    .then(res => res.json())
+    .then(json => {
+        if (json.status === "success") {
+            alert("Device unpaired successfully.");
+            document.getElementById("sensor-config").style.display = "none";
+            document.getElementById("device-status").textContent = "No device paired.";
+            document.getElementById("device-id").value = ""; // optional if you still have the input
+            window.currentDeviceId = null;
+        } else {
+            alert("Unpair failed: " + json.message);
+        }
+    })
+    .catch(err => {
+        console.error("Unpairing error:", err);
+        alert("Failed to unpair device.");
+    });
 }
