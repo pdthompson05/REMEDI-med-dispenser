@@ -52,6 +52,7 @@ function unpairDevice() {
                 document.getElementById("sensor-config").style.display = "none";
                 document.getElementById("device-status").textContent = "No device paired.";
                 document.getElementById("device-id").value = "";
+                location.reload();
             } else {
                 alert("Unpair failed: " + json.message);
             }
