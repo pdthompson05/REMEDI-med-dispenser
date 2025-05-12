@@ -130,36 +130,29 @@
 
         <div class="form-container">
           <h2>
-            Current Devices<button
-              class="add-dev-btn"
-              onclick="toggleDeviceForm()"
-            >
-              +
-            </button>
+            Current Devices
+            <button class="add-dev-btn" onclick="toggleDeviceForm()">+</button>
           </h2>
+
           <div id="device-form" style="display: none">
-            <input type="number" id="device-id-input" placeholder="Device ID" />
+            <input type="number" id="device-id" placeholder="Device ID" />
             <button onclick="pairDevice()">Pair</button>
           </div>
+
           <p id="device-status">Checking device status...</p>
           <ul id="device-list"></ul>
-        </div>
 
-        <div class="form-container" id="sensor-config" style="display: none;">
-          <h2>Configure Sensor Slots</h2>
-
-          <div class="info-group">
-            <label for="device-name-input">Device Name</label>
-            <input type="text" id="device-name-input" placeholder="Enter device name">
+          <div id="sensor-config" style="display: none;">
+            <h3>Configure Sensor Slots</h3>
+            <div id="sensor-config-form">
+                <!-- JS will generate slot selectors here -->
+            </div>
+            <button onclick="submitSensorConfig()">Save Configuration</button>
           </div>
 
-          <div id="sensor-config-form">
-            <!-- JS will populate this with Slot 1-4 selectors and counts -->
-          </div>
+          <button id="unpair-button" style="display: none" onclick="unpairDevice()">Unpair</button>
 
-          <button onclick="submitSensorConfig()">Save Configuration</button>
         </div>
-
 
         <div class="form-container">
           <h2>Set Reminder</h2>
@@ -205,6 +198,8 @@
     <script src="../js/device_add.js"></script>
     <script src="../js/pair.js"></script>
     <script src="../js/reminder.js"></script>
+    <script src="../js/sensor.js"></script>
+    <script src="../js/status.js"></script>
     <!--<script src="../js/notitray.js"></script>-->
   </body>
 </html>

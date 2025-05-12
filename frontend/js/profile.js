@@ -77,6 +77,34 @@ function loadProfile() {
         });
 }
 
+function loadDeviceStatus() {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/fetch_status.php", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(res => res.json())
+    .then(json => {
+        const statusEl = document.getElementById("device-status");
+        const unpairBtn = document.getElementById("unpair-button");
+
+        if (json.status === "success" && json.device) {
+            const d = json.device;
+            statusEl.innerText = `Device ${d.device_id}: ${d.connected ? "Connected" : "Disconnected"}, Temp: ${d.temperature ?? "N/A"}°C`;
+            if (unpairBtn) unpairBtn.style.display = "inline-block";
+            loadSensorConfig(d.device_id);
+        } else {
+            statusEl.innerText = "No device found.";
+            if (unpairBtn) unpairBtn.style.display = "none";
+        }
+    })
+    .catch(err => {
+        console.error("Status fetch failed:", err);
+        document.getElementById("device-status").innerText = "Device status error.";
+    });
+}
+window.addEventListener("DOMContentLoaded", loadDeviceStatus);
+
+
 function disableProfileEditing() {
     const inputs = document.querySelectorAll(".profile-info input");
     const editBtn = document.querySelector(".edit-btn");
@@ -150,44 +178,3 @@ function addTimeInput() {
     wrapper.appendChild(removeBtn);
     timeContainer.appendChild(wrapper);
 }
-
-function loadCurrentDevices() {
-  fetch("https://section-three.it313communityprojects.website/src/routes/device/get_config.php", {
-    method: "GET",
-    credentials: "include"
-  })
-    .then(res => res.json())
-    .then(json => {
-      const list = document.getElementById("device-list");
-      list.innerHTML = "";
-
-      if (json.status === "success" && json.data.length > 0) {
-        json.data.forEach(device => {
-          const li = document.createElement("li");
-          const connectedStatus = device.connected ? "Connected" : "Disconnected";
-
-          let slotDetails = "";
-          device.slots.forEach((slot, index) => {
-            slotDetails += `<br>Slot ${index + 1}: ${slot.med_name || "Empty"} (${slot.med_count ?? 0} left)`;
-          });
-
-          li.innerHTML = `
-            <strong>Device ID:</strong> ${device.device_id} <br>
-            <strong>Status:</strong> ${connectedStatus}
-            ${slotDetails}
-          `;
-          list.appendChild(li);
-        });
-      } else {
-        list.innerHTML = "<li>No devices paired.</li>";
-      }
-    })
-    .catch(err => {
-      console.error("Failed to load devices:", err);
-      document.getElementById("device-list").innerHTML = "<li>Error loading devices.</li>";
-    });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadCurrentDevices();
-});
