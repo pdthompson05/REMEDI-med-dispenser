@@ -1,13 +1,14 @@
 function loadSensorConfig() {
-    fetch("/src/routes/device/slot_config.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/slot_config.php", {
         method: "GET",
         credentials: "include"
     })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
-                document.getElementById("sensor-config").style.display = "block";
-                document.getElementById("device-name-input").value = json.device_name || "";
+                console.log("[Sensor Config] Data received:", json);
+                document.getElementById("sensor-config-section").style.display = "block";
+
                 const form = document.getElementById("sensor-config-form");
                 form.innerHTML = "";
 
@@ -28,15 +29,18 @@ function loadSensorConfig() {
                     </div>`;
                 }
             } else {
+                console.error("[Sensor Config] Failed:", json.message);
                 alert("Failed to load sensor config: " + json.message);
             }
         })
-        .catch(err => console.error("Sensor config load failed:", err));
+        .catch(err => {
+            console.error("Sensor config load failed:", err);
+            alert("Error loading sensor configuration.");
+        });
 }
 
 function submitSensorConfig() {
     const formData = new FormData();
-    formData.append("device_name", document.getElementById("device-name-input").value.trim());
 
     const sensors = document.querySelectorAll(".sensor-med");
     const counts = document.querySelectorAll(".sensor-count");
@@ -49,7 +53,7 @@ function submitSensorConfig() {
         formData.append(`slot_${slot}_count`, count);
     });
 
-    fetch("/src/routes/device/sensor.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/sensor.php", {
         method: "POST",
         body: formData,
         credentials: "include"
@@ -57,10 +61,15 @@ function submitSensorConfig() {
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
+                console.log("[Sensor Config] Saved successfully.");
                 alert("Sensor configuration saved.");
             } else {
+                console.error("[Sensor Config] Save failed:", json.message);
                 alert("Failed to save configuration: " + json.message);
             }
         })
-        .catch(err => console.error("Submit config failed:", err));
+        .catch(err => {
+            console.error("Submit config failed:", err);
+            alert("Error saving sensor configuration.");
+        });
 }
