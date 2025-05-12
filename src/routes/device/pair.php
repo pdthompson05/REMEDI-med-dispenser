@@ -22,6 +22,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param('ii', $user_id, $device_id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
+    $_SESSION['device_id'] = $device_id;
     echo json_encode(['status' => 'success']);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Pairing failed. Device may already be paired.']);

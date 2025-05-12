@@ -18,6 +18,7 @@ function pairDevice() {
             if (json.status === "success") {
                 alert("Device successfully paired!");
                 loadSensorConfig(); // Load config UI
+                location.reload();
             } else {
                 alert("Pairing failed: " + json.message);
             }
