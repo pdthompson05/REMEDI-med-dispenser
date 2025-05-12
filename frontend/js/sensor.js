@@ -53,7 +53,7 @@ function submitSensorConfig() {
         formData.append(`slot_${slot}_count`, count);
     });
 
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/sensor.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/submit_sensor.php", {
         method: "POST",
         body: formData,
         credentials: "include"
