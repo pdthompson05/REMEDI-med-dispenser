@@ -150,3 +150,44 @@ function addTimeInput() {
     wrapper.appendChild(removeBtn);
     timeContainer.appendChild(wrapper);
 }
+
+function loadCurrentDevices() {
+  fetch("https://section-three.it313communityprojects.website/src/routes/device/get_config.php", {
+    method: "GET",
+    credentials: "include"
+  })
+    .then(res => res.json())
+    .then(json => {
+      const list = document.getElementById("device-list");
+      list.innerHTML = "";
+
+      if (json.status === "success" && json.data.length > 0) {
+        json.data.forEach(device => {
+          const li = document.createElement("li");
+          const connectedStatus = device.connected ? "Connected" : "Disconnected";
+
+          let slotDetails = "";
+          device.slots.forEach((slot, index) => {
+            slotDetails += `<br>Slot ${index + 1}: ${slot.med_name || "Empty"} (${slot.med_count ?? 0} left)`;
+          });
+
+          li.innerHTML = `
+            <strong>Device ID:</strong> ${device.device_id} <br>
+            <strong>Status:</strong> ${connectedStatus}
+            ${slotDetails}
+          `;
+          list.appendChild(li);
+        });
+      } else {
+        list.innerHTML = "<li>No devices paired.</li>";
+      }
+    })
+    .catch(err => {
+      console.error("Failed to load devices:", err);
+      document.getElementById("device-list").innerHTML = "<li>Error loading devices.</li>";
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadCurrentDevices();
+});
