@@ -1,9 +1,10 @@
 <?php
+
 session_start();
-require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id'])) {
+if (! isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
     exit;
 }
@@ -11,14 +12,14 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $device_id = $_SESSION['device_id'] ?? null;
 
-if (!is_numeric($device_id)) {
+if (! is_numeric($device_id)) {
     echo json_encode(['status' => 'error', 'message' => 'No paired device']);
     exit;
 }
 
-$conn->prepare("DELETE FROM sensor WHERE device_id = ?")->bind_param('i', $device_id)->execute();
+$conn->prepare('DELETE FROM sensor WHERE device_id = ?')->bind_param('i', $device_id)->execute();
 
-$insert = $conn->prepare("INSERT INTO sensor (device_id, med_id, med_count) VALUES (?, ?, ?)");
+$insert = $conn->prepare('INSERT INTO sensor (device_id, med_id, med_count) VALUES (?, ?, ?)');
 
 $valid = false;
 for ($i = 1; $i <= 4; $i++) {

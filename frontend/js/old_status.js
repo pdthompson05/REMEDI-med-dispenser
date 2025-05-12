@@ -1,8 +1,8 @@
 function loadDeviceStatus() {
     fetch("https://section-three.it313communityprojects.website/src/routes/device/status.php", {
-        method: "GET",
-        credentials: "include"
-    })
+            method: "GET",
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             const statusEl = document.getElementById("device-status");

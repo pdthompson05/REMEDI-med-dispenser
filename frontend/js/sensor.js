@@ -1,8 +1,8 @@
 function loadSensorConfig() {
     fetch("https://section-three.it313communityprojects.website/src/routes/device/config_sensor.php", {
-        method: "GET",
-        credentials: "include"
-    })
+            method: "GET",
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
@@ -54,10 +54,10 @@ function submitSensorConfig() {
     });
 
     fetch("https://section-three.it313communityprojects.website/src/routes/device/submit_sensor.php", {
-        method: "POST",
-        body: formData,
-        credentials: "include"
-    })
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {

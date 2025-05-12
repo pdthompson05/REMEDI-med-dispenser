@@ -76,10 +76,10 @@ function loadProfile() {
             console.error("Error loading medications:", err);
         });
 
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/status.php", {
-        method: "GET",
-        credentials: "include"
-    })
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/fetch_status.php", {
+            method: "GET",
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             const statusEl = document.getElementById("device-status");
@@ -178,4 +178,3 @@ function addTimeInput() {
     wrapper.appendChild(removeBtn);
     timeContainer.appendChild(wrapper);
 }
-

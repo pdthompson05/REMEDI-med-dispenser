@@ -9,10 +9,10 @@ function pairDevice() {
     formData.append("device_id", deviceId);
 
     fetch("/src/routes/device/pair.php", {
-        method: "POST",
-        body: formData,
-        credentials: "include"
-    })
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        })
         .then(res => res.json())
         .then(json => {
             if (json.status === "success") {
@@ -29,34 +29,34 @@ function pairDevice() {
 }
 
 function unpairDevice() {
-  const deviceId = document.getElementById("device-id").value.trim();
+    const deviceId = document.getElementById("device-id").value.trim();
 
-  if (!deviceId) {
-    alert("No device ID provided.");
-    return;
-  }
+    if (!deviceId) {
+        alert("No device ID provided.");
+        return;
+    }
 
-  const formData = new FormData();
-  formData.append("device_id", deviceId);
+    const formData = new FormData();
+    formData.append("device_id", deviceId);
 
-  fetch("https://section-three.it313communityprojects.website/src/routes/device/unpair.php", {
-    method: "POST",
-    credentials: "include",
-    body: formData
-  })
-    .then(res => res.json())
-    .then(json => {
-      if (json.status === "success") {
-        alert("Device unpaired successfully.");
-        document.getElementById("sensor-config-section").style.display = "none";
-        document.getElementById("device-status").textContent = "No device paired.";
-        document.getElementById("device-id").value = "";
-      } else {
-        alert("Unpair failed: " + json.message);
-      }
-    })
-    .catch(err => {
-      console.error("Unpairing error:", err);
-      alert("Failed to unpair device.");
-    });
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/unpair.php", {
+            method: "POST",
+            credentials: "include",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(json => {
+            if (json.status === "success") {
+                alert("Device unpaired successfully.");
+                document.getElementById("sensor-config-section").style.display = "none";
+                document.getElementById("device-status").textContent = "No device paired.";
+                document.getElementById("device-id").value = "";
+            } else {
+                alert("Unpair failed: " + json.message);
+            }
+        })
+        .catch(err => {
+            console.error("Unpairing error:", err);
+            alert("Failed to unpair device.");
+        });
 }

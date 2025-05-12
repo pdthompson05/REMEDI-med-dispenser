@@ -1,9 +1,10 @@
 <?php
-session_start();
-header("Content-Type: application/json");
-require_once __DIR__ . '/../../config/db.php';
 
-if (!isset($_SESSION['user_id'])) {
+session_start();
+header('Content-Type: application/json');
+require_once __DIR__.'/../../config/db.php';
+
+if (! isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
     exit;
 }
@@ -11,9 +12,9 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Get device
-$sql = "SELECT device_id FROM device WHERE user_id = ?";
+$sql = 'SELECT device_id FROM device WHERE user_id = ?';
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -26,9 +27,9 @@ $device = $result->fetch_assoc();
 $device_id = $device['device_id'];
 
 // Get sensor slots
-$sql = "SELECT sensor_id, med_id, med_count FROM sensor WHERE device_id = ?";
+$sql = 'SELECT sensor_id, med_id, med_count FROM sensor WHERE device_id = ?';
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $device_id);
+$stmt->bind_param('i', $device_id);
 $stmt->execute();
 $sensor_result = $stmt->get_result();
 
@@ -40,26 +41,26 @@ while ($row = $sensor_result->fetch_assoc()) {
     $med_count = $row['med_count'];
 
     // Get med name
-    $med_stmt = $conn->prepare("SELECT med_name FROM med WHERE med_id = ?");
-    $med_stmt->bind_param("i", $med_id);
+    $med_stmt = $conn->prepare('SELECT med_name FROM med WHERE med_id = ?');
+    $med_stmt->bind_param('i', $med_id);
     $med_stmt->execute();
     $med_result = $med_stmt->get_result();
-    $med_name = $med_result->fetch_assoc()['med_name'] ?? "Unknown";
+    $med_name = $med_result->fetch_assoc()['med_name'] ?? 'Unknown';
 
     $slots[$index] = [
         'sensor_id' => $sensor_id,
         'med_id' => $med_id,
         'med_name' => $med_name,
-        'med_count' => $med_count
+        'med_count' => $med_count,
     ];
     $index++;
     $med_stmt->close();
 }
 
 // Get all user medications
-$sql = "SELECT med_id, med_name FROM med WHERE user_id = ?";
+$sql = 'SELECT med_id, med_name FROM med WHERE user_id = ?';
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param('i', $user_id);
 $stmt->execute();
 $meds_result = $stmt->get_result();
 
@@ -72,5 +73,5 @@ echo json_encode([
     'status' => 'success',
     'device_id' => $device_id,
     'slots' => $slots,
-    'meds' => $meds
+    'meds' => $meds,
 ]);

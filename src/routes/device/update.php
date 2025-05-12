@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json');
 
@@ -11,10 +12,10 @@ if (! $device_id || ! $med_id) {
 }
 
 // Get sensor ID and user ID
-$sql = "SELECT s.sensor_id, s.med_count, d.user_id
+$sql = 'SELECT s.sensor_id, s.med_count, d.user_id
         FROM sensor s
         JOIN device d ON s.device_id = d.device_id
-        WHERE s.device_id = ? AND s.med_id = ?";
+        WHERE s.device_id = ? AND s.med_id = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ii', $device_id, $med_id);
 $stmt->execute();
@@ -33,13 +34,13 @@ $user_id = $row['user_id'];
 $stmt->close();
 
 // Update med count
-$stmt = $conn->prepare("UPDATE sensor SET med_count = med_count - 1 WHERE sensor_id = ?");
+$stmt = $conn->prepare('UPDATE sensor SET med_count = med_count - 1 WHERE sensor_id = ?');
 $stmt->bind_param('i', $sensor_id);
 $stmt->execute();
 $stmt->close();
 
 // Log dose history
-$stmt = $conn->prepare("INSERT INTO dose_history (user_id, med_id, sensor_id, taken) VALUES (?, ?, ?, 1)");
+$stmt = $conn->prepare('INSERT INTO dose_history (user_id, med_id, sensor_id, taken) VALUES (?, ?, ?, 1)');
 $stmt->bind_param('iii', $user_id, $med_id, $sensor_id);
 $stmt->execute();
 $stmt->close();
