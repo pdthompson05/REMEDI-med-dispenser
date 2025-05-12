@@ -145,6 +145,22 @@
           <ul id="device-list"></ul>
         </div>
 
+        <div class="form-container" id="sensor-config-section" style="display: none;">
+          <h2>Configure Sensor Slots</h2>
+
+          <div class="info-group">
+            <label for="device-name-input">Device Name</label>
+            <input type="text" id="device-name-input" placeholder="Enter device name">
+          </div>
+
+          <div id="sensor-config-form">
+            <!-- JS will populate this with Slot 1-4 selectors and counts -->
+          </div>
+
+          <button onclick="submitSensorConfig()">Save Configuration</button>
+        </div>
+
+
         <div class="form-container">
           <h2>Set Reminder</h2>
 
