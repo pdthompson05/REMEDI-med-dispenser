@@ -10,7 +10,7 @@ if (! isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$device_id = $_SESSION['device_id'] ?? null;
+$device_id = $_SESSION['device_id'] ?? ($_POST['device_id'] ?? null);
 
 if (! is_numeric($device_id)) {
     echo json_encode(['status' => 'error', 'message' => 'No paired device']);

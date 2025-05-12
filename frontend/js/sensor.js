@@ -52,6 +52,7 @@ function submitSensorConfig() {
         formData.append(`slot_${slot}_med_id`, med_id);
         formData.append(`slot_${slot}_count`, count);
     });
+    formData.append("device_id", currentDeviceId);
 
     fetch("https://section-three.it313communityprojects.website/src/routes/device/submit_sensor.php", {
             method: "POST",
