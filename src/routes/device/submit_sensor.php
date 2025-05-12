@@ -17,7 +17,10 @@ if (! is_numeric($device_id)) {
     exit;
 }
 
-$conn->prepare('DELETE FROM sensor WHERE device_id = ?')->bind_param('i', $device_id)->execute();
+$delete = $conn->prepare('DELETE FROM sensor WHERE device_id = ?');
+$delete->bind_param('i', $device_id);
+$delete->execute();
+$delete->close();
 
 $insert = $conn->prepare('INSERT INTO sensor (device_id, med_id, med_count) VALUES (?, ?, ?)');
 
