@@ -1,52 +1,41 @@
 <?php
-require_once __DIR__.'/../../config/db.php';
+session_start();
+require_once __DIR__ . '/../../config/db.php';
 header('Content-Type: application/json');
 
-$device_id = $_POST['device_id'] ?? null;
-$slot_number = $_POST['slot_number'] ?? null; // Expected: 1–4
-$magnet_value = $_POST['magnet'] ?? null;
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+    exit;
+}
 
-if (!is_numeric($device_id) || !in_array($slot_number, [1, 2, 3, 4]) || !is_numeric($magnet_value)) {
+$user_id = $_SESSION['user_id'];
+$device_id = $_SESSION['device_id'] ?? null;
+
+if (!is_numeric($device_id)) {
+    echo json_encode(['status' => 'error', 'message' => 'No paired device']);
+    exit;
+}
+
+$conn->prepare("DELETE FROM sensor WHERE device_id = ?")->bind_param('i', $device_id)->execute();
+
+$insert = $conn->prepare("INSERT INTO sensor (device_id, med_id, med_count) VALUES (?, ?, ?)");
+
+$valid = false;
+for ($i = 1; $i <= 4; $i++) {
+    $med_id = $_POST["slot_{$i}_med_id"] ?? null;
+    $count = $_POST["slot_{$i}_count"] ?? null;
+
+    if ($med_id && $count !== null && is_numeric($count)) {
+        $insert->bind_param('iii', $device_id, $med_id, $count);
+        $insert->execute();
+        $valid = true;
+    }
+}
+
+$insert->close();
+
+if ($valid) {
+    echo json_encode(['status' => 'success', 'message' => 'Sensor slots configured']);
+} else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
-    exit;
 }
-
-// Get the correct sensor row
-$sql = "SELECT s.sensor_id, s.med_id, d.user_id, s.med_count
-        FROM sensor s
-        JOIN device d ON s.device_id = d.device_id
-        WHERE s.device_id = ? LIMIT 4 OFFSET ?";
-$stmt = $conn->prepare($sql);
-$offset = $slot_number - 1;
-$stmt->bind_param("ii", $device_id, $offset);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Sensor not found']);
-    exit;
-}
-
-$sensor = $result->fetch_assoc();
-$sensor_id = $sensor['sensor_id'];
-$med_id = $sensor['med_id'];
-$user_id = $sensor['user_id'];
-$med_count = $sensor['med_count'];
-
-$stmt->close();
-
-// Decrement med count and update magnet
-$new_count = max(0, $med_count - 1);
-$update = $conn->prepare("UPDATE sensor SET magnet = ?, med_count = ?, updated_at = NOW() WHERE sensor_id = ?");
-$update->bind_param("dii", $magnet_value, $new_count, $sensor_id);
-$update->execute();
-$update->close();
-
-// Log dose taken
-$log = $conn->prepare("INSERT INTO dose_history (user_id, med_id, sensor_id, taken) VALUES (?, ?, ?, 1)");
-$log->bind_param("iii", $user_id, $med_id, $sensor_id);
-$log->execute();
-$log->close();
-
-echo json_encode(['status' => 'success', 'message' => 'Sensor updated and dose logged']);
-$conn->close();
