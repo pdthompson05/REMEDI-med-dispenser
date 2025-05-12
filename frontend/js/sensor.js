@@ -1,5 +1,5 @@
 function loadSensorConfig() {
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/slot_config.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/config_sensor.php", {
         method: "GET",
         credentials: "include"
     })
