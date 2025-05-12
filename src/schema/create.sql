@@ -92,13 +92,14 @@ CREATE TABLE device (
 );
 
 CREATE TABLE sensor (
-	sensor_id INT PRIMARY KEY AUTO_INCREMENT,
-    device_id INT NOT NULL,
-    med_id INT NOT NULL,
-    med_count INT NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (device_id) REFERENCES device(device_id) ON DELETE CASCADE,
-	FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
+  device_id INT NOT NULL,
+  slot INT NOT NULL,
+  med_id INT NOT NULL,
+  med_count INT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (device_id, slot),
+  FOREIGN KEY (device_id) REFERENCES device(device_id) ON DELETE CASCADE,
+  FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE
 );
 
 CREATE TABLE dose_history (
