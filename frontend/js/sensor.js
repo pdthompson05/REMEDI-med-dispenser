@@ -7,7 +7,7 @@ function loadSensorConfig() {
         .then(json => {
             if (json.status === "success") {
                 console.log("[Sensor Config] Data received:", json);
-                document.getElementById("sensor-config-section").style.display = "block";
+                document.getElementById("sensor-config").style.display = "block";
 
                 const form = document.getElementById("sensor-config-form");
                 form.innerHTML = "";
