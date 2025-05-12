@@ -1,26 +1,23 @@
 <?php
-
-session_start();
-header('Content-Type: application/json');
 require_once __DIR__.'/../../config/db.php';
+header('Content-Type: application/json');
 
-if (! isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+$device_id = $_POST['device_id'] ?? null;
+$temp = $_POST['temp'] ?? null;
+
+if (! $device_id || ! is_numeric($temp)) {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
-
-$sql = 'SELECT device_id, connected, updated_at FROM device WHERE user_id = ?';
+$sql = 'UPDATE device SET temperature = ?, connected = 1, updated_at = NOW() WHERE device_id = ?';
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('i', $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt->bind_param('di', $temp, $device_id);
 
-if ($row = $result->fetch_assoc()) {
-    echo json_encode(['status' => 'success', 'data' => $row]);
+if ($stmt->execute()) {
+    echo json_encode(['status' => 'success', 'message' => 'Device status updated']);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'No device paired']);
+    echo json_encode(['status' => 'error', 'message' => $conn->error]);
 }
 
 $stmt->close();

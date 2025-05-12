@@ -1,7 +1,7 @@
 <?php
+require_once __DIR__.'/../../config/db.php';
 session_start();
 header('Content-Type: application/json');
-require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
@@ -16,29 +16,15 @@ if (!$device_id) {
     exit;
 }
 
-$check = $conn->prepare('SELECT user_id FROM device WHERE device_id = ?');
-$check->bind_param('i', $device_id);
-$check->execute();
-$result = $check->get_result();
+$sql = "UPDATE device SET user_id = ? WHERE device_id = ? AND user_id IS NULL";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('ii', $user_id, $device_id);
 
-if ($result->num_rows === 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Device not found']);
-    exit;
-}
-
-$row = $result->fetch_assoc();
-if ($row['user_id'] !== null) {
-    echo json_encode(['status' => 'error', 'message' => 'Device already paired']);
-    exit;
-}
-$check->close();
-
-$pair = $conn->prepare('UPDATE device SET user_id = ? WHERE device_id = ?');
-$pair->bind_param('ii', $user_id, $device_id);
-if ($pair->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Device successfully paired']);
+if ($stmt->execute() && $stmt->affected_rows > 0) {
+    echo json_encode(['status' => 'success']);
 } else {
-    echo json_encode(['status' => 'error', 'message' => $conn->error]);
+    echo json_encode(['status' => 'error', 'message' => 'Pairing failed. Device may already be paired.']);
 }
-$pair->close();
+
+$stmt->close();
 $conn->close();

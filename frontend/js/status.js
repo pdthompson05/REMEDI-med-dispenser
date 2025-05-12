@@ -1,36 +1,22 @@
-function checkDeviceStatus() {
-    fetch('https://section-three.it313communityprojects.website/src/routes/device/status.php', {
-            method: 'GET',
-            credentials: 'include'
-        })
+function fetchDeviceStatus() {
+    fetch("/src/routes/device/status.php", {
+        method: "GET",
+        credentials: "include"
+    })
         .then(res => res.json())
         .then(json => {
             const statusEl = document.getElementById("device-status");
-
             if (json.status === "success") {
-                const {
-                    connected,
-                    updated_at
-                } = json.data;
-                const lastSeen = new Date(updated_at);
-                const now = new Date();
-                const minutesAgo = (now - lastSeen) / 60000;
-
-                if (connected && minutesAgo < 5) {
-                    statusEl.innerText = "Device connected";
-                    statusEl.style.color = "green";
-                } else {
-                    statusEl.innerText = "Device offline";
-                    statusEl.style.color = "red";
-                }
+                const d = json.device;
+                statusEl.innerText = `Device ${d.device_id}: ${d.connected ? "Connected" : "Disconnected"}, Temp: ${d.temperature ?? "N/A"}°C`;
             } else {
-                statusEl.innerText = "No device paired";
-                statusEl.style.color = "gray";
+                statusEl.innerText = "No device found.";
             }
         })
         .catch(err => {
-            console.error("Device status error:", err);
+            console.error("Status fetch failed:", err);
+            document.getElementById("device-status").innerText = "Device status error.";
         });
 }
 
-document.addEventListener("DOMContentLoaded", checkDeviceStatus);
+document.addEventListener("DOMContentLoaded", fetchDeviceStatus);
