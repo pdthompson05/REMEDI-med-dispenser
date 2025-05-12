@@ -49,7 +49,7 @@ function unpairDevice() {
         .then(json => {
             if (json.status === "success") {
                 alert("Device unpaired successfully.");
-                document.getElementById("sensor-config-section").style.display = "none";
+                document.getElementById("sensor-config").style.display = "none";
                 document.getElementById("device-status").textContent = "No device paired.";
                 document.getElementById("device-id").value = "";
             } else {
