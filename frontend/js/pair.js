@@ -61,14 +61,8 @@ function loadSensorConfig(deviceId) {
             select.appendChild(option);
           });
 
-          const countInput = document.createElement("input");
-          countInput.type = "number";
-          countInput.placeholder = "Initial Count";
-          countInput.name = "sensor_count_" + i;
-
           wrapper.appendChild(label);
           wrapper.appendChild(select);
-          wrapper.appendChild(countInput);
           configContainer.appendChild(wrapper);
         }
 
@@ -91,9 +85,7 @@ function saveSensorConfig(deviceId) {
 
   for (let i = 1; i <= 4; i++) {
     const medId = document.querySelector(`select[name="sensor_slot_${i}"]`).value;
-    const count = document.querySelector(`input[name="sensor_count_${i}"]`).value;
     formData.append(`slot_${i}_med`, medId);
-    formData.append(`slot_${i}_count`, count);
   }
 
   fetch("https://section-three.it313communityprojects.website/src/routes/device/configure_sensors.php", {
