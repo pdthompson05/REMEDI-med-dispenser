@@ -261,15 +261,6 @@ button:hover {
     margin-top: 5px;
 }
 
-.logout-btn {
-    background-color: #e74c3c;
-    color: white;
-  }
-  
-  .logout-btn:hover {
-    background-color: #c0392b;
-  }  
-
 @media (max-width: 900px) {
     .main-container {
         flex-direction: column;
