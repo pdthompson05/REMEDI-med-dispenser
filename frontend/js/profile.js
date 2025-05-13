@@ -78,7 +78,7 @@ function loadProfile() {
 }
 
 function loadDeviceStatus() {
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/fetch_status.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/backend/fetch_status.php", {
         method: "GET",
         credentials: "include"
     })

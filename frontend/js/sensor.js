@@ -1,5 +1,5 @@
 function loadSensorConfig(deviceId = null) {
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/config_sensor.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/frontend/config_sensor.php", {
         method: "GET",
         credentials: "include"
     })
@@ -64,7 +64,7 @@ function submitSensorConfig() {
 
     formData.append("device_id", window.currentDeviceId); // pass to backend explicitly
 
-    fetch("https://section-three.it313communityprojects.website/src/routes/device/submit_sensor.php", {
+    fetch("https://section-three.it313communityprojects.website/src/routes/device/frontend/submit_sensor.php", {
         method: "POST",
         body: formData,
         credentials: "include"

@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../../config/db.php';
 
 $device_id = $_POST['device_id'] ?? null;
 $temp = $_POST['temp'] ?? null;

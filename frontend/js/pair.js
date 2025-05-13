@@ -8,7 +8,7 @@ function pairDevice() {
     const formData = new FormData();
     formData.append("device_id", deviceId);
 
-    fetch("/src/routes/device/pair.php", {
+    fetch("/src/routes/device/frontend/pair.php", {
             method: "POST",
             body: formData,
             credentials: "include"
@@ -30,7 +30,7 @@ function pairDevice() {
 }
 
 function unpairDevice() {
-    fetch("/src/routes/device/unpair.php", {
+    fetch("/src/routes/device/frontend/unpair.php", {
         method: "POST",
         credentials: "include"
     })
