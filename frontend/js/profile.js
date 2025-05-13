@@ -178,3 +178,23 @@ function addTimeInput() {
     wrapper.appendChild(removeBtn);
     timeContainer.appendChild(wrapper);
 }
+
+function logout() {
+    fetch("https://section-three.it313communityprojects.website/src/auth/user/logout.php", {
+      method: "POST",
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === "success") {
+          alert("Logged out successfully.");
+          window.location.href = "/frontend/html/login.html";
+          alert("Logout failed.");
+        }
+      })
+      .catch(err => {
+        console.error("Logout error:", err);
+        alert("Something went wrong.");
+      });
+  }
+  
