@@ -15,6 +15,8 @@ CREATE TABLE user (
   password_hash VARCHAR(255) NOT NULL,
   verification_token VARCHAR(64),
   is_verified TINYINT(1) DEFAULT 0,
+  reset_token_hash VARCHAR(64) DEFAULT NULL,
+  reset_token_expires_at DATETIME DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -113,3 +115,5 @@ CREATE TABLE dose_history (
   FOREIGN KEY (med_id) REFERENCES med(med_id) ON DELETE CASCADE,
   FOREIGN KEY (sensor_id) REFERENCES sensor(sensor_id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_reset_token_hash ON user (reset_token_hash);
