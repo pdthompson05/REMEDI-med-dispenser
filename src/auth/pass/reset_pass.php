@@ -15,7 +15,7 @@
 <body class="login-page">
   <div class="login-card">
     <div class="login-header">
-      <img src="../../frontend/html/pill2.png" alt="Pill Icon" class="pill-icon" />
+      <img src="../../../frontend/html/pill2.png" alt="Pill Icon" class="pill-icon" />
       <h2>Reset Your <span class="brand">REMEDI</span> Password</h2>
       <p>Enter your email to receive a reset link.</p>
     </div>
