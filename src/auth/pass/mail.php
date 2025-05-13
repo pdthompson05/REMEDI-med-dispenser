@@ -70,7 +70,7 @@ function sendPasswordResetEmail($email, $token)
         $mail->setFrom($mailUser, 'noreply-remedi');
         $mail->addAddress($email);
 
-        $reset_link = 'https://section-three.it313communityprojects.website/src/auth/forgot_pass.php?token='.urlencode($token);
+        $reset_link = 'https://section-three.it313communityprojects.website/src/auth/passforgot_pass.php?token='.urlencode($token);
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Request';
         $mail->Body = "<p>Click the link below to reset your password:</p>
